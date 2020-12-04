@@ -1,89 +1,79 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
   <meta charset="utf-8">
   
-  
+  <title>Page 2 | Hexo</title>
 
   
+  <meta name="author" content="John Doe">
   
-  
-  
-  
-  
-  <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/page/2/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-  
-    <link rel="icon" href="/css/images/favicon.ico">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
 
   
 
   
-  <!-- baidu webmaster push -->
-  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="Hexo"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 <meta name="generator" content="Hexo 5.2.0"></head>
-<body class="home blog custom-background custom-font-enabled single-author">
-  <div id="page" class="hfeed site">
-      <header id="masthead" class="site-header" role="banner">
-    <hgroup>
-      <h1 class="site-title">
-        <a href="/" title="Hexo" rel="home">Hexo</a>
-      </h1>
-      
-        <h2 class="site-description hitokoto"></h2>
-        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
-      
-    </hgroup>
 
-    <nav id="site-navigation" class="main-navigation" role="navigation">
-            <button class="menu-toggle">菜单</button>
-            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
-            <div class="menu-main-container">
-                <ul id="menu-main" class="nav-menu">
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
-                
-                </ul>
-            </div>
-    </nav>
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Hexo</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+    </ul>
+  </nav>
 </header>
 
-      <div id="main" class="wrapper">
-        <div id="primary" class="site-content"><div id="content" role="main">
-  
-    <article id="post-note/develop/c-jump" class="post-note/develop/c-jump post type-post status-publish format-standard hentry">
-    <!---->
+    <main class="site-main posts-loop">
+    
+  <article>
 
-      <header class="entry-header">
-        
-        
   
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/11/09/note/develop/c-jump/">c中的setjump和longjump</a>
-    </h1>
+    
+    <h3 class="article-title"><a href="/2020/11/09/note/develop/c-jump/"><span>c中的setjump和longjump</span></a></h3>
+    
   
 
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/11/09/note/develop/c-jump/" data-id="ckhe8gmwp0003d0wb67zxcet8" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/11/09/note/develop/c-jump/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-11-09T11:48:35.000Z">
+          2020-11-09
+        </time>
+      </a>
+    </span>
+  </div>
 
-    <div class="entry-content">
+
+  
+
+  <div class="article-content">
+    <div class="entry">
       
         <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>goto可能会导致程序逻辑的混乱，并且非常容易导致程序栈帧的混乱，造成不可预知的后果。</p>
 <p>setjump和longjump用于代替goto。由于操作系统调用会有很“深”的函数调用，当某些操作完成后，系统调用函数想要快速返回用户层函数而不是一层层地返回，所以这里经常用setjmp/longjmp。</p>
@@ -108,45 +98,48 @@
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-macro-setjmp.html">C 库宏 - setjmp()</a></p>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/11/09/note/develop/c-jump/">
-    <time datetime="2020-11-09T11:48:35.000Z" class="entry-date">
-        2020-11-09
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
+  <article>
 
+  
+    
+    <h3 class="article-title"><a href="/2020/11/09/note/develop/cpp-lambda/"><span>c++中的lambda表达式</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/11/09/note/develop/cpp-lambda/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-11-09T10:47:03.000Z">
+          2020-11-09
+        </time>
+      </a>
+    </span>
+  </div>
 
 
   
-    <article id="post-note/develop/cpp-lambda" class="post-note/develop/cpp-lambda post type-post status-publish format-standard hentry">
-    <!---->
 
-      <header class="entry-header">
-        
-        
-  
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/11/09/note/develop/cpp-lambda/">c++中的lambda表达式</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/11/09/note/develop/cpp-lambda/" data-id="ckhe8gmww0004d0wb7s2xhvdh" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
+  <div class="article-content">
+    <div class="entry">
       
         <p>C++ 11及以后才有</p>
 <p>完整声明</p>
@@ -192,45 +185,48 @@
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://www.cnblogs.com/DswCnblog/p/5629165.html">C++ 11 Lambda表达式</a></p>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/11/09/note/develop/cpp-lambda/">
-    <time datetime="2020-11-09T10:47:03.000Z" class="entry-date">
-        2020-11-09
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
+  <article>
 
+  
+    
+    <h3 class="article-title"><a href="/2020/11/09/note/game/game-1/"><span>游戏开发中的基础知识</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/11/09/note/game/game-1/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-11-09T01:28:10.000Z">
+          2020-11-09
+        </time>
+      </a>
+    </span>
+  </div>
 
 
   
-    <article id="post-note/game/game-1" class="post-note/game/game-1 post type-post status-publish format-standard hentry">
-    <!---->
 
-      <header class="entry-header">
-        
-        
-  
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/11/09/note/game/game-1/">游戏开发中的基础知识</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/11/09/note/game/game-1/" data-id="ckhe8gmwn0002d0wbfsbo24uz" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
+  <div class="article-content">
+    <div class="entry">
       
         <h2 id="游戏中的概念"><a href="#游戏中的概念" class="headerlink" title="游戏中的概念"></a>游戏中的概念</h2><ol>
 <li><p>导演</p>
@@ -268,45 +264,48 @@
 </ol>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/11/09/note/game/game-1/">
-    <time datetime="2020-11-09T01:28:10.000Z" class="entry-date">
-        2020-11-09
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
+  <article>
 
+  
+    
+    <h3 class="article-title"><a href="/2020/11/04/note/3d/maya-1/"><span>maya入门--maya建模方法和基本概念</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/11/04/note/3d/maya-1/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-11-04T10:14:26.000Z">
+          2020-11-04
+        </time>
+      </a>
+    </span>
+  </div>
 
 
   
-    <article id="post-note/3d/maya-1" class="post-note/3d/maya-1 post type-post status-publish format-standard hentry">
-    <!---->
 
-      <header class="entry-header">
-        
-        
-  
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/11/04/note/3d/maya-1/">maya入门--maya建模方法和基本概念</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/11/04/note/3d/maya-1/" data-id="ckh4cefde0000qgwb2jhnbela" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
+  <div class="article-content">
+    <div class="entry">
       
         <h2 id="maya建模方法"><a href="#maya建模方法" class="headerlink" title="maya建模方法"></a>maya建模方法</h2><ol>
 <li><p>NURBS建模</p>
@@ -322,45 +321,48 @@
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/143041389">Maya的几种建模方法 - fashion游戏建模的文章 - 知乎</a></p>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/11/04/note/3d/maya-1/">
-    <time datetime="2020-11-04T10:14:26.000Z" class="entry-date">
-        2020-11-04
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
+  <article>
 
+  
+    
+    <h3 class="article-title"><a href="/2020/11/03/note/3d/3d-1/"><span>3d建模入门操作</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/11/03/note/3d/3d-1/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-11-03T02:13:05.000Z">
+          2020-11-03
+        </time>
+      </a>
+    </span>
+  </div>
 
 
   
-    <article id="post-note/3d/3d-1" class="post-note/3d/3d-1 post type-post status-publish format-standard hentry">
-    <!---->
 
-      <header class="entry-header">
-        
-        
-  
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/11/03/note/3d/3d-1/">3d建模入门操作</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/11/03/note/3d/3d-1/" data-id="ckh4cefdi0001qgwbfpeoafmm" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
+  <div class="article-content">
+    <div class="entry">
       
         <p>太难了啊，版本更新得亲妈都不认识了，操作和选项都找不到</p>
 <h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><ul>
@@ -393,45 +395,48 @@
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/ztguang/article/details/83015592?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522160275332819726892416122%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&amp;request_id=160275332819726892416122&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_v1~rank_blog_v1-6-83015592.pc_v1_rank_blog_v1&amp;utm_term=Blender&amp;spm=1018.2118.3001.4187">【教程篇】Blender实例教程（一）——制作一个酷炫的三叶草星_张同光 (Tongguang Zhang)：Hello everyone !-CSDN博客</a></p>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/11/03/note/3d/3d-1/">
-    <time datetime="2020-11-03T02:13:05.000Z" class="entry-date">
-        2020-11-03
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
+  <article>
 
+  
+    
+    <h3 class="article-title"><a href="/2020/11/02/note/rev/dll-inject/"><span>dll注入技术</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/11/02/note/rev/dll-inject/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-11-02T11:41:24.000Z">
+          2020-11-02
+        </time>
+      </a>
+    </span>
+  </div>
 
 
   
-    <article id="post-note/rev/dll-inject" class="post-note/rev/dll-inject post type-post status-publish format-standard hentry">
-    <!---->
 
-      <header class="entry-header">
-        
-        
-  
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/11/02/note/rev/dll-inject/">dll注入技术</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/11/02/note/rev/dll-inject/" data-id="ckh4cefdj0002qgwb5735gfo8" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
+  <div class="article-content">
+    <div class="entry">
       
         <p>由于学习hook技术过程中需要dll注入，递归学习至此</p>
 <h2 id="总体步骤"><a href="#总体步骤" class="headerlink" title="总体步骤"></a>总体步骤</h2><ol>
@@ -509,45 +514,48 @@
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] 《逆向工程核心原理》</p>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/11/02/note/rev/dll-inject/">
-    <time datetime="2020-11-02T11:41:24.000Z" class="entry-date">
-        2020-11-02
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
+  <article>
 
+  
+    
+    <h3 class="article-title"><a href="/2020/11/01/writeup/xh-2020/wp/"><span>湘湖杯2020wp(只有RE部分)</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/11/01/writeup/xh-2020/wp/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-11-01T02:02:12.000Z">
+          2020-11-01
+        </time>
+      </a>
+    </span>
+  </div>
 
 
   
-    <article id="post-writeup/xh-2020/wp" class="post-writeup/xh-2020/wp post type-post status-publish format-standard hentry">
-    <!---->
 
-      <header class="entry-header">
-        
-        
-  
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/11/01/writeup/xh-2020/wp/">湘湖杯2020wp(只有RE部分)</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/11/01/writeup/xh-2020/wp/" data-id="ckgzthi3z0000u0wbg0546zj0" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
+  <div class="article-content">
+    <div class="entry">
       
         <h2 id="easyZ"><a href="#easyZ" class="headerlink" title="easyZ"></a>easyZ</h2><ol>
 <li><p>使用strings找到input相关字符串</p>
@@ -604,45 +612,48 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> random,string</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">check = [</span><br><span class="line"> <span class="string">&#x27;e5438e78ec1de10a2693f9cffb930d23&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;08e8e8855af8ea652df54845d21b9d67&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;a905095f0d801abd5865d649a646b397&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;bac8510b0902185146c838cdf8ead8e0&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;f26f009a6dc171e0ca7a4a770fecd326&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cffd0b9d37e7187483dc8dd19f4a8fa8&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;4cb467175ab6763a9867b9ed694a2780&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cffd0b9d37e7187483dc8dd19f4a8fa8&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;fd311e9877c3db59027597352999e91f&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;49733de19d912d4ad559736b1ae418a7&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;7fb523b42413495cc4e610456d1f1c84&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;acb465dc618e6754de2193bf0410aafe&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;bc52c927138231e29e0b05419e741902&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;515b7eceeb8f22b53575afec4123e878&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;451660d67c64da6de6fadc66079e1d8a&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;fe86104ce1853cb140b7ec0412d93837&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;acb465dc618e6754de2193bf0410aafe&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;c2bab7ea31577b955e2c2cac680fb2f4&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;f077b3a47c09b44d7077877a5aff3699&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;620741f57e7fafe43216d6aa51666f1d&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;9e3b206e50925792c3234036de6a25ab&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;49733de19d912d4ad559736b1ae418a7&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;874992ac91866ce1430687aa9f7121fc&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">num</span>):</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">while</span> num != <span class="number">1</span>:</span><br><span class="line">        num = num * <span class="number">3</span> + <span class="number">1</span> <span class="keyword">if</span> num % <span class="number">2</span> <span class="keyword">else</span> num // <span class="number">2</span></span><br><span class="line">        result.append(num)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(<span class="string">&#x27;Your input is not the FLAG!&#x27;</span>)</span><br><span class="line">    flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">27</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0x20</span>,<span class="number">0x7f</span>):</span><br><span class="line">            ret_list = func(i)</span><br><span class="line">            s = <span class="string">&#x27;&#x27;</span></span><br><span class="line">            <span class="keyword">for</span> idx <span class="keyword">in</span> range(len(ret_list)):</span><br><span class="line">                s += str(ret_list[idx])</span><br><span class="line">                s += str(ret_list[(len(ret_list) - idx - <span class="number">1</span>)])</span><br><span class="line">            md5 = hashlib.md5()</span><br><span class="line">            md5.update(s.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">            <span class="keyword">if</span> md5.hexdigest()==check[j]:</span><br><span class="line">                flag+=chr(i)</span><br><span class="line">                print(flag)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    md5 = hashlib.md5()</span><br><span class="line">    md5.update(flag.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">    print(<span class="string">&#x27;You win!&#x27;</span>)</span><br><span class="line">    print(<span class="string">&#x27;flag&#123;&#x27;</span> + md5.hexdigest() + <span class="string">&#x27;&#125;&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/11/01/writeup/xh-2020/wp/">
-    <time datetime="2020-11-01T02:02:12.000Z" class="entry-date">
-        2020-11-01
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
+  <article>
 
+  
+    
+    <h3 class="article-title"><a href="/2020/10/31/note/attack/1/"><span>红蓝对抗中学到的东西</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/10/31/note/attack/1/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-10-31T00:53:51.000Z">
+          2020-10-31
+        </time>
+      </a>
+    </span>
+  </div>
 
 
   
-    <article id="post-note/attack/1" class="post-note/attack/1 post type-post status-publish format-standard hentry">
-    <!---->
 
-      <header class="entry-header">
-        
-        
-  
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/10/31/note/attack/1/">红蓝对抗中学到的东西</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/10/31/note/attack/1/" data-id="ckgzthi400001u0wb0hhw9u6p" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
+  <div class="article-content">
+    <div class="entry">
       
         <h2 id="信息搜集非常重要"><a href="#信息搜集非常重要" class="headerlink" title="信息搜集非常重要"></a>信息搜集非常重要</h2><ul>
 <li><p>使用扫描器对网站进行扫描</p>
@@ -690,45 +701,48 @@
 <p>如果有大佬，以上可无视</p>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/10/31/note/attack/1/">
-    <time datetime="2020-10-31T00:53:51.000Z" class="entry-date">
-        2020-10-31
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
+  <article>
 
+  
+    
+    <h3 class="article-title"><a href="/2020/10/29/note/web/pentist/"><span>渗透测试笔记</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/10/29/note/web/pentist/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-10-29T01:27:32.000Z">
+          2020-10-29
+        </time>
+      </a>
+    </span>
+  </div>
 
 
   
-    <article id="post-note/web/pentist" class="post-note/web/pentist post type-post status-publish format-standard hentry">
-    <!---->
 
-      <header class="entry-header">
-        
-        
-  
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/10/29/note/web/pentist/">渗透测试笔记</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/10/29/note/web/pentist/" data-id="ckgzthi410002u0wb1u3qhl6j" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
+  <div class="article-content">
+    <div class="entry">
       
         <h2 id="内网渗透环境搭建"><a href="#内网渗透环境搭建" class="headerlink" title="内网渗透环境搭建"></a>内网渗透环境搭建</h2><p>搭建四个靶机，两台Windows，两台Linux</p>
 <ul>
@@ -750,45 +764,48 @@
 <h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>雪殇佬</p>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/10/29/note/web/pentist/">
-    <time datetime="2020-10-29T01:27:32.000Z" class="entry-date">
-        2020-10-29
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
+  <article>
 
+  
+    
+    <h3 class="article-title"><a href="/2020/10/28/note/rev/win-hook/"><span>Windows hook介绍</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/10/28/note/rev/win-hook/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-10-28T00:36:03.000Z">
+          2020-10-28
+        </time>
+      </a>
+    </span>
+  </div>
 
 
   
-    <article id="post-note/rev/win-hook" class="post-note/rev/win-hook post type-post status-publish format-standard hentry">
-    <!---->
 
-      <header class="entry-header">
-        
-        
-  
-    <h1 class="entry-title">
-      <a class="article-title" href="/2020/10/28/note/rev/win-hook/">Windows hook介绍</a>
-    </h1>
-  
-
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/10/28/note/rev/win-hook/" data-id="ckgzthi450003u0wbakm103w7" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
-
-    <div class="entry-content">
+  <div class="article-content">
+    <div class="entry">
       
         <p>windows下hook机制主要是替换程序要使用的函数，以替换掉原函数的功能或者添加功能。</p>
 <p>比如杀软主动防御功能，监控敏感API，对这些函数进行hook；木马病毒可能hook键盘消息来窃取用户输入，从而获得某些密码</p>
@@ -927,110 +944,49 @@
 <p>[7] <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37552052/article/details/81453591">Windows Hook原理与实现_安全杂货铺-CSDN博客</a></p>
 
       
-    </div><!-- .entry-content -->
+    </div>
 
-    <footer class="entry-meta">
-    <a href="/2020/10/28/note/rev/win-hook/">
-    <time datetime="2020-10-28T00:36:03.000Z" class="entry-date">
-        2020-10-28
-    </time>
-</a>
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
     
+
     
-    </footer>
+
+    </div>
+
+    
+  </div>
 </article>
 
 
 
 
+<nav class="pagination">
+  
+  <a href="//" class="pagination-prev">Prev</a>
+  
+  
+  <a target="_blank" rel="noopener" href="//page/3/" class="pagination-next">Next</a>
+  
+</nav>
+    </main>
 
-
-  
-  
-    <nav id="pagination">
-      <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
-      </nav>
-    </nav>
-  
-
-</div></div>
-        <div id="secondary" class="widget-area" role="complementary">
-  
-    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
-    <div>
-        <input type="text" value="" name="s" id="s" />
-        <input type="submit" id="searchsubmit" value="搜索" />
-    </div>
-</form></aside>
-  
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
     
-  
+    &copy; 2020 John Doe
     
-  
-    
-  <aside class="widget">
-    <h3 class="widget-title">Recents</h3>
-    <div class="widget-content">
-      <ul>
-        
-          <li>
-            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
-          </li>
-        
-      </ul>
-    </div>
-  </aside>
-
-  
-    
-  
-    
-  
-</div>
-      </div>
-      <footer id="colophon" role="contentinfo">
-    <p>&copy; 2020 John Doe
-    All rights reserved.</p>
-    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+  </p>
 </footer>
-    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
-
-<script src="/js/jquery-3.3.1.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-<script src="/js/navigation.js"></script>
-
-<div id="bg"></div>
-
+    
+    
   </div>
+</div>
 </body>
 </html>

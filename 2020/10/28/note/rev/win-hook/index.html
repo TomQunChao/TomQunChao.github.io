@@ -1,95 +1,85 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
   <meta charset="utf-8">
   
+  <title>Windows hook介绍 | Hexo</title>
+
+  
+  <meta name="author" content="John Doe">
+  
+
   
   <meta name="description" content="windows下hook机制主要是替换程序要使用的函数，以替换掉原函数的功能或者添加功能。
 比如杀软主动防御功能，监控敏感API，对这些函数进行hook；木马病毒可能hook键盘消息来窃取用户输入，从而获得某些密码
-windows下的hook主要分为应用层和内核层，内核层一般在x86平台使用，因为从" />
+windows下的hook主要分为应用层和内核层，内核层一般在x86平台使用，因为从">
   
 
   
   
-  
-  
-  
-  
-  <title>Windows hook介绍 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="windows下hook机制主要是替换程序要使用的函数，以替换掉原函数的功能或者添加功能。 比如杀软主动防御功能，监控敏感API，对这些函数进行hook；木马病毒可能hook键盘消息来窃取用户输入，从而获得某些密码 windows下的hook主要分为应用层和内核层，内核层一般在x86平台使用，因为从Windows Vista x64开始引入Patch Guard技术极大地限制了Windows内核挂">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Windows hook介绍">
-<meta property="og:url" content="http://example.com/2020/10/28/note/rev/win-hook/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="windows下hook机制主要是替换程序要使用的函数，以替换掉原函数的功能或者添加功能。 比如杀软主动防御功能，监控敏感API，对这些函数进行hook；木马病毒可能hook键盘消息来窃取用户输入，从而获得某些密码 windows下的hook主要分为应用层和内核层，内核层一般在x86平台使用，因为从Windows Vista x64开始引入Patch Guard技术极大地限制了Windows内核挂">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-10-28T00:36:03.000Z">
-<meta property="article:modified_time" content="2020-11-14T03:03:30.334Z">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-  
-    <link rel="icon" href="/css/images/favicon.ico">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
+  <meta name="keywords" content="">
   
 
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Windows hook介绍"/>
+
+  <meta property="og:site_name" content="Hexo"/>
+
   
-  <!-- baidu webmaster push -->
-  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 <meta name="generator" content="Hexo 5.2.0"></head>
-<body class="home blog custom-background custom-font-enabled single-author">
-  <div id="page" class="hfeed site">
-      <header id="masthead" class="site-header" role="banner">
-    <hgroup>
-      <h1 class="site-title">
-        <a href="/" title="Hexo" rel="home">Hexo</a>
-      </h1>
-      
-        <h2 class="site-description hitokoto"></h2>
-        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
-      
-    </hgroup>
 
-    <nav id="site-navigation" class="main-navigation" role="navigation">
-            <button class="menu-toggle">菜单</button>
-            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
-            <div class="menu-main-container">
-                <ul id="menu-main" class="nav-menu">
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
-                
-                </ul>
-            </div>
-    </nav>
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Hexo</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+    </ul>
+  </nav>
 </header>
 
-      <div id="main" class="wrapper">
-        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-note/rev/win-hook" class="post-note/rev/win-hook post type-post status-publish format-standard hentry">
-    <!---->
+    <main class="site-main posts-loop">
+    <article>
 
-      <header class="entry-header">
-        
-        
   
-    <h1 class="entry-title article-title">
-      Windows hook介绍
-    </h1>
+    
+    <h3 class="article-title"><span>Windows hook介绍</span></h3>
+    
   
 
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/10/28/note/rev/win-hook/" data-id="ckgzthi450003u0wbakm103w7" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/10/28/note/rev/win-hook/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-10-28T00:36:03.000Z">
+          2020-10-28
+        </time>
+      </a>
+    </span>
+  </div>
 
-    <div class="entry-content">
+
+  
+
+  <div class="article-content">
+    <div class="entry">
       
         <p>windows下hook机制主要是替换程序要使用的函数，以替换掉原函数的功能或者添加功能。</p>
 <p>比如杀软主动防御功能，监控敏感API，对这些函数进行hook；木马病毒可能hook键盘消息来窃取用户输入，从而获得某些密码</p>
@@ -228,114 +218,45 @@ windows下的hook主要分为应用层和内核层，内核层一般在x86平台
 <p>[7] <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37552052/article/details/81453591">Windows Hook原理与实现_安全杂货铺-CSDN博客</a></p>
 
       
-    </div><!-- .entry-content -->
-
-    <footer class="entry-meta">
-    <a href="/2020/10/28/note/rev/win-hook/">
-    <time datetime="2020-10-28T00:36:03.000Z" class="entry-date">
-        2020-10-28
-    </time>
-</a>
-    
-    
-    </footer>
-</article>
-
-
-    
-<nav class="nav-single">
-    <h3 class="assistive-text">文章导航</h3>
-    
-        <span class="nav-previous"><a href="/2020/10/29/note/web/pentist/" rel="prev"><span class="meta-nav">←</span> 渗透测试笔记</a></span>
-    
-    
-        <span class="nav-next"><a href="/2020/10/28/note/rev/win-ehs/" rel="next">windows异常处理机制 <span class="meta-nav">→</span></a></span>
-    
-</nav><!-- .nav-single -->
-
-
-
-
-
-
-
-</div></div>
-        <div id="secondary" class="widget-area" role="complementary">
-  
-    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
-    <div>
-        <input type="text" value="" name="s" id="s" />
-        <input type="submit" id="searchsubmit" value="搜索" />
     </div>
-</form></aside>
-  
-    
-  
-    
-  
-    
-  <aside class="widget">
-    <h3 class="widget-title">Recents</h3>
-    <div class="widget-content">
-      <ul>
-        
-          <li>
-            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
-          </li>
-        
-      </ul>
-    </div>
-  </aside>
-
-  
-    
-  
-    
-  
-</div>
-      </div>
-      <footer id="colophon" role="contentinfo">
-    <p>&copy; 2020 John Doe
-    All rights reserved.</p>
-    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
-</footer>
-    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
-
-<script src="/js/jquery-3.3.1.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-<script src="/js/navigation.js"></script>
-
-<div id="bg"></div>
 
   </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 John Doe
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
 </body>
 </html>

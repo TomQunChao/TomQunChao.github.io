@@ -1,98 +1,88 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
   <meta charset="utf-8">
   
+  <title>平方求幂&amp;damCTF tracing-into-the-night wp | Hexo</title>
+
+  
+  <meta name="author" content="John Doe">
+  
+
   
   <meta name="description" content="平方求幂算法平方求幂算法是一种快速计算一个数的幂次的方法
 
 x^n=\begin{cases}
 x^{\frac{n}{2}}\ if\ x\ is\ odd\\
 x\times x^{\frac{n-1}{2}}\ if \ x\ is\ even
-\end{cases}利用这个规律可以递归求一个" />
+\end{cases}利用这个规律可以递归求一个">
   
 
   
   
-  
-  
-  
-  
-  <title>平方求幂&amp;damCTF tracing-into-the-night wp | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="平方求幂算法平方求幂算法是一种快速计算一个数的幂次的方法  x^n&#x3D;\begin{cases} x^{\frac{n}{2}}\ if\ x\ is\ odd\\ x\times x^{\frac{n-1}{2}}\ if \ x\ is\ even \end{cases}利用这个规律可以递归求一个数的整数幂次。普通求幂复杂度为$O(n)$，该算法复杂度为$O(log_2n)$ tracing-i">
-<meta property="og:type" content="article">
-<meta property="og:title" content="平方求幂&amp;damCTF tracing-into-the-night wp">
-<meta property="og:url" content="http://example.com/2020/10/14/note/rev/rev-2/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="平方求幂算法平方求幂算法是一种快速计算一个数的幂次的方法  x^n&#x3D;\begin{cases} x^{\frac{n}{2}}\ if\ x\ is\ odd\\ x\times x^{\frac{n-1}{2}}\ if \ x\ is\ even \end{cases}利用这个规律可以递归求一个数的整数幂次。普通求幂复杂度为$O(n)$，该算法复杂度为$O(log_2n)$ tracing-i">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-10-14T02:13:31.000Z">
-<meta property="article:modified_time" content="2020-11-14T05:58:19.908Z">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-  
-    <link rel="icon" href="/css/images/favicon.ico">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
+  <meta name="keywords" content="">
   
 
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="平方求幂&amp;damCTF tracing-into-the-night wp"/>
+
+  <meta property="og:site_name" content="Hexo"/>
+
   
-  <!-- baidu webmaster push -->
-  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 <meta name="generator" content="Hexo 5.2.0"></head>
-<body class="home blog custom-background custom-font-enabled single-author">
-  <div id="page" class="hfeed site">
-      <header id="masthead" class="site-header" role="banner">
-    <hgroup>
-      <h1 class="site-title">
-        <a href="/" title="Hexo" rel="home">Hexo</a>
-      </h1>
-      
-        <h2 class="site-description hitokoto"></h2>
-        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
-      
-    </hgroup>
 
-    <nav id="site-navigation" class="main-navigation" role="navigation">
-            <button class="menu-toggle">菜单</button>
-            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
-            <div class="menu-main-container">
-                <ul id="menu-main" class="nav-menu">
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
-                
-                </ul>
-            </div>
-    </nav>
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Hexo</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+    </ul>
+  </nav>
 </header>
 
-      <div id="main" class="wrapper">
-        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-note/rev/rev-2" class="post-note/rev/rev-2 post type-post status-publish format-standard hentry">
-    <!---->
+    <main class="site-main posts-loop">
+    <article>
 
-      <header class="entry-header">
-        
-        
   
-    <h1 class="entry-title article-title">
-      平方求幂&amp;damCTF tracing-into-the-night wp
-    </h1>
+    
+    <h3 class="article-title"><span>平方求幂&amp;damCTF tracing-into-the-night wp</span></h3>
+    
   
 
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/10/14/note/rev/rev-2/" data-id="ckg8s3wwv0000ywwbbxjfb8u9" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/10/14/note/rev/rev-2/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-10-14T02:13:31.000Z">
+          2020-10-14
+        </time>
+      </a>
+    </span>
+  </div>
 
-    <div class="entry-content">
+
+  
+
+  <div class="article-content">
+    <div class="entry">
       
         <h2 id="平方求幂算法"><a href="#平方求幂算法" class="headerlink" title="平方求幂算法"></a>平方求幂算法</h2><p>平方求幂算法是一种快速计算一个数的幂次的方法</p>
 <script type="math/tex; mode=display">
@@ -118,114 +108,45 @@ res=t1^{input}mod\ n</script><p>是一个rsa算法，所以找到对应的解密
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000401236 ; int __cdecl main(int argc, const char **argv, const char **envp)</span><br><span class="line">.text:0000000000401236                 public main</span><br><span class="line">.text:0000000000401236 main            proc near               ; DATA XREF: _start+21↑o</span><br><span class="line">.text:0000000000401236 ; __unwind &#123;</span><br><span class="line">.text:0000000000401236                 endbr64</span><br><span class="line">.text:000000000040123A                 push    rbp</span><br><span class="line">.text:000000000040123B                 mov     rbp, rsp</span><br><span class="line">.text:000000000040123E                 sub     rsp, 650h</span><br><span class="line">.text:0000000000401245                 mov     rax, fs:28h</span><br><span class="line">.text:000000000040124E                 mov     [rbp-8], rax</span><br><span class="line">.text:0000000000401252                 xor     eax, eax</span><br><span class="line">.text:0000000000401254                 lea     rdi, asc_4029E0 ; &quot;&gt;&gt;&gt; &quot;</span><br><span class="line">.text:000000000040125B                 mov     eax, 0</span><br><span class="line">.text:0000000000401260                 call    puts</span><br><span class="line">.text:0000000000401265                 lea     rax, [rbp-5F0h]</span><br><span class="line">.text:000000000040126C                 mov     rsi, rax</span><br><span class="line">.text:000000000040126F                 lea     rdi, a1499s     ; &quot;%1499s&quot;</span><br><span class="line">.text:0000000000401276                 mov     eax, 0</span><br><span class="line">.text:000000000040127B                 call    scanf</span><br><span class="line">.text:0000000000401280                 lea     rdx, [rbp-610h]</span><br><span class="line">.text:0000000000401287                 lea     rsi, [rbp-620h]</span><br><span class="line">.text:000000000040128E                 lea     rax, [rbp-630h]</span><br><span class="line">.text:0000000000401295                 mov     ecx, 0</span><br><span class="line">.text:000000000040129A                 mov     rdi, rax</span><br><span class="line">.text:000000000040129D                 mov     eax, 0</span><br><span class="line">.text:00000000004012A2                 call    gmpz_inits</span><br><span class="line">.text:00000000004012A7                 lea     rax, [rbp-630h]</span><br><span class="line">.text:00000000004012AE                 mov     edx, 0Ah</span><br><span class="line">.text:00000000004012B3                 lea     rsi, N          ; &quot;447184510719975054597372033820970367631&quot;...</span><br><span class="line">.text:00000000004012BA                 mov     rdi, rax</span><br><span class="line">.text:00000000004012BD                 call    gmpz_set_str</span><br><span class="line">.text:00000000004012C2                 lea     rax, [rbp-620h]</span><br><span class="line">.text:00000000004012C9                 mov     edx, 0Ah</span><br><span class="line">.text:00000000004012CE                 lea     rsi, C          ; &quot;206194863148973418443184998011923777934&quot;...</span><br><span class="line">.text:00000000004012D5                 mov     rdi, rax</span><br><span class="line">.text:00000000004012D8                 call    gmpz_set_str</span><br><span class="line">.text:00000000004012DD                 lea     rcx, [rbp-5F0h]</span><br><span class="line">.text:00000000004012E4                 lea     rax, [rbp-610h]</span><br><span class="line">.text:00000000004012EB                 mov     edx, 0Ah</span><br><span class="line">.text:00000000004012F0                 mov     rsi, rcx</span><br><span class="line">.text:00000000004012F3                 mov     rdi, rax</span><br><span class="line">.text:00000000004012F6                 call    gmpz_set_str</span><br><span class="line">.text:00000000004012FB                 lea     rax, [rbp-600h]</span><br><span class="line">.text:0000000000401302                 mov     esi, 1</span><br><span class="line">.text:0000000000401307                 mov     rdi, rax</span><br><span class="line">.text:000000000040130A                 call    gmpz_init_set_ui</span><br><span class="line">.text:000000000040130F                 mov     rax, [rbp-608h]</span><br><span class="line">.text:0000000000401316                 mov     [rbp-640h], rax</span><br><span class="line">.text:000000000040131D                 mov     eax, [rbp-60Ch]</span><br><span class="line">.text:0000000000401323                 mov     [rbp-644h], eax</span><br><span class="line">.text:0000000000401329                 mov     eax, [rbp-644h]</span><br><span class="line">.text:000000000040132F                 sub     eax, 1</span><br><span class="line">.text:0000000000401332                 mov     [rbp-650h], eax</span><br><span class="line">.text:0000000000401338                 jmp     loc_40145D</span><br><span class="line">.text:000000000040133D ; ---------------------------------------------------------------------------</span><br><span class="line">.text:000000000040133D</span><br><span class="line">.text:000000000040133D loc_40133D:                             ; CODE XREF: main+22E↓j</span><br><span class="line">.text:000000000040133D                 mov     dword ptr [rbp-64Ch], 0</span><br><span class="line">.text:0000000000401347                 jmp     loc_401449</span><br><span class="line">.text:000000000040134C ; ---------------------------------------------------------------------------</span><br><span class="line">.text:000000000040134C</span><br><span class="line">.text:000000000040134C loc_40134C:                             ; CODE XREF: main+21A↓j</span><br><span class="line">.text:000000000040134C                 lea     rdx, [rbp-600h]</span><br><span class="line">.text:0000000000401353                 lea     rcx, [rbp-600h]</span><br><span class="line">.text:000000000040135A                 lea     rax, [rbp-600h]</span><br><span class="line">.text:0000000000401361                 mov     rsi, rcx</span><br><span class="line">.text:0000000000401364                 mov     rdi, rax</span><br><span class="line">.text:0000000000401367                 call    gmpz_mul</span><br><span class="line">.text:000000000040136C                 lea     rdx, [rbp-630h]</span><br><span class="line">.text:0000000000401373                 lea     rcx, [rbp-600h]</span><br><span class="line">.text:000000000040137A                 lea     rax, [rbp-600h]</span><br><span class="line">.text:0000000000401381                 mov     rsi, rcx</span><br><span class="line">.text:0000000000401384                 mov     rdi, rax</span><br><span class="line">.text:0000000000401387                 call    gmpz_mod</span><br><span class="line">.text:000000000040138C                 mov     eax, [rbp-650h]</span><br><span class="line">.text:0000000000401392                 cdqe</span><br><span class="line">.text:0000000000401394                 lea     rdx, ds:0[rax*8]</span><br><span class="line">.text:000000000040139C                 mov     rax, [rbp-640h]</span><br><span class="line">.text:00000000004013A3                 add     rax, rdx</span><br><span class="line">.text:00000000004013A6                 mov     rax, [rax]</span><br><span class="line">.text:00000000004013A9                 mov     rdx, 8000000000000000h</span><br><span class="line">.text:00000000004013B3                 and     rdx, rax</span><br><span class="line">.text:00000000004013B6                 mov     rax, 8000000000000000h</span><br><span class="line">.text:00000000004013C0                 cmp     rdx, rax</span><br><span class="line">.text:00000000004013C3                 jnz     short loc_401405</span><br><span class="line">.text:00000000004013C5                 lea     rdx, [rbp-620h]</span><br><span class="line">.text:00000000004013CC                 lea     rcx, [rbp-600h]</span><br><span class="line">.text:00000000004013D3                 lea     rax, [rbp-600h]</span><br><span class="line">.text:00000000004013DA                 mov     rsi, rcx</span><br><span class="line">.text:00000000004013DD                 mov     rdi, rax</span><br><span class="line">.text:00000000004013E0                 call    gmpz_mul</span><br><span class="line">.text:00000000004013E5                 lea     rdx, [rbp-630h]</span><br><span class="line">.text:00000000004013EC                 lea     rcx, [rbp-600h]</span><br><span class="line">.text:00000000004013F3                 lea     rax, [rbp-600h]</span><br><span class="line">.text:00000000004013FA                 mov     rsi, rcx</span><br><span class="line">.text:00000000004013FD                 mov     rdi, rax</span><br><span class="line">.text:0000000000401400                 call    gmpz_mod</span><br><span class="line">.text:0000000000401405</span><br><span class="line">.text:0000000000401405 loc_401405:                             ; CODE XREF: main+18D↑j</span><br><span class="line">.text:0000000000401405                 mov     eax, [rbp-650h]</span><br><span class="line">.text:000000000040140B                 cdqe</span><br><span class="line">.text:000000000040140D                 lea     rdx, ds:0[rax*8]</span><br><span class="line">.text:0000000000401415                 mov     rax, [rbp-640h]</span><br><span class="line">.text:000000000040141C                 add     rax, rdx</span><br><span class="line">.text:000000000040141F                 mov     rdx, [rax]</span><br><span class="line">.text:0000000000401422                 mov     eax, [rbp-650h]</span><br><span class="line">.text:0000000000401428                 cdqe</span><br><span class="line">.text:000000000040142A                 lea     rcx, ds:0[rax*8]</span><br><span class="line">.text:0000000000401432                 mov     rax, [rbp-640h]</span><br><span class="line">.text:0000000000401439                 add     rax, rcx</span><br><span class="line">.text:000000000040143C                 add     rdx, rdx</span><br><span class="line">.text:000000000040143F                 mov     [rax], rdx</span><br><span class="line">.text:0000000000401442                 add     dword ptr [rbp-64Ch], 1</span><br><span class="line">.text:0000000000401449</span><br><span class="line">.text:0000000000401449 loc_401449:                             ; CODE XREF: main+111↑j</span><br><span class="line">.text:0000000000401449                 cmp     dword ptr [rbp-64Ch], 3Fh</span><br><span class="line">.text:0000000000401450                 jle     loc_40134C</span><br><span class="line">.text:0000000000401456                 sub     dword ptr [rbp-650h], 1</span><br><span class="line">.text:000000000040145D</span><br><span class="line">.text:000000000040145D loc_40145D:                             ; CODE XREF: main+102↑j</span><br><span class="line">.text:000000000040145D                 cmp     dword ptr [rbp-650h], 0</span><br><span class="line">.text:0000000000401464                 jns     loc_40133D</span><br><span class="line">.text:000000000040146A                 mov     rax, [rbp-5F8h]</span><br><span class="line">.text:0000000000401471                 mov     [rbp-638h], rax</span><br><span class="line">.text:0000000000401478                 mov     eax, [rbp-5FCh]</span><br><span class="line">.text:000000000040147E                 shl     eax, 3</span><br><span class="line">.text:0000000000401481                 mov     [rbp-644h], eax</span><br><span class="line">.text:0000000000401487                 lea     rdi, asc_4029EC ; &quot;&lt;&lt;&lt; &quot;</span><br><span class="line">.text:000000000040148E                 mov     eax, 0</span><br><span class="line">.text:0000000000401493                 call    puts</span><br><span class="line">.text:0000000000401498                 mov     eax, [rbp-644h]</span><br><span class="line">.text:000000000040149E                 sub     eax, 1</span><br><span class="line">.text:00000000004014A1                 mov     [rbp-648h], eax</span><br><span class="line">.text:00000000004014A7                 jmp     short loc_4014D0</span><br><span class="line">.text:00000000004014A9 ; ---------------------------------------------------------------------------</span><br><span class="line">.text:00000000004014A9</span><br><span class="line">.text:00000000004014A9 loc_4014A9:                             ; CODE XREF: main+2A1↓j</span><br><span class="line">.text:00000000004014A9                 mov     eax, [rbp-648h]</span><br><span class="line">.text:00000000004014AF                 movsxd  rdx, eax</span><br><span class="line">.text:00000000004014B2                 mov     rax, [rbp-638h]</span><br><span class="line">.text:00000000004014B9                 add     rax, rdx</span><br><span class="line">.text:00000000004014BC                 movzx   eax, byte ptr [rax]</span><br><span class="line">.text:00000000004014BF                 movsx   eax, al</span><br><span class="line">.text:00000000004014C2                 mov     edi, eax</span><br><span class="line">.text:00000000004014C4                 call    put_char</span><br><span class="line">.text:00000000004014C9                 sub     dword ptr [rbp-648h], 1</span><br><span class="line">.text:00000000004014D0</span><br><span class="line">.text:00000000004014D0 loc_4014D0:                             ; CODE XREF: main+271↑j</span><br><span class="line">.text:00000000004014D0                 cmp     dword ptr [rbp-648h], 0</span><br><span class="line">.text:00000000004014D7                 jns     short loc_4014A9</span><br><span class="line">.text:00000000004014D9                 mov     eax, 0</span><br><span class="line">.text:00000000004014DE                 mov     rsi, [rbp-8]</span><br><span class="line">.text:00000000004014E2                 xor     rsi, fs:28h</span><br><span class="line">.text:00000000004014EB                 jz      short locret_4014F2</span><br><span class="line">.text:00000000004014ED                 call    sub_4010E0</span><br><span class="line">.text:00000000004014F2</span><br><span class="line">.text:00000000004014F2 locret_4014F2:                          ; CODE XREF: main+2B5↑j</span><br><span class="line">.text:00000000004014F2                 leave</span><br><span class="line">.text:00000000004014F3                 retn</span><br><span class="line">.text:00000000004014F3 ; &#125; &#x2F;&#x2F; starts at 401236</span><br><span class="line">.text:00000000004014F3 main            endp</span><br></pre></td></tr></table></figure>
 
       
-    </div><!-- .entry-content -->
-
-    <footer class="entry-meta">
-    <a href="/2020/10/14/note/rev/rev-2/">
-    <time datetime="2020-10-14T02:13:31.000Z" class="entry-date">
-        2020-10-14
-    </time>
-</a>
-    
-    
-    </footer>
-</article>
-
-
-    
-<nav class="nav-single">
-    <h3 class="assistive-text">文章导航</h3>
-    
-        <span class="nav-previous"><a href="/2020/10/14/note/rev/rev-3/" rel="prev"><span class="meta-nav">←</span> Xposed学习--工作原理</a></span>
-    
-    
-        <span class="nav-next"><a href="/2020/10/10/note/rev/rev-1/" rel="next">IDA使用技巧--导入头文件和导入函数签名 <span class="meta-nav">→</span></a></span>
-    
-</nav><!-- .nav-single -->
-
-
-
-
-
-
-
-</div></div>
-        <div id="secondary" class="widget-area" role="complementary">
-  
-    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
-    <div>
-        <input type="text" value="" name="s" id="s" />
-        <input type="submit" id="searchsubmit" value="搜索" />
     </div>
-</form></aside>
-  
-    
-  
-    
-  
-    
-  <aside class="widget">
-    <h3 class="widget-title">Recents</h3>
-    <div class="widget-content">
-      <ul>
-        
-          <li>
-            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
-          </li>
-        
-      </ul>
-    </div>
-  </aside>
-
-  
-    
-  
-    
-  
-</div>
-      </div>
-      <footer id="colophon" role="contentinfo">
-    <p>&copy; 2020 John Doe
-    All rights reserved.</p>
-    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
-</footer>
-    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
-
-<script src="/js/jquery-3.3.1.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-<script src="/js/navigation.js"></script>
-
-<div id="bg"></div>
 
   </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 John Doe
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
 </body>
 </html>

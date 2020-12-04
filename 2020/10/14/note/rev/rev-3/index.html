@@ -1,94 +1,84 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
   <meta charset="utf-8">
   
+  <title>Xposed学习--工作原理 | Hexo</title>
+
+  
+  <meta name="author" content="John Doe">
+  
+
   
   <meta name="description" content="Xposed工作原理zygote进程Android运行的心脏。每一个应用都是这个进程的fork，都从这个进程的一个fork开始。
-Android系统启动时，zygote进程被/init.rc脚本启动。当/system/bin/app_process加载完成时，zygote启动完成。/system/b" />
+Android系统启动时，zygote进程被/init.rc脚本启动。当/system/bin/app_process加载完成时，zygote启动完成。/system/b">
   
 
   
   
-  
-  
-  
-  
-  <title>Xposed学习--工作原理 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Xposed工作原理zygote进程Android运行的心脏。每一个应用都是这个进程的fork，都从这个进程的一个fork开始。 Android系统启动时，zygote进程被&#x2F;init.rc脚本启动。当&#x2F;system&#x2F;bin&#x2F;app_process加载完成时，zygote启动完成。&#x2F;system&#x2F;bin&#x2F;app_process负责加载必要的类和调用初始化方法。 Xposed安装xposed后，会复">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Xposed学习--工作原理">
-<meta property="og:url" content="http://example.com/2020/10/14/note/rev/rev-3/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Xposed工作原理zygote进程Android运行的心脏。每一个应用都是这个进程的fork，都从这个进程的一个fork开始。 Android系统启动时，zygote进程被&#x2F;init.rc脚本启动。当&#x2F;system&#x2F;bin&#x2F;app_process加载完成时，zygote启动完成。&#x2F;system&#x2F;bin&#x2F;app_process负责加载必要的类和调用初始化方法。 Xposed安装xposed后，会复">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-10-14T02:43:20.000Z">
-<meta property="article:modified_time" content="2020-10-14T06:25:34.583Z">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-  
-    <link rel="icon" href="/css/images/favicon.ico">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
+  <meta name="keywords" content="">
   
 
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Xposed学习--工作原理"/>
+
+  <meta property="og:site_name" content="Hexo"/>
+
   
-  <!-- baidu webmaster push -->
-  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 <meta name="generator" content="Hexo 5.2.0"></head>
-<body class="home blog custom-background custom-font-enabled single-author">
-  <div id="page" class="hfeed site">
-      <header id="masthead" class="site-header" role="banner">
-    <hgroup>
-      <h1 class="site-title">
-        <a href="/" title="Hexo" rel="home">Hexo</a>
-      </h1>
-      
-        <h2 class="site-description hitokoto"></h2>
-        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
-      
-    </hgroup>
 
-    <nav id="site-navigation" class="main-navigation" role="navigation">
-            <button class="menu-toggle">菜单</button>
-            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
-            <div class="menu-main-container">
-                <ul id="menu-main" class="nav-menu">
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
-                
-                </ul>
-            </div>
-    </nav>
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Hexo</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+    </ul>
+  </nav>
 </header>
 
-      <div id="main" class="wrapper">
-        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-note/rev/rev-3" class="post-note/rev/rev-3 post type-post status-publish format-standard hentry">
-    <!---->
+    <main class="site-main posts-loop">
+    <article>
 
-      <header class="entry-header">
-        
-        
   
-    <h1 class="entry-title article-title">
-      Xposed学习--工作原理
-    </h1>
+    
+    <h3 class="article-title"><span>Xposed学习--工作原理</span></h3>
+    
   
 
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/10/14/note/rev/rev-3/" data-id="ckg8w8b7g0000p8wbh4e88aa7" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/10/14/note/rev/rev-3/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-10-14T02:43:20.000Z">
+          2020-10-14
+        </time>
+      </a>
+    </span>
+  </div>
 
-    <div class="entry-content">
+
+  
+
+  <div class="article-content">
+    <div class="entry">
       
         <h2 id="Xposed工作原理"><a href="#Xposed工作原理" class="headerlink" title="Xposed工作原理"></a>Xposed工作原理</h2><h3 id="zygote进程"><a href="#zygote进程" class="headerlink" title="zygote进程"></a>zygote进程</h3><p>Android运行的心脏。每一个应用都是这个进程的fork，都从这个进程的一个fork开始。</p>
 <p>Android系统启动时，zygote进程被/init.rc脚本启动。当/system/bin/app_process加载完成时，zygote启动完成。/system/bin/app_process负责加载必要的类和调用初始化方法。</p>
@@ -168,114 +158,45 @@ Android系统启动时，zygote进程被/init.rc脚本启动。当/system/bin/ap
 <p>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/song_lee/article/details/105048406">adb获取手机中已安装app的按转包</a></p>
 
       
-    </div><!-- .entry-content -->
-
-    <footer class="entry-meta">
-    <a href="/2020/10/14/note/rev/rev-3/">
-    <time datetime="2020-10-14T02:43:20.000Z" class="entry-date">
-        2020-10-14
-    </time>
-</a>
-    
-    
-    </footer>
-</article>
-
-
-    
-<nav class="nav-single">
-    <h3 class="assistive-text">文章导航</h3>
-    
-        <span class="nav-previous"><a href="/2020/10/18/note/rev/z3/" rel="prev"><span class="meta-nav">←</span> Z3使用简介</a></span>
-    
-    
-        <span class="nav-next"><a href="/2020/10/14/note/rev/rev-2/" rel="next">平方求幂&amp;damCTF tracing-into-the-night wp <span class="meta-nav">→</span></a></span>
-    
-</nav><!-- .nav-single -->
-
-
-
-
-
-
-
-</div></div>
-        <div id="secondary" class="widget-area" role="complementary">
-  
-    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
-    <div>
-        <input type="text" value="" name="s" id="s" />
-        <input type="submit" id="searchsubmit" value="搜索" />
     </div>
-</form></aside>
-  
-    
-  
-    
-  
-    
-  <aside class="widget">
-    <h3 class="widget-title">Recents</h3>
-    <div class="widget-content">
-      <ul>
-        
-          <li>
-            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
-          </li>
-        
-      </ul>
-    </div>
-  </aside>
-
-  
-    
-  
-    
-  
-</div>
-      </div>
-      <footer id="colophon" role="contentinfo">
-    <p>&copy; 2020 John Doe
-    All rights reserved.</p>
-    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
-</footer>
-    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
-
-<script src="/js/jquery-3.3.1.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-<script src="/js/navigation.js"></script>
-
-<div id="bg"></div>
 
   </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 John Doe
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
 </body>
 </html>

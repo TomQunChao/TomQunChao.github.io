@@ -1,94 +1,84 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
   <meta charset="utf-8">
   
+  <title>n1ctf 2020 逆向wp | Hexo</title>
+
+  
+  <meta name="author" content="John Doe">
+  
+
   
   <meta name="description" content="oflo// TODO
-easyapk12345678910111213141516171819202122232425262728293031323334import base64import hashlibimport random,stringfrom Crypto.Cipher import" />
+easyapk12345678910111213141516171819202122232425262728293031323334import base64import hashlibimport random,stringfrom Crypto.Cipher import">
   
 
   
   
-  
-  
-  
-  
-  <title>n1ctf 2020 逆向wp | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="oflo&#x2F;&#x2F; TODO easyapk12345678910111213141516171819202122232425262728293031323334import base64import hashlibimport random,stringfrom Crypto.Cipher import AESfrom math import *from pwn import *import stri">
-<meta property="og:type" content="article">
-<meta property="og:title" content="n1ctf 2020 逆向wp">
-<meta property="og:url" content="http://example.com/2020/10/20/writeup/n1ctf2020/wp/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="oflo&#x2F;&#x2F; TODO easyapk12345678910111213141516171819202122232425262728293031323334import base64import hashlibimport random,stringfrom Crypto.Cipher import AESfrom math import *from pwn import *import stri">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-10-20T05:59:47.000Z">
-<meta property="article:modified_time" content="2020-10-21T07:06:25.555Z">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-  
-    <link rel="icon" href="/css/images/favicon.ico">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
+  <meta name="keywords" content="">
   
 
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="n1ctf 2020 逆向wp"/>
+
+  <meta property="og:site_name" content="Hexo"/>
+
   
-  <!-- baidu webmaster push -->
-  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 <meta name="generator" content="Hexo 5.2.0"></head>
-<body class="home blog custom-background custom-font-enabled single-author">
-  <div id="page" class="hfeed site">
-      <header id="masthead" class="site-header" role="banner">
-    <hgroup>
-      <h1 class="site-title">
-        <a href="/" title="Hexo" rel="home">Hexo</a>
-      </h1>
-      
-        <h2 class="site-description hitokoto"></h2>
-        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
-      
-    </hgroup>
 
-    <nav id="site-navigation" class="main-navigation" role="navigation">
-            <button class="menu-toggle">菜单</button>
-            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
-            <div class="menu-main-container">
-                <ul id="menu-main" class="nav-menu">
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
-                
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
-                
-                </ul>
-            </div>
-    </nav>
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Hexo</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+    </ul>
+  </nav>
 </header>
 
-      <div id="main" class="wrapper">
-        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-writeup/n1ctf2020/wp" class="post-writeup/n1ctf2020/wp post type-post status-publish format-standard hentry">
-    <!---->
+    <main class="site-main posts-loop">
+    <article>
 
-      <header class="entry-header">
-        
-        
   
-    <h1 class="entry-title article-title">
-      n1ctf 2020 逆向wp
-    </h1>
+    
+    <h3 class="article-title"><span>n1ctf 2020 逆向wp</span></h3>
+    
   
 
-        
-        <div class="comments-link">
-            
-            <a href="javascript:void(0);" data-url="http://example.com/2020/10/20/writeup/n1ctf2020/wp/" data-id="ckgj4wnxx0002xowbhq4f2n1r" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
-        </div><!-- .comments-link -->
-      </header><!-- .entry-header -->
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/10/20/writeup/n1ctf2020/wp/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-10-20T05:59:47.000Z">
+          2020-10-20
+        </time>
+      </a>
+    </span>
+  </div>
 
-    <div class="entry-content">
+
+  
+
+  <div class="article-content">
+    <div class="entry">
       
         <h2 id="oflo"><a href="#oflo" class="headerlink" title="oflo"></a>oflo</h2><p>// TODO</p>
 <h2 id="easyapk"><a href="#easyapk" class="headerlink" title="easyapk"></a>easyapk</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> random,string</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">s = <span class="string">&#x27;n1ctf&#123;17b87f9aae8933ef&#x27;</span></span><br><span class="line">print(s+<span class="string">&#x27;a&#x27;</span>*(<span class="number">38</span>-len(s))+<span class="string">&#x27;&#125;&#x27;</span>)</span><br><span class="line">print(len(s)<span class="number">-6</span>)</span><br><span class="line">a = <span class="string">&#x27;jZe3yJG3zJLHywu4otmZzwy&#x27;</span></span><br><span class="line">tab = <span class="string">&#x27;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-&#x27;</span></span><br><span class="line">rtab = <span class="string">&#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#x27;</span></span><br><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(tab)):</span><br><span class="line">    d[tab[i]] = rtab[i]</span><br><span class="line">ra = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    ra+=d[i]</span><br><span class="line">ra+=<span class="string">&#x27;=&#x27;</span></span><br><span class="line">flag1 = base64.b64decode(ra.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">print(<span class="string">&#x27;flag1:&#x27;</span>,flag1)</span><br><span class="line"></span><br><span class="line">iv = <span class="string">b&#x27;17b87f9aae8933ef&#x27;</span></span><br><span class="line">key = <span class="string">b&#x27;\&#x27;17b87f9aae8933efn1ctf&#123;&#125;&#x27;</span></span><br><span class="line">cipher = bytes([<span class="number">0xA5</span>, <span class="number">0xA4</span>, <span class="number">0x4C</span>, <span class="number">0xD</span>, <span class="number">0xD2</span>, <span class="number">0x52</span>, <span class="number">0x1E</span>, <span class="number">0x63</span>, <span class="number">0x54</span>, <span class="number">0xC5</span>, <span class="number">0x29</span>, <span class="number">0xFA</span>,<span class="number">0xE4</span>, <span class="number">0xEC</span>, <span class="number">0x1F</span>, <span class="number">0x27</span>,<span class="number">0x52</span>, <span class="number">0xD2</span>, <span class="number">0xF1</span>, <span class="number">0xB7</span>, <span class="number">0xE4</span>, <span class="number">0x1C</span>, <span class="number">0x61</span>, <span class="number">0x42</span>, <span class="number">0x77</span>, <span class="number">0x9F</span>, <span class="number">0x5D</span>, <span class="number">0xA1</span>, <span class="number">0x87</span>, <span class="number">0xA</span>, <span class="number">0xEC</span>, <span class="number">0x55</span>])</span><br><span class="line">aes = AES.new(mode=AES.MODE_CBC,iv=iv,key=key)</span><br><span class="line"><span class="comment"># 03b5029f16f7e605</span></span><br><span class="line">print(aes.decrypt(cipher))</span><br><span class="line">print(<span class="string">&#x27;n1ctf&#123;&#x27;</span>+str(flag1,encoding=<span class="string">&#x27;utf-8&#x27;</span>)+<span class="string">&#x27;03b5029f16f7e605&#125;&#x27;</span>)</span><br></pre></td></tr></table></figure>
@@ -140,114 +130,45 @@ easyapk12345678910111213141516171819202122232425262728293031323334import base64i
 <h2 id="N1vault"><a href="#N1vault" class="headerlink" title="N1vault"></a>N1vault</h2><p>// TODO</p>
 
       
-    </div><!-- .entry-content -->
-
-    <footer class="entry-meta">
-    <a href="/2020/10/20/writeup/n1ctf2020/wp/">
-    <time datetime="2020-10-20T05:59:47.000Z" class="entry-date">
-        2020-10-20
-    </time>
-</a>
-    
-    
-    </footer>
-</article>
-
-
-    
-<nav class="nav-single">
-    <h3 class="assistive-text">文章导航</h3>
-    
-        <span class="nav-previous"><a href="/2020/10/21/note/compiler/lex_and_yacc/" rel="prev"><span class="meta-nav">←</span> lex，yacc学习笔记</a></span>
-    
-    
-        <span class="nav-next"><a href="/2020/10/18/note/rev/buuoj-1/" rel="next">buuoj中学到的东西--键盘扫描码 <span class="meta-nav">→</span></a></span>
-    
-</nav><!-- .nav-single -->
-
-
-
-
-
-
-
-</div></div>
-        <div id="secondary" class="widget-area" role="complementary">
-  
-    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
-    <div>
-        <input type="text" value="" name="s" id="s" />
-        <input type="submit" id="searchsubmit" value="搜索" />
     </div>
-</form></aside>
-  
-    
-  
-    
-  
-    
-  <aside class="widget">
-    <h3 class="widget-title">Recents</h3>
-    <div class="widget-content">
-      <ul>
-        
-          <li>
-            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
-          </li>
-        
-      </ul>
-    </div>
-  </aside>
-
-  
-    
-  
-    
-  
-</div>
-      </div>
-      <footer id="colophon" role="contentinfo">
-    <p>&copy; 2020 John Doe
-    All rights reserved.</p>
-    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
-</footer>
-    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
-
-<script src="/js/jquery-3.3.1.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-<script src="/js/navigation.js"></script>
-
-<div id="bg"></div>
 
   </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 John Doe
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
 </body>
 </html>
