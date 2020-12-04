@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="Xposed工作原理zygote进程Android运行的心脏。每一个应用都是这个进程的fork，都从这个进程的一个fork开始。
+Android系统启动时，zygote进程被/init.rc脚本启动。当/system/bin/app_process加载完成时，zygote启动完成。/system/b" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Xposed学习--工作原理 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Xposed工作原理zygote进程Android运行的心脏。每一个应用都是这个进程的fork，都从这个进程的一个fork开始。 Android系统启动时，zygote进程被&#x2F;init.rc脚本启动。当&#x2F;system&#x2F;bin&#x2F;app_process加载完成时，zygote启动完成。&#x2F;system&#x2F;bin&#x2F;app_process负责加载必要的类和调用初始化方法。 Xposed安装xposed后，会复">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xposed学习--工作原理">
+<meta property="og:url" content="http://example.com/2020/10/14/note/rev/rev-3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Xposed工作原理zygote进程Android运行的心脏。每一个应用都是这个进程的fork，都从这个进程的一个fork开始。 Android系统启动时，zygote进程被&#x2F;init.rc脚本启动。当&#x2F;system&#x2F;bin&#x2F;app_process加载完成时，zygote启动完成。&#x2F;system&#x2F;bin&#x2F;app_process负责加载必要的类和调用初始化方法。 Xposed安装xposed后，会复">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-14T02:43:20.000Z">
+<meta property="article:modified_time" content="2020-10-14T06:25:34.583Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Hexo" rel="home">Hexo</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-note/rev/rev-3" class="post-note/rev/rev-3 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      Xposed学习--工作原理
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/10/14/note/rev/rev-3/" data-id="ckg8w8b7g0000p8wbh4e88aa7" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="Xposed工作原理"><a href="#Xposed工作原理" class="headerlink" title="Xposed工作原理"></a>Xposed工作原理</h2><h3 id="zygote进程"><a href="#zygote进程" class="headerlink" title="zygote进程"></a>zygote进程</h3><p>Android运行的心脏。每一个应用都是这个进程的fork，都从这个进程的一个fork开始。</p>
+<p>Android系统启动时，zygote进程被/init.rc脚本启动。当/system/bin/app_process加载完成时，zygote启动完成。/system/bin/app_process负责加载必要的类和调用初始化方法。</p>
+<h3 id="Xposed"><a href="#Xposed" class="headerlink" title="Xposed"></a>Xposed</h3><p>安装xposed后，会复制一份扩展后的app_process到/system/bin，这个app_process会添加一个额外的jar到classpath并且在特定的地方调用方法。</p>
+<p>举个例子，当虚拟机创建后，在zygote的main函数执行之前，或者main函数中，xposed时zygote的一部分并且可以控制上下文。</p>
+<p>jar位于<code>/data/data/de.robv.android.xposed.installer/bin/XposedBridge.jar</code>。</p>
+<p>使用Xposed可以hook方法，在方法前后注入代码。</p>
+<p>XposedBridge还有native方法hookMethodNative，会将某个方法改成native并且把方法link到自己的native方法。</p>
+<h2 id="Xposed入门示例"><a href="#Xposed入门示例" class="headerlink" title="Xposed入门示例"></a>Xposed入门示例</h2><ol>
+<li><p>新建Android Studio工程，选择空白activity</p>
+</li>
+<li><p>下载<a target="_blank" rel="noopener" href="https://github.com/rovo89/XposedBridge/wiki/Using-the-Xposed-Framework-API">xposedAPI</a>，放在工程的libs目录下</p>
+</li>
+<li><p>改动build.gradle(:app)，如果有implementation fileTree()就换成compileOnly，如果没有就添加一行compileOnly</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;com.android.application&#x27;</span></span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion <span class="number">30</span></span><br><span class="line">    buildToolsVersion <span class="string">&quot;30.0.2&quot;</span></span><br><span class="line"></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId <span class="string">&quot;com.example.redclocknew&quot;</span></span><br><span class="line">        minSdkVersion <span class="number">20</span></span><br><span class="line">        targetSdkVersion <span class="number">30</span></span><br><span class="line">        versionCode <span class="number">1</span></span><br><span class="line">        versionName <span class="string">&quot;1.0&quot;</span></span><br><span class="line"></span><br><span class="line">        testInstrumentationRunner <span class="string">&quot;androidx.test.runner.AndroidJUnitRunner&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled <span class="literal">false</span></span><br><span class="line">            proguardFiles getDefaultProguardFile(<span class="string">&#x27;proguard-android-optimize.txt&#x27;</span>), <span class="string">&#x27;proguard-rules.pro&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line"><span class="comment">//    implementation fileTree(dir: &quot;libs&quot;, include: [&quot;*.jar&quot;])</span></span><br><span class="line">    compileOnly fileTree(<span class="attr">dir:</span> <span class="string">&#x27;libs&#x27;</span>, <span class="attr">include:</span> [<span class="string">&#x27;*.jar&#x27;</span>])</span><br><span class="line">    implementation <span class="string">&#x27;androidx.appcompat:appcompat:1.2.0&#x27;</span></span><br><span class="line">    testImplementation <span class="string">&#x27;junit:junit:4.12&#x27;</span></span><br><span class="line">    androidTestImplementation <span class="string">&#x27;androidx.test.ext:junit:1.1.2&#x27;</span></span><br><span class="line">    androidTestImplementation <span class="string">&#x27;androidx.test.espresso:espresso-core:3.3.0&#x27;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑AndroidManifest.xml，添加一系列meta-data，比如我的是这样</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">manifest</span> <span class="attr">xmlns:android</span>=<span class="string">&quot;http://schemas.android.com/apk/res/android&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">package</span>=<span class="string">&quot;com.example.redclocknew&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">application</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:allowBackup</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:icon</span>=<span class="string">&quot;@mipmap/ic_launcher&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:label</span>=<span class="string">&quot;@string/app_name&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:roundIcon</span>=<span class="string">&quot;@mipmap/ic_launcher_round&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:supportsRtl</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:theme</span>=<span class="string">&quot;@style/AppTheme&quot;</span> &gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta-data</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:name</span>=<span class="string">&quot;xposedmodule&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:value</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta-data</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:name</span>=<span class="string">&quot;xposeddescription&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:value</span>=<span class="string">&quot;Easy example which makes the status bar clock red and adds a smiley&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta-data</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:name</span>=<span class="string">&quot;xposedminversion&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:value</span>=<span class="string">&quot;53&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">application</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建类，添加代码，示例如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.redclocknew;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> de.robv.android.xposed.XposedHelpers.findAndHookMethod;</span><br><span class="line"><span class="keyword">import</span> android.graphics.Color;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"><span class="keyword">import</span> de.robv.android.xposed.IXposedHookLoadPackage;</span><br><span class="line"><span class="keyword">import</span> de.robv.android.xposed.XC_MethodHook;</span><br><span class="line"><span class="keyword">import</span> de.robv.android.xposed.XposedBridge;</span><br><span class="line"><span class="keyword">import</span> de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedClock</span> <span class="keyword">implements</span> <span class="title">IXposedHookLoadPackage</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleLoadPackage</span><span class="params">(LoadPackageParam lpparam)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!lpparam.packageName.equals(<span class="string">&quot;com.android.systemui&quot;</span>))</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line"><span class="comment">//        XposedBridge.log(&quot;Loaded app: &quot; + lpparam.packageName);</span></span><br><span class="line">        findAndHookMethod(<span class="string">&quot;com.android.systemui.statusbar.policy.Clock&quot;</span>, lpparam.classLoader, <span class="string">&quot;updateClock&quot;</span>, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">afterHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line"></span><br><span class="line">                TextView tv = (TextView) param.thisObject;</span><br><span class="line">                String text = tv.getText().toString();</span><br><span class="line">                tv.setText(text + <span class="string">&quot;🍖&quot;</span>);</span><br><span class="line">                tv.setTextColor(Color.RED);</span><br><span class="line">                <span class="keyword">if</span>(text!=<span class="keyword">null</span>&amp;&amp;text.length()&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="keyword">char</span> c = text.charAt(text.length()-<span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">if</span>((c&amp;<span class="number">1</span>)!=<span class="number">0</span>)&#123;</span><br><span class="line">                        tv.setText(text+<span class="string">&quot;🍭&quot;</span>);</span><br><span class="line">                        tv.setTextColor(Color.GREEN);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加assets/xposed_init文本文件，在文件中添加你的完整类名，比如我的是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">com.example.redclocknew.RedClock</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>工具栏build-&gt;build apk(s)</p>
+</li>
+<li><p>找到对应的apk，使用</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install 文件名</span><br></pre></td></tr></table></figure>
+<p>进行安装</p>
+</li>
+<li><p>重启手机，愉快体验</p>
+</li>
+</ol>
+<h2 id="自定义Xposed模块"><a href="#自定义Xposed模块" class="headerlink" title="自定义Xposed模块"></a>自定义Xposed模块</h2><p>根据Xposed实现原理，大概的替换思路有了：找到要hook的方法，然后利用xposedhook该方法并且实施自己要做的动作。</p>
+<p>找源码有两种方式，反编译和阅读源码(如果有)</p>
+<p>相关资料</p>
+<ol>
+<li><p><a target="_blank" rel="noopener" href="https://ibotpeaches.github.io/Apktool/">apktool</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://java-decompiler.github.io/">jd-gui</a> or <a target="_blank" rel="noopener" href="https://github.com/deathmarine/Luyten">luyten</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/pxb1988/dex2jar">dex2java</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://source.android.com/setup/build/downloading">下载android源码</a> or <a target="_blank" rel="noopener" href="http://grepcode.com/snapshot/repository.grepcode.com/java/ext/com.google.android/android/4.0.3_r1/">here</a></p>
+</li>
+<li><p><a href="androidxrefx.com">在线查看android源码</a></p>
+</li>
+<li><p>获取系统中指定App安装包的方法</p>
+<ol>
+<li><p>获取栈顶activity(当前界面所属activity)</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb shell dumpsys window | findstr mCurrentFocus</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">adb shell dumpsys activity | findstr mFucusedActivity</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取app文件安装路径</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell pm path com.test</span><br></pre></td></tr></table></figure>
+<ul>
+<li>/system/app rom附带软件</li>
+<li>/system/priv-app 手机厂商定制软件</li>
+<li>/data/app 用户安装软件</li>
+</ul>
+</li>
+<li><p>使用pull命令获取应用</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb pull path_to_apk path_to_store</span><br></pre></td></tr></table></figure>
+<p>使用push命令可以存储应用</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb push path_to_file path_on_phone</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<p>找到可以修改的点和相关函数，注意xposed只能hook函数。</p>
+<p>使用下面的代码确定相关app是否存在</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleLoadPackage</span><span class="params">(LoadPackageParam lpparam)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!lpparam.packageName.equals(<span class="string">&quot;com.android.systemui&quot;</span>))</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    XposedBridge.log(<span class="string">&quot;we are in SystemUI!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用findAndHook方法hook方法→_→</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> de.robv.android.xposed.mods.tutorial;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> de.robv.android.xposed.XposedHelpers.findAndHookMethod;</span><br><span class="line"><span class="keyword">import</span> de.robv.android.xposed.IXposedHookLoadPackage;</span><br><span class="line"><span class="keyword">import</span> de.robv.android.xposed.XC_MethodHook;</span><br><span class="line"><span class="keyword">import</span> de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tutorial</span> <span class="keyword">implements</span> <span class="title">IXposedHookLoadPackage</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleLoadPackage</span><span class="params">(<span class="keyword">final</span> LoadPackageParam lpparam)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    	<span class="keyword">if</span> (!lpparam.packageName.equals(<span class="string">&quot;com.android.systemui&quot;</span>))</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">    	</span><br><span class="line">    	findAndHookMethod(<span class="string">&quot;com.android.systemui.statusbar.policy.Clock&quot;</span>, lpparam.classLoader, <span class="string">&quot;updateClock&quot;</span>, <span class="keyword">new</span> XC_MethodHook() &#123;</span><br><span class="line">    		<span class="meta">@Override</span></span><br><span class="line">    		<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    			<span class="comment">// this will be called before the clock was updated by the original method</span></span><br><span class="line">    		&#125;</span><br><span class="line">    		<span class="meta">@Override</span></span><br><span class="line">    		<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">afterHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    			<span class="comment">// this will be called after the clock was updated by the original method</span></span><br><span class="line">    		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://github.com/rovo89/XposedBridge/wiki/Development-tutorial">Xposed turtorial</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://jsonchao.github.io/2019/02/24/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%B9%8BZygote%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8/">Android系统启动流程之Zygote启动</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/song_lee/article/details/105048406">adb获取手机中已安装app的按转包</a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/10/14/note/rev/rev-3/">
+    <time datetime="2020-10-14T02:43:20.000Z" class="entry-date">
+        2020-10-14
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2020/10/18/note/rev/z3/" rel="prev"><span class="meta-nav">←</span> Z3使用简介</a></span>
+    
+    
+        <span class="nav-next"><a href="/2020/10/14/note/rev/rev-2/" rel="next">平方求幂&amp;damCTF tracing-into-the-night wp <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2020 John Doe
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>

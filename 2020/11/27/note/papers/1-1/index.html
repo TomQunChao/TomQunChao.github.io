@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="语义提取首先要定义语义，比如说一个软件的行为有无恶意，有恶意和无恶意就是语义。然后才可以在软件中提取信息，整合信息，判断是否具有这些语义。或者可以判断两个软件是否具有相同语义。
+1基于语义的恶意代码行为特征提取及检测方法
+恶意代码总是会有各种混淆以干扰分析，并且还会有变种。比如说插入垃圾行为，插入垃" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>app行为的语义提取方案读论文笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="语义提取首先要定义语义，比如说一个软件的行为有无恶意，有恶意和无恶意就是语义。然后才可以在软件中提取信息，整合信息，判断是否具有这些语义。或者可以判断两个软件是否具有相同语义。 1基于语义的恶意代码行为特征提取及检测方法 恶意代码总是会有各种混淆以干扰分析，并且还会有变种。比如说插入垃圾行为，插入垃圾代码。这时如果从一个更高的抽象层次去分析，就可以抵抗这些干扰。于是就引入了语义特征分析。  现有的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="app行为的语义提取方案读论文笔记">
+<meta property="og:url" content="http://example.com/2020/11/27/note/papers/1-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="语义提取首先要定义语义，比如说一个软件的行为有无恶意，有恶意和无恶意就是语义。然后才可以在软件中提取信息，整合信息，判断是否具有这些语义。或者可以判断两个软件是否具有相同语义。 1基于语义的恶意代码行为特征提取及检测方法 恶意代码总是会有各种混淆以干扰分析，并且还会有变种。比如说插入垃圾行为，插入垃圾代码。这时如果从一个更高的抽象层次去分析，就可以抵抗这些干扰。于是就引入了语义特征分析。  现有的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/.com//2-1.PNG">
+<meta property="og:image" content="http://example.com/.com//2-2.PNG">
+<meta property="og:image" content="http://example.com/.com//5-1.PNG">
+<meta property="og:image" content="http://example.com/.com//6-1.PNG">
+<meta property="article:published_time" content="2020-11-27T15:40:06.000Z">
+<meta property="article:modified_time" content="2020-12-04T09:19:34.346Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/.com//2-1.PNG">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Hexo" rel="home">Hexo</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-note/papers/1-1" class="post-note/papers/1-1 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      app行为的语义提取方案读论文笔记
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/27/note/papers/1-1/" data-id="cki3dgtlv0000bwwbawla2v06" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>语义提取首先要定义语义，比如说一个软件的行为有无恶意，有恶意和无恶意就是语义。然后才可以在软件中提取信息，整合信息，判断是否具有这些语义。或者可以判断两个软件是否具有相同语义。</p>
+<h2 id="1"><a href="#1" class="headerlink" title="1"></a>1</h2><p><a target="_blank" rel="noopener" href="http://www.jos.org.cn/jos/ch/reader/create_pdf.aspx?file_no=3953&amp;journal_id=jos">基于语义的恶意代码行为特征提取及检测方法</a></p>
+<p>恶意代码总是会有各种混淆以干扰分析，并且还会有变种。比如说插入垃圾行为，插入垃圾代码。这时如果从一个更高的抽象层次去分析，就可以抵抗这些干扰。于是就引入了语义特征分析。</p>
+<blockquote>
+<p>现有的分析方法难于抵抗代码混淆，特征库庞大，在于分析方案无法分析出恶意代码的根本意图</p>
+</blockquote>
+<p>这篇论文的参考资料8-10是行为语义相关的。</p>
+<p>主要通过数据依赖和控制依赖，行为图构建，语义特征分析来分析恶意代码的行为，主要阐述了语义无关和语义等价两类混淆技术。</p>
+<p>先进行动态污点传播分析</p>
+<p>然后是行为依赖图的构建：</p>
+<ol>
+<li>行为依赖图初始化为空</li>
+<li>遇到产生污点的关键系统调用，添加节点</li>
+<li>遇到新的系统调用时，如果传入参数包含污点数据，则将其添加为节点<ul>
+<li>这里注意通过DFA将系统调用序列等价为某一个系统调用</li>
+</ul>
+</li>
+<li>依赖图的添加是通过添加新节点时回溯计算污点传播过程完成的<br>对于控制流转移的问题，采用递归下降反汇编算法</li>
+<li>当污点漂白或恶意代码执行结束，行为图构建结束</li>
+</ol>
+<p>语义等价通过等价库解决，语义无关有相应的提取方案。</p>
+<p>对于语义无关调用，通过污点分析分析相关调用对系统的状态是否产生影响，系统状态定义为操作系统的完整性和数据安全性。语义无关系统调用在行为图中定义为没有使系统状态产生改变的节点；将循环替换为一次执行信息</p>
+<p>最后构建一个恶意代码行为图特征库，匹配系统调用，边，节点，并且为不同的匹配元素设置不同的权值，最后一个加权平均获得最后的[0,1]的值，并且涉资一个阈值，超过阈值就认为是恶意代码。</p>
+<p>阈值设置是基于实验结果的。</p>
+<blockquote>
+<p>通过对行为层混淆技术的分析,我们从语义角度将其分为语义无关调用插入和语义等价调用变换两类.语义无关调用插入是指恶意代码中常加入一些与其意图无关没有无实际作用的系统调用,目的是改变代码特征,我们从语义角度将其称为语义无关调用.语义等价调用变换主要是指通过等价系统调用替换、循环变换等方式改变执行行为的系统调用序列,从而改变特征.等价系统调用序列是指行为相同的不同系统调用序列,将其互相替换,便可在不改变行为的前提下改变特征.循环变换即指改变操作粒度,将同样的行为分割为不同循环而产生不同图特征的混淆方式.这两种混淆方法的共同特点是,在保持恶意代码行为意图即代码语义的条件下,通过等价替换改变特征,我们将此类变换统称为语义等价调用变换</p>
+</blockquote>
+<p>7-10参考资料可能有语义分析</p>
+<blockquote>
+<p>[7] Sathyanarayan VS, Kohli P, Bruhadeshwar B. Signature generation and detection of malware families. In: Proc. of the 13th<br>Austalasian Conf. on Information Security and Privacy. Wollongong, 2008. 336−349. [doi: 10.1007/978-3-540-70500-0_25]<br>[8] Christodorescu M, Jha S, Seshia SA, Song DX, Bryant RE. Semantics-Aware malware detection. In: Proc. of the 2005 IEEE Symp.on Security and Privacy. 2005. 32−46. [doi: 10.1109/SP.2005.20]<br>[9] Preda MD, Christodorescu M, Jha S, Debray S. A semantics-based approach to malware detection. In: Proc. of the Symp. onPrinciples of Programming Languages. New York: ACM Press, 2007. 377−388. [doi: 10.1145/1190216.1190270]<br>[10] Kinder J, Katzenbeisser S, Schallhart C, Veith H. Detecting malicious code by model checking. In: Proc. of the 2nd Int’l Conf. onIntrusion and Malware Detection and Vulnerability Assessment (DIMVA 2005). LNCS 3548, Vienna: Springer-Verlag, 2005.174−187. [doi: 10.1007/11506881_11] </p>
+</blockquote>
+<h2 id="2"><a href="#2" class="headerlink" title="2"></a>2</h2><p><a target="_blank" rel="noopener" href="https://xueshu.baidu.com/usercenter/paper/show?paperid=dd2172d9cc4bf41dbc92641acce1ea1a&amp;site=xueshu_se">https://xueshu.baidu.com/usercenter/paper/show?paperid=dd2172d9cc4bf41dbc92641acce1ea1a&amp;site=xueshu_se</a></p>
+<p>Android系统下混淆恶意软件的检测研究</p>
+<p>基于source-sink的语义特征的提取与加工处理：从程序中提取从source到sink的数据流，使用自定义的处理器进行处理，产生最终的特征</p>
+<p>source即敏感信息，sink即将敏感信息泄露的API调用。然后进行格式化，找到恶意软件家族最常用的特征。</p>
+<p>API调用的语义特征，权限，linux命令</p>
+<p>flowdroid提取source-sink流,apktool提取权限特征</p>
+<p><img src="/.com//2-1.PNG" alt></p>
+<p>后面是用机器学习的方式进行分类的</p>
+<p><img src="/.com//2-2.PNG" alt></p>
+<h2 id="3"><a href="#3" class="headerlink" title="3"></a>3</h2><p>因为看到前面的方案都有污点分析的方法，所以找了找污点分析的文献综述</p>
+<p>污点分析技术的原理和实践应用<br><a target="_blank" rel="noopener" href="https://xueshu.baidu.com/usercenter/paper/show?paperid=be0648c3bf970bf4977b893e2089f8d7&amp;site=xueshu_se">https://xueshu.baidu.com/usercenter/paper/show?paperid=be0648c3bf970bf4977b893e2089f8d7&amp;site=xueshu_se</a></p>
+<p>之前看过的，介绍了污点分析的现状，相关工具，分类，静态污点分析和动态污点分析的优缺点</p>
+<h2 id="4"><a href="#4" class="headerlink" title="4"></a>4</h2><p>A Semantics-Based Approach to Malware Detection </p>
+<blockquote>
+<p>这篇文章认为识别恶意软件的关键在于语义</p>
+</blockquote>
+<p>后面没看懂了</p>
+<h2 id="5"><a href="#5" class="headerlink" title="5"></a>5</h2><p>Sentics-Aware Malware Detection</p>
+<p>定义一系列的模板，如果目标代码和已定义的模板，存在一个内存上下文，在这个内存上下文相同的情况下，对内存的影响相同，则目标代码和模板由相同的语义。模板是由自定义的语言写成的，这样就忽略了平台差异</p>
+<p>模板中的代码，在一定的状态下，产生一系列的系统调用称为事件</p>
+<p>定义J为一个恶意软件家族所具有的所有行为的模板集合，如果一个程序包含这个集合中的所有行为，则这个程序有恶意行为</p>
+<p>模板匹配程序</p>
+<p>模板T的一个节点m和程序P的一个节点n</p>
+<ul>
+<li>节点匹配：如果有函数f,f(m)=n，则说这两个节点匹配,比如说图中的4和7节点<br> <img src="/.com//5-1.PNG" alt></li>
+<li>边匹配：点匹配完成之后，需要确定节点中的变量在节点指令执行完成之后值是否相同</li>
+</ul>
+<h2 id="6"><a href="#6" class="headerlink" title="6"></a>6</h2><p>Semantics-Aware Android Malware Classification Using Weighted Contextual API Dependency Graphs</p>
+<p>使用Weighted Contextual API Dependency Graphs(WC-ADG)描述APP的行为</p>
+<p>带有权值和上下文的API依赖图</p>
+<blockquote>
+<p>API依赖：展示应用如何与Android框架交互</p>
+<p>上下文：在调用API时上下文</p>
+<p>常量：攻击者一般把窃取到的数据发送到指定的位置，所以和调用API有关的常量值得注意<br>API依赖图不精确匹配，因为不同的API(甚至带常量的和不带常量的)对系统安全性的影响不同，所以对于不同的API应该赋予不同的权值</p>
+</blockquote>
+<p>形式化定义：WC-ADG G=(V,E,$\alpha$,$\beta$),API操作$\Sigma$,权值空间$W$<br>符号|含义<br>—|—<br>$V$|API操作，也就是点<br>$E$|API之间的关联，也就是边<br>$\Sigma$|带有上下文的API操作<br>$\alpha$|把点对应到$\Sigma$中的一个元素<br>$\beta$|为每一个点赋权值<br>例子</p>
+<p><img src="/.com//6-1.PNG" alt></p>
+<p>生成图的步骤</p>
+<ol>
+<li>发现入口，入口分为被用户察觉和不被用户察觉。并且入口发现之后就可以找到参数，关联等</li>
+<li>分析数据流，交叉引用分析</li>
+</ol>
+<p>探测步骤</p>
+<ol>
+<li>生成图，然后根据已有的软件的图(没有恶意行为的)判断相似度，如果相似率小于0.3，则判断为不正常</li>
+<li>异常行为探测</li>
+<li>训练分类器<ol>
+<li>建立已有软件图的数据库，包括恶意/非恶意软件的一些小行为，移除了恶意软件和非恶意软件共有的行为</li>
+<li>给定一个待测软件，生成它的功能向量，向量的每一个元素代表数据库中的一个图，元素值代表和该图的相似度</li>
+</ol>
+</li>
+</ol>
+<h2 id="7"><a href="#7" class="headerlink" title="7"></a>7</h2><p>Detecting Malicious Code by Model Checking</p>
+<p>把控制流模型化为一个带标签的有限图</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/27/note/papers/1-1/">
+    <time datetime="2020-11-27T15:40:06.000Z" class="entry-date">
+        2020-11-27
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+    
+        <span class="nav-next"><a href="/2020/11/26/note/rev/qiling/" rel="next">麒麟框架使用--官方示例 <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2020 John Doe
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>

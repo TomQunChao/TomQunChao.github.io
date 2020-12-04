@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="简介z3是巨硬开发的开源线性约束求解器
+数据类型
+Int
+Real
+BitVec
+文档
+
+使用一般步骤
+定义数据类型
+12a = Int(&amp;#x27;a&amp;#x27;) # 定义一个数学上的整数整数x = [BitVec(&amp;#x27;x%d&amp;#x27;%i,32) for i in 6] # 定义6个" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Z3使用简介 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="简介z3是巨硬开发的开源线性约束求解器 数据类型 Int Real BitVec 文档  使用一般步骤 定义数据类型 12a &#x3D; Int(&amp;#x27;a&amp;#x27;) # 定义一个数学上的整数整数x &#x3D; [BitVec(&amp;#x27;x%d&amp;#x27;%i,32) for i in 6] # 定义6个32位整数型位向量，就是C&#x2F;C++中的int  添加约束 1234s &#x3D; Solver()">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Z3使用简介">
+<meta property="og:url" content="http://example.com/2020/10/18/note/rev/z3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="简介z3是巨硬开发的开源线性约束求解器 数据类型 Int Real BitVec 文档  使用一般步骤 定义数据类型 12a &#x3D; Int(&amp;#x27;a&amp;#x27;) # 定义一个数学上的整数整数x &#x3D; [BitVec(&amp;#x27;x%d&amp;#x27;%i,32) for i in 6] # 定义6个32位整数型位向量，就是C&#x2F;C++中的int  添加约束 1234s &#x3D; Solver()">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-18T05:12:57.000Z">
+<meta property="article:modified_time" content="2020-10-18T05:27:10.243Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Hexo" rel="home">Hexo</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-note/rev/z3" class="post-note/rev/z3 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      Z3使用简介
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/10/18/note/rev/z3/" data-id="ckgeoaeta00014cwb64n7fv48" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>z3是巨硬开发的开源线性约束求解器</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><ol>
+<li>Int</li>
+<li>Real</li>
+<li>BitVec</li>
+<li>文档</li>
+</ol>
+<h2 id="使用一般步骤"><a href="#使用一般步骤" class="headerlink" title="使用一般步骤"></a>使用一般步骤</h2><ol>
+<li><p>定义数据类型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = Int(<span class="string">&#x27;a&#x27;</span>) <span class="comment"># 定义一个数学上的整数整数</span></span><br><span class="line">x = [BitVec(<span class="string">&#x27;x%d&#x27;</span>%i,<span class="number">32</span>) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">6</span>] <span class="comment"># 定义6个32位整数型位向量，就是C/C++中的int</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加约束</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s &#x3D; Solver()</span><br><span class="line">s.add(x[0]+x[1]&lt;10)</span><br><span class="line">s.add(x[0]&#x3D;&#x3D;2)</span><br><span class="line">s.add(x[0]+x[3]&#x3D;&#x3D;5)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>求解</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">res = []</span><br><span class="line"><span class="keyword">if</span> s.check()==sat: <span class="comment">#如果约束满足</span></span><br><span class="line">    m = s.model() <span class="comment"># 满足的模型</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> m:</span><br><span class="line">        res.append(i.as_long()) <span class="comment"># 转化为长整型</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上述情况只能找到一种满足情况的解，可能存在溢出</p>
+</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/30548907">z3一把梭</a></p>
+<p>[2] [vscode自动补全功能]</p>
+<h2 id="附件"><a href="#附件" class="headerlink" title="附件"></a>附件</h2><p>全部代码(这个例子溢出，所以不相等)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> z3 <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">x = [BitVec(<span class="string">&#x27;x%i&#x27;</span>%i,<span class="number">32</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">6</span>)]</span><br><span class="line">s = Solver()</span><br><span class="line">s.add(x[<span class="number">0</span>]==<span class="number">0xDF48EF7E</span>)</span><br><span class="line">s.add(x[<span class="number">1</span>]==<span class="number">0x20CAACF4</span>)</span><br><span class="line">s.add(x[<span class="number">5</span>]==<span class="number">0x84F30420</span>)</span><br><span class="line">s.add(x[<span class="number">2</span>]-x[<span class="number">3</span>]==<span class="number">0x84A236FF</span>)</span><br><span class="line">s.add(x[<span class="number">3</span>]+x[<span class="number">4</span>]==<span class="number">0xFA6CB703</span>)</span><br><span class="line">s.add(x[<span class="number">2</span>]-x[<span class="number">4</span>]==<span class="number">0x42D731A8</span>)</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">x[3]-x[4]=0x42d731a8-0x84a236ff</span></span><br><span class="line"><span class="string">x[3] = (0x42d731a8-0x84a236ff+0xfa6cb703)/2;</span></span><br><span class="line"><span class="string">x[2] = x[3]+0x84a236ff;</span></span><br><span class="line"><span class="string">x[4] = 0xfa6cb703-x[3];</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">res = []</span><br><span class="line"><span class="keyword">while</span> s.check()==sat:</span><br><span class="line">    m = s.model()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> x:</span><br><span class="line">        res.append(m[i].as_long())</span><br><span class="line">    print(m)</span><br></pre></td></tr></table></figure>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/10/18/note/rev/z3/">
+    <time datetime="2020-10-18T05:12:57.000Z" class="entry-date">
+        2020-10-18
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2020/10/18/note/win/win-1/" rel="prev"><span class="meta-nav">←</span> power shell 禁止执行脚本的解决方法</a></span>
+    
+    
+        <span class="nav-next"><a href="/2020/10/14/note/rev/rev-3/" rel="next">Xposed学习--工作原理 <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2020 John Doe
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>

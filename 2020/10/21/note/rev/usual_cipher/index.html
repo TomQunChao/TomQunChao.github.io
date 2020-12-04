@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="相关数论基础辗转相除法用于计算两个数的最大公约数，也叫欧几里得法
+$gcd(a,b)=gcd(b,a\ mod\ b),a,b\in Z$
+直到
+$a\%b=0$
+此时$b$就是最大公约数
+证明过程待后续
+代码实现
+123456789uint32_t gcd(int32_t a,int32_t b)" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>常见加密算法 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="相关数论基础辗转相除法用于计算两个数的最大公约数，也叫欧几里得法 $gcd(a,b)&#x3D;gcd(b,a\ mod\ b),a,b\in Z$ 直到 $a\%b&#x3D;0$ 此时$b$就是最大公约数 证明过程待后续 代码实现 123456789uint32_t gcd(int32_t a,int32_t b)&amp;#123;    int32_t t;    while(b)&amp;#123;        t&#x3D;a%">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常见加密算法">
+<meta property="og:url" content="http://example.com/2020/10/21/note/rev/usual_cipher/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="相关数论基础辗转相除法用于计算两个数的最大公约数，也叫欧几里得法 $gcd(a,b)&#x3D;gcd(b,a\ mod\ b),a,b\in Z$ 直到 $a\%b&#x3D;0$ 此时$b$就是最大公约数 证明过程待后续 代码实现 123456789uint32_t gcd(int32_t a,int32_t b)&amp;#123;    int32_t t;    while(b)&amp;#123;        t&#x3D;a%">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-21T10:50:40.000Z">
+<meta property="article:modified_time" content="2020-11-21T03:59:53.486Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Hexo" rel="home">Hexo</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-note/rev/usual_cipher" class="post-note/rev/usual_cipher post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      常见加密算法
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/10/21/note/rev/usual_cipher/" data-id="ckgkfi3ue0000f4wb1eit4iit" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="相关数论基础"><a href="#相关数论基础" class="headerlink" title="相关数论基础"></a>相关数论基础</h2><h3 id="辗转相除法"><a href="#辗转相除法" class="headerlink" title="辗转相除法"></a>辗转相除法</h3><p>用于计算两个数的最大公约数，也叫欧几里得法</p>
+<p>$gcd(a,b)=gcd(b,a\ mod\ b),a,b\in Z$</p>
+<p>直到</p>
+<p>$a\%b=0$</p>
+<p>此时$b$就是最大公约数</p>
+<p>证明过程待后续</p>
+<p>代码实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">uint32_t</span> <span class="title">gcd</span><span class="params">(<span class="keyword">int32_t</span> a,<span class="keyword">int32_t</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int32_t</span> t;</span><br><span class="line">    <span class="keyword">while</span>(b)&#123;</span><br><span class="line">        t=a%b;</span><br><span class="line">        a=b;</span><br><span class="line">        b=t;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="快速幂"><a href="#快速幂" class="headerlink" title="快速幂"></a>快速幂</h3><p>用于快速计算$a^n,n\in N,a\in Z$</p>
+<script type="math/tex; mode=display">
+a^n=\begin{cases}
+a^{n-1}\cdot a,n\ is\ odd
+\\a^{\frac{n}{2}}\cdot a^{\frac{n}{2}},n\ is\ even
+\end{cases}</script><p>代码实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int32_t</span> <span class="title">qpow</span><span class="params">(<span class="keyword">int32_t</span> a,<span class="keyword">uint32_t</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int32_t</span> ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n)&#123;</span><br><span class="line">        <span class="keyword">if</span>(n&amp;<span class="number">1</span>)&#123;</span><br><span class="line">            ans*=a;</span><br><span class="line">        &#125;</span><br><span class="line">        a*=a;</span><br><span class="line">        n&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="中国剩余定理"><a href="#中国剩余定理" class="headerlink" title="中国剩余定理"></a>中国剩余定理</h3><p>给出以下的一元线性同余方程组</p>
+<script type="math/tex; mode=display">
+S:\begin{cases}
+x\equiv a_1(mod\ m_1)\\
+x\equiv a_2(mod\ m_2)\\
+\ \ \ \ \vdots\\
+x\equiv a_n(mod\ m_n)
+\end{cases}</script><p>中国剩余定理给出了有解的判定条件和解的具体形式</p>
+<p>若$m_1,m_2,…,m_n$中任两数互质，则对任意整数$a_1,a_2,…,a_n$，方程组$S$有解，通解通过如下方式得到</p>
+<ol>
+<li><p>$M\prod\limits_{i=1}^{n}m_i,M_i=M/m_i,\forall i\in{1,2,…,n}$</p>
+</li>
+<li><p>$t_i=M_i^{-1}(mod\ m_i)$</p>
+</li>
+<li><p>$x\equiv \sum\limits_{i=1}^{n}a_it_iM_i(mod\ M)$</p>
+</li>
+</ol>
+<h4 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h4><p>由假设，$gcd(M_i,m_i)=1$，则$M_i^{-1}(mod\ m_i)$存在。</p>
+<p>考察$x\ mod\ m_i,\because\forall j\ne i,M_j\equiv 0(mod\ m_i)$，从而得到$x\equiv a_it_iM_i(mod\ m_i)$</p>
+<p>而$t_iM_i\equiv1(mod\ m_i)$，从而$x\equiv a_i(mod\ m_i)$</p>
+<p>唯一性：</p>
+<p>设$x_1,x_2$都是$S$的解，则$\forall i\in{1,2,…,n},x_1-x_2\equiv 0(mod\ m_i)$</p>
+<p>而$gcd(m_i,m_j)=1,i\ne j,i,j\in{1,2,…,n}$，从而由$x_1-x_2\equiv0(mod\ M)$，从而说明是$x_1=x_2$</p>
+<h3 id="费马小定理"><a href="#费马小定理" class="headerlink" title="费马小定理"></a>费马小定理</h3><p>$a^{p-1}\equiv 1(mod\ p),p$是质数且$a\ne0(mod\ p)$</p>
+<h2 id="hash算法"><a href="#hash算法" class="headerlink" title="hash算法"></a>hash算法</h2><h2 id="对称加密算法"><a href="#对称加密算法" class="headerlink" title="对称加密算法"></a>对称加密算法</h2><h3 id="加密模式"><a href="#加密模式" class="headerlink" title="加密模式"></a>加密模式</h3><p>设$c_i,p_i,iv,f$分别为第$i$个密文块，明文块，初始向量，加密函数。ECB模式无$iv$。</p>
+<h4 id="ECB"><a href="#ECB" class="headerlink" title="ECB"></a>ECB</h4><p>每个块自行加密</p>
+<p>$c_0=f(p_0),c_1=f(p_1),…,c_n=f(p_n)$</p>
+<h4 id="CBC"><a href="#CBC" class="headerlink" title="CBC"></a>CBC</h4><p>当前块加密会影响到以后的块</p>
+<p>$c<em>0=f(iv\oplus p_0),c_1=f(p_1\oplus c_0),…,c_n=f(c</em>{n-1}\oplus p_n)$</p>
+<h3 id="AES"><a href="#AES" class="headerlink" title="AES"></a>AES</h3><p>也叫Rijndael加密法</p>
+<p>使用代换-置换网络</p>
+<p>加密的单位为4*4字节共4步</p>
+<ol>
+<li><p>AddRountKey</p>
+<p>每一回合与该次密钥做xor运算，密钥通过Rijndael密钥生成方案产生</p>
+</li>
+<li><p>SubBytes</p>
+<p>把每一个字节通过查找表(s盒)的方式替换成另一个</p>
+</li>
+<li><p>ShiftRows</p>
+<p>可以理解为每个双字单位分散到其它双字</p>
+<p>这里是不同双字的混合</p>
+</li>
+<li><p>MixColumns</p>
+<p>使用线性变换在一个双字内部混合</p>
+<p>这里是一个双字内部的混合</p>
+</li>
+</ol>
+<ul>
+<li><p>第一轮加密之前需要进行“白化操作”，即首先异或密钥</p>
+</li>
+<li><p>最后一轮没有MixColumns操作，使用AddRountKey替代</p>
+</li>
+</ul>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><p>S盒</p>
+<p>参考资料：<a href="[高级加密标准 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86">AES—wikipedia</a>)</p>
+<h3 id="DES"><a href="#DES" class="headerlink" title="DES"></a>DES</h3><p>Fiestel网络</p>
+<p>16个相同的过程，块长度为64位，分成两个32位的半块v1,v2</p>
+<h4 id="总体过程："><a href="#总体过程：" class="headerlink" title="总体过程："></a>总体过程：</h4><ol>
+<li><p>进行一次置换，称为IP</p>
+</li>
+<li><p>进行16轮如下操作</p>
+<p>s1=v1^F(v2)</p>
+<p>v1=v2</p>
+<p>v2=s1</p>
+<p>其中F为Fiestel函数，包含扩张，与密钥混合，S盒，置换操作</p>
+</li>
+<li><p>进行一次置换，成为FP，FP为IP的逆函数</p>
+</li>
+</ol>
+<p>IP和FP是简化输入输出数据库的过程而被显式地包含在标准中</p>
+<h4 id="Fiestel函数"><a href="#Fiestel函数" class="headerlink" title="Fiestel函数"></a>Fiestel函数</h4><ol>
+<li><p>扩张</p>
+<p>将32为半块扩展到48位，包含8个6位块，每块包含4位输出位，加上邻接块中紧邻的位</p>
+</li>
+<li><p>与密钥混合</p>
+<p>用异或操作将扩张结果和子密钥混合，子密钥是通过密钥调度产生的</p>
+</li>
+<li><p>S盒</p>
+<p>与子密钥混合后，分成6个8位的块，然后使用S盒置换处理</p>
+</li>
+<li><p>置换</p>
+<p>32个输出位利用P置换进行重组</p>
+</li>
+</ol>
+<h3 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h3><p>S盒</p>
+<p>参考资料：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%B3%87%E6%96%99%E5%8A%A0%E5%AF%86%E6%A8%99%E6%BA%96">DES—wikipedia</a></p>
+<h3 id="tea"><a href="#tea" class="headerlink" title="tea"></a>tea</h3><p>可以加密两个无符号整数</p>
+<p>参考代码(来自wikipedia)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">encrypt</span> <span class="params">(<span class="keyword">uint32_t</span>* v, <span class="keyword">uint32_t</span>* k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint32_t</span> v0=v[<span class="number">0</span>], v1=v[<span class="number">1</span>], sum=<span class="number">0</span>, i;           <span class="comment">/* set up */</span></span><br><span class="line">    <span class="keyword">uint32_t</span> delta=<span class="number">0x9e3779b9</span>;                     <span class="comment">/* a key schedule constant */</span></span><br><span class="line">    <span class="keyword">uint32_t</span> k0=k[<span class="number">0</span>], k1=k[<span class="number">1</span>], k2=k[<span class="number">2</span>], k3=k[<span class="number">3</span>];   <span class="comment">/* cache key */</span></span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span>; i &lt; <span class="number">32</span>; i++) &#123;                       <span class="comment">/* basic cycle start */</span></span><br><span class="line">        sum += delta;</span><br><span class="line">        v0 += ((v1&lt;&lt;<span class="number">4</span>) + k0) ^ (v1 + sum) ^ ((v1&gt;&gt;<span class="number">5</span>) + k1);</span><br><span class="line">        v1 += ((v0&lt;&lt;<span class="number">4</span>) + k2) ^ (v0 + sum) ^ ((v0&gt;&gt;<span class="number">5</span>) + k3);  </span><br><span class="line">    &#125;                                              <span class="comment">/* end cycle */</span></span><br><span class="line">    v[<span class="number">0</span>]=v0; v[<span class="number">1</span>]=v1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">decrypt</span> <span class="params">(<span class="keyword">uint32_t</span>* v, <span class="keyword">uint32_t</span>* k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint32_t</span> v0=v[<span class="number">0</span>], v1=v[<span class="number">1</span>], sum=<span class="number">0xC6EF3720</span>, i;  <span class="comment">/* set up */</span></span><br><span class="line">    <span class="keyword">uint32_t</span> delta=<span class="number">0x9e3779b9</span>;                     <span class="comment">/* a key schedule constant */</span></span><br><span class="line">    <span class="keyword">uint32_t</span> k0=k[<span class="number">0</span>], k1=k[<span class="number">1</span>], k2=k[<span class="number">2</span>], k3=k[<span class="number">3</span>];   <span class="comment">/* cache key */</span></span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;<span class="number">32</span>; i++) &#123;                         <span class="comment">/* basic cycle start */</span></span><br><span class="line">        v1 -= ((v0&lt;&lt;<span class="number">4</span>) + k2) ^ (v0 + sum) ^ ((v0&gt;&gt;<span class="number">5</span>) + k3);</span><br><span class="line">        v0 -= ((v1&lt;&lt;<span class="number">4</span>) + k0) ^ (v1 + sum) ^ ((v1&gt;&gt;<span class="number">5</span>) + k1);</span><br><span class="line">        sum -= delta;                                   </span><br><span class="line">    &#125;                                              <span class="comment">/* end cycle */</span></span><br><span class="line">    v[<span class="number">0</span>]=v0; v[<span class="number">1</span>]=v1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也有部分变种，大多是变了delta，或者delta使用v0=(0-(-delta))</p>
+<h3 id="xtea"><a href="#xtea" class="headerlink" title="xtea"></a>xtea</h3><p>参考代码(来自wikipedia)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* take 64 bits of data in v[0] and v[1] and 128 bits of key[0] - key[3] */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">encipher</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> num_rounds, <span class="keyword">uint32_t</span> v[<span class="number">2</span>], <span class="keyword">uint32_t</span> <span class="keyword">const</span> key[<span class="number">4</span>])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">uint32_t</span> v0=v[<span class="number">0</span>], v1=v[<span class="number">1</span>], sum=<span class="number">0</span>, delta=<span class="number">0x9E3779B9</span>;</span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span>; i &lt; num_rounds; i++) &#123;</span><br><span class="line">        v0 += (((v1 &lt;&lt; <span class="number">4</span>) ^ (v1 &gt;&gt; <span class="number">5</span>)) + v1) ^ (sum + key[sum &amp; <span class="number">3</span>]);</span><br><span class="line">        sum += delta;</span><br><span class="line">        v1 += (((v0 &lt;&lt; <span class="number">4</span>) ^ (v0 &gt;&gt; <span class="number">5</span>)) + v0) ^ (sum + key[(sum&gt;&gt;<span class="number">11</span>) &amp; <span class="number">3</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    v[<span class="number">0</span>]=v0; v[<span class="number">1</span>]=v1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">decipher</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> num_rounds, <span class="keyword">uint32_t</span> v[<span class="number">2</span>], <span class="keyword">uint32_t</span> <span class="keyword">const</span> key[<span class="number">4</span>])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">uint32_t</span> v0=v[<span class="number">0</span>], v1=v[<span class="number">1</span>], delta=<span class="number">0x9E3779B9</span>, sum=delta*num_rounds;</span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span>; i &lt; num_rounds; i++) &#123;</span><br><span class="line">        v1 -= (((v0 &lt;&lt; <span class="number">4</span>) ^ (v0 &gt;&gt; <span class="number">5</span>)) + v0) ^ (sum + key[(sum&gt;&gt;<span class="number">11</span>) &amp; <span class="number">3</span>]);</span><br><span class="line">        sum -= delta;</span><br><span class="line">        v0 -= (((v1 &lt;&lt; <span class="number">4</span>) ^ (v1 &gt;&gt; <span class="number">5</span>)) + v1) ^ (sum + key[sum &amp; <span class="number">3</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    v[<span class="number">0</span>]=v0; v[<span class="number">1</span>]=v1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相比tea，在使用密钥更不确定，特征值不变</p>
+<h3 id="xxtea"><a href="#xxtea" class="headerlink" title="xxtea"></a>xxtea</h3><p>参考代码(来自wikipedia)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MX ((z&gt;&gt;5^y<span class="meta-string">&lt;&lt;2) + (y&gt;&gt;3^z&lt;&lt;4) ^ (sum^y) + (k[p&amp;3^e]^z))</span></span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">long</span> <span class="title">btea</span><span class="params">(<span class="keyword">long</span>* v, <span class="keyword">long</span> n, <span class="keyword">long</span>* k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> z=v[n<span class="number">-1</span>], y=v[<span class="number">0</span>], sum=<span class="number">0</span>, e, DELTA=<span class="number">0x9e3779b9</span>;</span><br><span class="line">    <span class="keyword">long</span> p, q ;</span><br><span class="line">    <span class="keyword">if</span> (n &gt; <span class="number">1</span>) &#123;          <span class="comment">/* Coding Part */</span></span><br><span class="line">      q = <span class="number">6</span> + <span class="number">52</span>/n;</span><br><span class="line">      <span class="keyword">while</span> (q-- &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        sum += DELTA;</span><br><span class="line">        e = (sum &gt;&gt; <span class="number">2</span>) &amp; <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">for</span> (p=<span class="number">0</span>; p&lt;n<span class="number">-1</span>; p++) y = v[p+<span class="number">1</span>], z = v[p] += MX;</span><br><span class="line">        y = v[<span class="number">0</span>];</span><br><span class="line">        z = v[n<span class="number">-1</span>] += MX;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span> ; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (n &lt; <span class="number">-1</span>) &#123;  <span class="comment">/* Decoding Part */</span></span><br><span class="line">      n = -n;</span><br><span class="line">      q = <span class="number">6</span> + <span class="number">52</span>/n;</span><br><span class="line">      sum = q*DELTA ;</span><br><span class="line">      <span class="keyword">while</span> (sum != <span class="number">0</span>) &#123;</span><br><span class="line">        e = (sum &gt;&gt; <span class="number">2</span>) &amp; <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">for</span> (p=n<span class="number">-1</span>; p&gt;<span class="number">0</span>; p--) z = v[p<span class="number">-1</span>], y = v[p] -= MX;</span><br><span class="line">        z = v[n<span class="number">-1</span>];</span><br><span class="line">        y = v[<span class="number">0</span>] -= MX;</span><br><span class="line">        sum -= DELTA;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>n表示v的长度，正数表示加密，负数解密</p>
+<h2 id="SM4"><a href="#SM4" class="headerlink" title="SM4"></a>SM4</h2><ul>
+<li><p>密钥长度为128bits</p>
+</li>
+<li><p>加密算法和密钥扩展算法都是32位非线性迭代结构</p>
+</li>
+<li><p>加解密算法结构相同，轮密钥的使用顺序相反</p>
+</li>
+</ul>
+<h4 id="定义运算"><a href="#定义运算" class="headerlink" title="定义运算"></a>定义运算</h4><p>32位数$x$向左循环移动$i$位$:x&lt;&lt;&lt;i,\oplus$为异或</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ROL32(x,i) ((x)<span class="meta-string">&lt;&lt;(i)|(((unsigned int)x&gt;&gt;(32-(i)))))</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="定义参量"><a href="#定义参量" class="headerlink" title="定义参量"></a>定义参量</h4><p>密钥长度位128bits $MK=(MK_0,MK_1,MK_2,MK_3)$</p>
+<p>轮密钥为32*32bits $rk=(rk<em>0,rk_1,…,rk</em>{31})$</p>
+<p>$FK=(FK<em>0,FK_1,…,FK_3)$为系统参数，$CK=(CK_0,CK_1,…,CK</em>{31})$为固定参数</p>
+<p>$CK_{i,j}=(4i+j)*7\ mod\ 256$，其中$i$为双字编号，$j$为字节编号，$j$采用大端序</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> RK_SIZE 32</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">uint32_t</span> mk[<span class="number">4</span>];    <span class="comment">// 加密使用的密钥</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">uint32_t</span> rk[<span class="number">31</span>];    <span class="comment">// 轮密钥</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">uint32_t</span> fk[<span class="number">4</span>]=&#123;<span class="number">0xA3B1BAC6</span>,<span class="number">0x56AA3350</span>,<span class="number">0x677D9197</span>,<span class="number">0xB27022DC</span>&#125;;</span><br><span class="line"><span class="comment">// ck会在密钥生成算法中体现</span></span><br></pre></td></tr></table></figure>
+<h4 id="轮函数F"><a href="#轮函数F" class="headerlink" title="轮函数F"></a>轮函数F</h4><p>$F(X_0,X_1,X_2,X_3,rk)=X_0\oplus T(X_1\oplus X_2\oplus X_3\oplus rk)$</p>
+<p>合成置换$T(.)=L(\tau(.))$</p>
+<p>若输入为$A=(a_0,a_1,a_2,a_3)$，其中$a_i$为8字节无符号整数，则非线性置换$\tau(A)=(sbox[a_0],sbox[a_1],sbox[a_2],sbox[a_3])$</p>
+<p>$sbox$为替换用s盒</p>
+<p>若输入为$B$，其中$B$为32字节无符号整数，则线性变换$L(B)=B\oplus (B&lt;&lt;&lt;2)\oplus(B&lt;&lt;&lt;10)\oplus(B&lt;&lt;&lt;18)\oplus(B&lt;&lt;&lt;24)$</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> L(x) (x)^ROL32(x,2)^ROL32(x,10)^ROL32(x,18)^ROL32(x,24)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> tau(x) (sbox[(x)&gt;&gt;24]<span class="meta-string">&lt;&lt;24|sbox[((x)&gt;&gt;16)&amp;0xFF]&lt;&lt;16|sbox[((x)&gt;&gt;8)&amp;0xFF]&lt;&lt;8|sbox[x&amp;0xFF])</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> T(x) (L(tau(x)))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">uint8_t</span> sbox[<span class="number">256</span>]; <span class="comment">// s盒，在最终代码中体现</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 轮函数F直接在加密过程中体现</span></span><br></pre></td></tr></table></figure>
+<h4 id="加密算法"><a href="#加密算法" class="headerlink" title="加密算法"></a>加密算法</h4><p>反序变换$R(a_0,a_1,a_2,a_3)=(a_3,a_2,a_1,a_0),a_i$为8位</p>
+<p>设输入为$(X_0,X_1,X_2,X_3),X_i$为32位</p>
+<p>输出为$(Y_0,Y_1,Y_2,Y_3)$</p>
+<p>则$X<em>{i+4}=F(X_i,X</em>{i+1},X<em>{i+2},X</em>{i+3},rk_i)$</p>
+<p>$(Y<em>0,Y_1,Y_2,Y_3)=R(X</em>{32},X<em>{33},X</em>{34},X_{35})$</p>
+<p>解密过程和加密过程变换结构相同，不同的是轮密钥顺序</p>
+<p>加密时$(rk<em>0,rk_1,…,rk</em>{31})$</p>
+<p>解密时$rk<em>{31},rk</em>{30},…,rk_0$</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">crypt</span><span class="params">(<span class="keyword">uint32_t</span> p[<span class="number">4</span>],<span class="keyword">uint32_t</span> crk[<span class="number">31</span>])</span></span>&#123;</span><br><span class="line">    <span class="keyword">uint32_t</span> c[<span class="number">36</span>];</span><br><span class="line">    c[<span class="number">0</span>]=p[<span class="number">0</span>];</span><br><span class="line">    c[<span class="number">1</span>]=p[<span class="number">1</span>];</span><br><span class="line">    c[<span class="number">2</span>]=p[<span class="number">2</span>];</span><br><span class="line">    c[<span class="number">3</span>]=p[<span class="number">3</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;RK_SIZE;i++)&#123;</span><br><span class="line">        c[i+<span class="number">4</span>]=c[i]^T(c[i+<span class="number">1</span>]^c[i+<span class="number">2</span>]^c[i+<span class="number">3</span>]^crk[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    p[<span class="number">0</span>]=c[<span class="number">35</span>];</span><br><span class="line">    p[<span class="number">1</span>]=c[<span class="number">34</span>];</span><br><span class="line">    p[<span class="number">2</span>]=c[<span class="number">33</span>];</span><br><span class="line">    p[<span class="number">3</span>]=c[<span class="number">32</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">encrypt</span><span class="params">(<span class="keyword">uint32_t</span> p[<span class="number">4</span>])</span></span>&#123;</span><br><span class="line">    crypt(p,rk);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">decrypt</span><span class="params">(<span class="keyword">uint32_t</span> c[<span class="number">4</span>])</span></span>&#123;</span><br><span class="line">    crypt(p,rrk); <span class="comment">// rrk是rk的逆序</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="密钥扩展算法"><a href="#密钥扩展算法" class="headerlink" title="密钥扩展算法"></a>密钥扩展算法</h4><p>密钥$MK=(MK_0,MK_1,MK_2,MK_3)$</p>
+<p>$K=(K<em>0,K_1,…,K</em>{31})$</p>
+<p>$(K_0,K_1,K_2,K_3)=(MK_0\oplus FK_0,MK_1\oplus FK_1,MK_2\oplus FK_2,MK_3\oplus FK_3)$</p>
+<p>轮密钥为$rk,rk<em>i=K</em>{i+4}=K<em>i\oplus T’(K</em>{i+1}\oplus K<em>{i+2}\oplus K</em>{i+3}\oplus CK_i)$</p>
+<p>$T’$和$T$基本相同，其中的$L’=B\oplus(B&lt;&lt;&lt;13)\oplus(B&lt;&lt;&lt;23)$</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Lp(x) ((x)^ROL32(x,13)^ROL32(x,23))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Tp(x) Lp(tau(x))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ck(i) (((4*(i)*7)&amp;0xFF)&lt;&lt;24|(((4*(i)+1)*7)&amp;0xFF)&lt;&lt;16|(((4*(i)+2)*7)&amp;0xFF)&lt;&lt;8|(4*(i)+3)&amp;0xFF)</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">initKey</span><span class="params">(<span class="keyword">uin32_t</span> mk[<span class="number">4</span>])</span></span>&#123;</span><br><span class="line">    <span class="keyword">uint32_t</span> k[<span class="number">36</span>];</span><br><span class="line">    k[<span class="number">0</span>]=mk[<span class="number">0</span>]^fk[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;RK_SIZE;i++)&#123;</span><br><span class="line">        k[i+<span class="number">4</span>]=k[i]^Tp(k[i+<span class="number">1</span>]^k[i+<span class="number">2</span>]^k[i+<span class="number">3</span>]^ck(i));</span><br><span class="line">        rk[i]=k[i+<span class="number">4</span>];</span><br><span class="line">        rrk[RK_SIZE-i]=rk[i]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;inttypes.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> cha(x) ((((x)&amp;0x3F)+24)%64)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ROL32(x,i) ((x)<span class="meta-string">&lt;&lt;(i)|(((unsigned int)(x)&gt;&gt;(32-(i)))))</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> L(x) (x)^ROL32(x,2)^ROL32(x,10)^ROL32(x,18)^ROL32(x,24)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> tau(x) (sbox[((x)&gt;&gt;24)&amp;0xFF]<span class="meta-string">&lt;&lt;24|sbox[((x)&gt;&gt;16)&amp;0xFF]&lt;&lt;16|sbox[((x)&gt;&gt;8)&amp;0xFF]&lt;&lt;8|sbox[x&amp;0xFF])</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> T(x) (L(tau(x)))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Lp(x) ((x)^ROL32(x,13)^ROL32(x,23)) <span class="comment">// L&#x27;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Tp(x) (Lp(tau(x))) <span class="comment">// T&#x27;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ck(i) (((4*(i)*7)&amp;0xFF)&lt;&lt;24|(((4*(i)+1)*7)&amp;0xFF)&lt;&lt;16|(((4*(i)+2)*7)&amp;0xFF)&lt;&lt;8|(4*(i)+3)*7&amp;0xFF)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> R(x) (((x)&gt;&gt;24)&amp;0xFF|((x)&gt;&gt;8)&amp;0xFF00|((x)&lt;&lt;8)&amp;0xFF0000|((x)&lt;&lt;24))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> RK_SIZE 32      <span class="comment">// 密钥轮数</span></span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">uint32_t</span> rk[<span class="number">32</span>];    <span class="comment">// 轮密钥</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">uint32_t</span> rrk[<span class="number">32</span>];    <span class="comment">// 逆序轮密钥</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">uint32_t</span> fk[<span class="number">4</span>] = &#123; <span class="number">0xA3B1BAC6</span>,<span class="number">0x56AA3350</span>,<span class="number">0x677D9197</span>,<span class="number">0xB27022DC</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">uint8_t</span> sbox[<span class="number">256</span>] = &#123;</span><br><span class="line"><span class="number">0xd6</span>,<span class="number">0x90</span>,<span class="number">0xe9</span>,<span class="number">0xfe</span>,<span class="number">0xcc</span>,<span class="number">0xe1</span>,<span class="number">0x3d</span>,<span class="number">0xb7</span>,<span class="number">0x16</span>,<span class="number">0xb6</span>,<span class="number">0x14</span>,<span class="number">0xc2</span>,<span class="number">0x28</span>,<span class="number">0xfb</span>,<span class="number">0x2c</span>,<span class="number">0x05</span>,</span><br><span class="line"><span class="number">0x2b</span>,<span class="number">0x67</span>,<span class="number">0x9a</span>,<span class="number">0x76</span>,<span class="number">0x2a</span>,<span class="number">0xbe</span>,<span class="number">0x04</span>,<span class="number">0xc3</span>,<span class="number">0xaa</span>,<span class="number">0x44</span>,<span class="number">0x13</span>,<span class="number">0x26</span>,<span class="number">0x49</span>,<span class="number">0x86</span>,<span class="number">0x06</span>,<span class="number">0x99</span>,</span><br><span class="line"><span class="number">0x9c</span>,<span class="number">0x42</span>,<span class="number">0x50</span>,<span class="number">0xf4</span>,<span class="number">0x91</span>,<span class="number">0xef</span>,<span class="number">0x98</span>,<span class="number">0x7a</span>,<span class="number">0x33</span>,<span class="number">0x54</span>,<span class="number">0x0b</span>,<span class="number">0x43</span>,<span class="number">0xed</span>,<span class="number">0xcf</span>,<span class="number">0xac</span>,<span class="number">0x62</span>,</span><br><span class="line"><span class="number">0xe4</span>,<span class="number">0xb3</span>,<span class="number">0x1c</span>,<span class="number">0xa9</span>,<span class="number">0xc9</span>,<span class="number">0x08</span>,<span class="number">0xe8</span>,<span class="number">0x95</span>,<span class="number">0x80</span>,<span class="number">0xdf</span>,<span class="number">0x94</span>,<span class="number">0xfa</span>,<span class="number">0x75</span>,<span class="number">0x8f</span>,<span class="number">0x3f</span>,<span class="number">0xa6</span>,</span><br><span class="line"><span class="number">0x47</span>,<span class="number">0x07</span>,<span class="number">0xa7</span>,<span class="number">0xfc</span>,<span class="number">0xf3</span>,<span class="number">0x73</span>,<span class="number">0x17</span>,<span class="number">0xba</span>,<span class="number">0x83</span>,<span class="number">0x59</span>,<span class="number">0x3c</span>,<span class="number">0x19</span>,<span class="number">0xe6</span>,<span class="number">0x85</span>,<span class="number">0x4f</span>,<span class="number">0xa8</span>,</span><br><span class="line"><span class="number">0x68</span>,<span class="number">0x6b</span>,<span class="number">0x81</span>,<span class="number">0xb2</span>,<span class="number">0x71</span>,<span class="number">0x64</span>,<span class="number">0xda</span>,<span class="number">0x8b</span>,<span class="number">0xf8</span>,<span class="number">0xeb</span>,<span class="number">0x0f</span>,<span class="number">0x4b</span>,<span class="number">0x70</span>,<span class="number">0x56</span>,<span class="number">0x9d</span>,<span class="number">0x35</span>,</span><br><span class="line"><span class="number">0x1e</span>,<span class="number">0x24</span>,<span class="number">0x0e</span>,<span class="number">0x5e</span>,<span class="number">0x63</span>,<span class="number">0x58</span>,<span class="number">0xd1</span>,<span class="number">0xa2</span>,<span class="number">0x25</span>,<span class="number">0x22</span>,<span class="number">0x7c</span>,<span class="number">0x3b</span>,<span class="number">0x01</span>,<span class="number">0x21</span>,<span class="number">0x78</span>,<span class="number">0x87</span>,</span><br><span class="line"><span class="number">0xd4</span>,<span class="number">0x00</span>,<span class="number">0x46</span>,<span class="number">0x57</span>,<span class="number">0x9f</span>,<span class="number">0xd3</span>,<span class="number">0x27</span>,<span class="number">0x52</span>,<span class="number">0x4c</span>,<span class="number">0x36</span>,<span class="number">0x02</span>,<span class="number">0xe7</span>,<span class="number">0xa0</span>,<span class="number">0xc4</span>,<span class="number">0xc8</span>,<span class="number">0x9e</span>,</span><br><span class="line"><span class="number">0xea</span>,<span class="number">0xbf</span>,<span class="number">0x8a</span>,<span class="number">0xd2</span>,<span class="number">0x40</span>,<span class="number">0xc7</span>,<span class="number">0x38</span>,<span class="number">0xb5</span>,<span class="number">0xa3</span>,<span class="number">0xf7</span>,<span class="number">0xf2</span>,<span class="number">0xce</span>,<span class="number">0xf9</span>,<span class="number">0x61</span>,<span class="number">0x15</span>,<span class="number">0xa1</span>,</span><br><span class="line"><span class="number">0xe0</span>,<span class="number">0xae</span>,<span class="number">0x5d</span>,<span class="number">0xa4</span>,<span class="number">0x9b</span>,<span class="number">0x34</span>,<span class="number">0x1a</span>,<span class="number">0x55</span>,<span class="number">0xad</span>,<span class="number">0x93</span>,<span class="number">0x32</span>,<span class="number">0x30</span>,<span class="number">0xf5</span>,<span class="number">0x8c</span>,<span class="number">0xb1</span>,<span class="number">0xe3</span>,</span><br><span class="line"><span class="number">0x1d</span>,<span class="number">0xf6</span>,<span class="number">0xe2</span>,<span class="number">0x2e</span>,<span class="number">0x82</span>,<span class="number">0x66</span>,<span class="number">0xca</span>,<span class="number">0x60</span>,<span class="number">0xc0</span>,<span class="number">0x29</span>,<span class="number">0x23</span>,<span class="number">0xab</span>,<span class="number">0x0d</span>,<span class="number">0x53</span>,<span class="number">0x4e</span>,<span class="number">0x6f</span>,</span><br><span class="line"><span class="number">0xd5</span>,<span class="number">0xdb</span>,<span class="number">0x37</span>,<span class="number">0x45</span>,<span class="number">0xde</span>,<span class="number">0xfd</span>,<span class="number">0x8e</span>,<span class="number">0x2f</span>,<span class="number">0x03</span>,<span class="number">0xff</span>,<span class="number">0x6a</span>,<span class="number">0x72</span>,<span class="number">0x6d</span>,<span class="number">0x6c</span>,<span class="number">0x5b</span>,<span class="number">0x51</span>,</span><br><span class="line"><span class="number">0x8d</span>,<span class="number">0x1b</span>,<span class="number">0xaf</span>,<span class="number">0x92</span>,<span class="number">0xbb</span>,<span class="number">0xdd</span>,<span class="number">0xbc</span>,<span class="number">0x7f</span>,<span class="number">0x11</span>,<span class="number">0xd9</span>,<span class="number">0x5c</span>,<span class="number">0x41</span>,<span class="number">0x1f</span>,<span class="number">0x10</span>,<span class="number">0x5a</span>,<span class="number">0xd8</span>,</span><br><span class="line"><span class="number">0x0a</span>,<span class="number">0xc1</span>,<span class="number">0x31</span>,<span class="number">0x88</span>,<span class="number">0xa5</span>,<span class="number">0xcd</span>,<span class="number">0x7b</span>,<span class="number">0xbd</span>,<span class="number">0x2d</span>,<span class="number">0x74</span>,<span class="number">0xd0</span>,<span class="number">0x12</span>,<span class="number">0xb8</span>,<span class="number">0xe5</span>,<span class="number">0xb4</span>,<span class="number">0xb0</span>,</span><br><span class="line"><span class="number">0x89</span>,<span class="number">0x69</span>,<span class="number">0x97</span>,<span class="number">0x4a</span>,<span class="number">0x0c</span>,<span class="number">0x96</span>,<span class="number">0x77</span>,<span class="number">0x7e</span>,<span class="number">0x65</span>,<span class="number">0xb9</span>,<span class="number">0xf1</span>,<span class="number">0x09</span>,<span class="number">0xc5</span>,<span class="number">0x6e</span>,<span class="number">0xc6</span>,<span class="number">0x84</span>,</span><br><span class="line"><span class="number">0x18</span>,<span class="number">0xf0</span>,<span class="number">0x7d</span>,<span class="number">0xec</span>,<span class="number">0x3a</span>,<span class="number">0xdc</span>,<span class="number">0x4d</span>,<span class="number">0x20</span>,<span class="number">0x79</span>,<span class="number">0xee</span>,<span class="number">0x5f</span>,<span class="number">0x3e</span>,<span class="number">0xd7</span>,<span class="number">0xcb</span>,<span class="number">0x39</span>,<span class="number">0x48</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">crypt</span><span class="params">(<span class="keyword">uint32_t</span> p[<span class="number">4</span>], <span class="keyword">uint32_t</span> crk[<span class="number">31</span>])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint32_t</span> c[<span class="number">36</span>];</span><br><span class="line">    c[<span class="number">0</span>] = p[<span class="number">0</span>];</span><br><span class="line">    c[<span class="number">1</span>] = p[<span class="number">1</span>];</span><br><span class="line">    c[<span class="number">2</span>] = p[<span class="number">2</span>];</span><br><span class="line">    c[<span class="number">3</span>] = p[<span class="number">3</span>];</span><br><span class="line">    <span class="keyword">uint32_t</span> t;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; RK_SIZE; i++) &#123;</span><br><span class="line">        t = (c[i + <span class="number">1</span>] ^ c[i + <span class="number">2</span>] ^ c[i + <span class="number">3</span>] ^ crk[i]);</span><br><span class="line">        c[i + <span class="number">4</span>] = c[i] ^ T(t);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%08x\n&quot;</span>, c[i + <span class="number">4</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    p[<span class="number">0</span>] = c[<span class="number">35</span>];</span><br><span class="line">    p[<span class="number">1</span>] = c[<span class="number">34</span>];</span><br><span class="line">    p[<span class="number">2</span>] = c[<span class="number">33</span>];</span><br><span class="line">    p[<span class="number">3</span>] = c[<span class="number">32</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">encrypt</span><span class="params">(<span class="keyword">uint32_t</span> p[<span class="number">4</span>])</span> </span>&#123;</span><br><span class="line">    crypt(p, rk);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">decrypt</span><span class="params">(<span class="keyword">uint32_t</span> c[<span class="number">4</span>])</span> </span>&#123;</span><br><span class="line">    crypt(c, rrk); <span class="comment">// rrk是rk的逆序</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">initKey</span><span class="params">(<span class="keyword">uint32_t</span> mk[<span class="number">4</span>])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint32_t</span> k[<span class="number">36</span>];</span><br><span class="line">    k[<span class="number">0</span>] = mk[<span class="number">0</span>] ^ fk[<span class="number">0</span>];</span><br><span class="line">    k[<span class="number">1</span>] = mk[<span class="number">1</span>] ^ fk[<span class="number">1</span>];</span><br><span class="line">    k[<span class="number">2</span>] = mk[<span class="number">2</span>] ^ fk[<span class="number">2</span>];</span><br><span class="line">    k[<span class="number">3</span>] = mk[<span class="number">3</span>] ^ fk[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">uint32_t</span> t;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; RK_SIZE; i++) &#123;</span><br><span class="line">        t = k[i + <span class="number">1</span>] ^ k[i + <span class="number">2</span>] ^ k[i + <span class="number">3</span>]^ck(i);</span><br><span class="line">        k[i + <span class="number">4</span>] = k[i] ^ Tp(t);</span><br><span class="line">        rk[i] = k[i + <span class="number">4</span>];</span><br><span class="line">        rrk[RK_SIZE - i<span class="number">-1</span>] = rk[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">uint32_t</span>* d, <span class="keyword">size_t</span> len)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;==============%s============\n&quot;</span>, name);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;0x%08X,&quot;</span>, d[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n============================\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint8_t</span> data[] = &#123; <span class="number">0x01</span>,<span class="number">0x23</span>,<span class="number">0x45</span>,<span class="number">0x67</span>,<span class="number">0x89</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span>,<span class="number">0xfe</span>,<span class="number">0xdc</span>,<span class="number">0xba</span>,<span class="number">0x98</span>,<span class="number">0x76</span>,<span class="number">0x54</span>,<span class="number">0x32</span>,<span class="number">0x10</span> &#125;;</span><br><span class="line">    <span class="keyword">uint8_t</span> key[] = &#123; <span class="number">0x01</span>,<span class="number">0x23</span>,<span class="number">0x45</span>,<span class="number">0x67</span>,<span class="number">0x89</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span>,<span class="number">0xfe</span>,<span class="number">0xdc</span>,<span class="number">0xba</span>,<span class="number">0x98</span>,<span class="number">0x76</span>,<span class="number">0x54</span>,<span class="number">0x32</span>,<span class="number">0x10</span> &#125;;</span><br><span class="line">    <span class="keyword">uint32_t</span> mk[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">uint32_t</span> p[<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memcpy</span>(p, data, <span class="number">16</span>);</span><br><span class="line">    <span class="built_in">memcpy</span>(mk, key, <span class="number">16</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        mk[i] = R(mk[i]);</span><br><span class="line">        p[i] = R(p[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    initKey(mk);</span><br><span class="line">    printArray(<span class="string">&quot;plain text&quot;</span>, p, <span class="number">4</span>);</span><br><span class="line">    encrypt(p);</span><br><span class="line">    printArray(<span class="string">&quot;cipher&quot;</span>, p, <span class="number">4</span>);</span><br><span class="line">    decrypt(p);</span><br><span class="line">    printArray(<span class="string">&quot;plain text(after decrypt)&quot;</span>, p, <span class="number">4</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        p[i] = R(p[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memcpy</span>(data, p, <span class="number">16</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><p>[1] SM4算法标准</p>
+<h2 id="公钥加密算法"><a href="#公钥加密算法" class="headerlink" title="公钥加密算法"></a>公钥加密算法</h2><h2 id="rsa"><a href="#rsa" class="headerlink" title="rsa"></a>rsa</h2><blockquote>
+<p>费马小定理</p>
+<p>$p$是质数，$a$不是$p$的倍数，$a^{p-1}mod\ p\equiv1$</p>
+</blockquote>
+<p>那么对于数据$a$，加密后的数据为$c$，私钥为$e,p,q$，公钥为$d,n$</p>
+<p>其中$n=pq$，$ed\equiv 1(\mod (p-1)(q-1))$</p>
+<p>则加密</p>
+<script type="math/tex; mode=display">
+c=a^{e}\mod n</script><p>解密</p>
+<script type="math/tex; mode=display">
+c^{d}\mod n\equiv (a^e)^d\mod n\equiv a^{ed}\mod n</script><p>由于</p>
+<script type="math/tex; mode=display">
+a^{ed}\equiv a^{1+t(p-1)(q-1)}\mod n=aa^{(p-1)(q-1)}\mod n</script><p>又由于$n=pq,ab\mod n=(a\mod n)(b\mod n)\mod n$</p>
+<p>得到</p>
+<script type="math/tex; mode=display">
+a^{(p-1)(q-1)}\mod n</script><p>从而</p>
+<script type="math/tex; mode=display">
+(a^{p-1})^{q-1}\mod pq\equiv a^{p-1}\mod p\equiv 1</script><p>从而解密出来为$a$</p>
+<h3 id="ElGamal"><a href="#ElGamal" class="headerlink" title="ElGamal"></a>ElGamal</h3><p>// TODO</p>
+<h2 id="其它加密算法"><a href="#其它加密算法" class="headerlink" title="其它加密算法"></a>其它加密算法</h2><h3 id="CRC32"><a href="#CRC32" class="headerlink" title="CRC32"></a>CRC32</h3><p>用于校验数据</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">uint32_t</span> <span class="title">CRC</span><span class="params">(<span class="keyword">uint32_t</span> *v,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">uint32_t</span> crc32tab[<span class="number">256</span>],crc,dwcrc=<span class="number">0xFFFFFFFF</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;<span class="number">256</span>;i++)&#123;</span><br><span class="line">        crc=i;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">size_t</span> j=<span class="number">0</span>;j&lt;<span class="number">8</span>;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(crc&amp;<span class="number">1</span>)crc=(crc&gt;&gt;<span class="number">1</span>)^<span class="number">0xEDB88320</span>;</span><br><span class="line">            <span class="keyword">else</span> crc&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        crc32tab[i]=crc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">        dwcrc=crc32tab[(dwcrc^v[i])&amp;<span class="number">0xFF</span>]^(dwcrc&gt;&gt;<span class="number">8</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    dwcrc=~dwcrc;</span><br><span class="line">    <span class="keyword">return</span> dwcrc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CRC并不安全，只用于传输过程中完整性的校验</p>
+<h3 id="base系列"><a href="#base系列" class="headerlink" title="base系列"></a>base系列</h3><p>base64，base56，base32，base16</p>
+<p>找到base表</p>
+<h2 id="差分密码分析"><a href="#差分密码分析" class="headerlink" title="差分密码分析"></a>差分密码分析</h2><p>攻击者选取一部分明文并获取相应密文，运用若干对有着常量差异的明文，计算其中的差异$\Delta x=f(x_1,x_2)$，其中$f$可以自定义，比如异或操作。</p>
+<p>然后攻击者计算相应密文的差异，尝试找出差异分布的统计特征。明文差异和密文差异所组成的差异叫做差分，统计特征由所使用的S盒所决定。</p>
+<p>对于S盒$S$，攻击者分析差分$(\Delta x,\Delta y),\Delta y=S(x\oplus \Delta x)\oplus S(x)$。攻击者希望某个密文差异出现的频率非常高，这样就能将加密和随机过程区分开来。</p>
+<blockquote>
+<p>最基本的差分密码分析密钥破解形式中，攻击者首先获取大量明文对的密文，并假设差分在至少<em>r</em> − 1轮后有效，<em>r</em>即加密算法的总轮数。攻击者在倒数第二轮与最后一轮之间差异固定的假设下，去推测可能的轮密钥。如果轮密钥比较短，那么只需举可能的轮密钥，直到最后一轮运算结果和差异的<em>密文对</em>一致即可。当一个轮密钥看起来明显比其他密钥常出现时，其会被假设是正确的轮密钥</p>
+</blockquote>
+<p>还不是很懂，回头看吧英文版似乎有个简单的例子。</p>
+<p>参考资料</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%B7%AE%E5%88%86%E5%AF%86%E7%A0%81%E5%88%86%E6%9E%90">差分密码分析—wikipedia</a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/10/21/note/rev/usual_cipher/">
+    <time datetime="2020-10-21T10:50:40.000Z" class="entry-date">
+        2020-10-21
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2020/10/22/writeup/buuoj/wp/" rel="prev"><span class="meta-nav">←</span> buuoj writeup</a></span>
+    
+    
+        <span class="nav-next"><a href="/2020/10/21/note/develop/python_gmpy/" rel="next">windows下python安装gmpy2 <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2020 John Doe
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="相关术语
+SEH：结构化异常处理
+
+VEH向量化异常处理
+
+TopLevelEH顶层异常处理
+
+
+每种处理方法都可以三种值，在不同处理方法下意义不同
+
+EXCEPTION_EXECUTE_HANDLER
+该异常被处理，从异常处下一条指令开始执行
+
+EXCEPTION_CONTINUE_SEARCH
+" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>windows异常处理机制 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="相关术语 SEH：结构化异常处理  VEH向量化异常处理  TopLevelEH顶层异常处理   每种处理方法都可以三种值，在不同处理方法下意义不同  EXCEPTION_EXECUTE_HANDLER 该异常被处理，从异常处下一条指令开始执行  EXCEPTION_CONTINUE_SEARCH 不处理该异常  EXCEPTION_CONTINUE_EXECUTIOIN 忽略异常，从异常处继续执">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows异常处理机制">
+<meta property="og:url" content="http://example.com/2020/10/28/note/rev/win-ehs/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="相关术语 SEH：结构化异常处理  VEH向量化异常处理  TopLevelEH顶层异常处理   每种处理方法都可以三种值，在不同处理方法下意义不同  EXCEPTION_EXECUTE_HANDLER 该异常被处理，从异常处下一条指令开始执行  EXCEPTION_CONTINUE_SEARCH 不处理该异常  EXCEPTION_CONTINUE_EXECUTIOIN 忽略异常，从异常处继续执">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-28T00:35:26.000Z">
+<meta property="article:modified_time" content="2020-10-28T01:17:49.537Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Hexo" rel="home">Hexo</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-note/rev/win-ehs" class="post-note/rev/win-ehs post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      windows异常处理机制
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2020/10/28/note/rev/win-ehs/" data-id="ckgzthi460004u0wb6fllck14" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h2><ul>
+<li><p>SEH：结构化异常处理</p>
+</li>
+<li><p>VEH向量化异常处理</p>
+</li>
+<li><p>TopLevelEH顶层异常处理</p>
+</li>
+</ul>
+<p>每种处理方法都可以三种值，在不同处理方法下意义不同</p>
+<ul>
+<li><p>EXCEPTION_EXECUTE_HANDLER</p>
+<p>该异常被处理，从异常处下一条指令开始执行</p>
+</li>
+<li><p>EXCEPTION_CONTINUE_SEARCH</p>
+<p>不处理该异常</p>
+</li>
+<li><p>EXCEPTION_CONTINUE_EXECUTIOIN</p>
+<p>忽略异常，从异常处继续执行</p>
+</li>
+</ul>
+<p>如果当前进程正在被调试，调试器也可以返回值</p>
+<ul>
+<li><p>DBG_CONTINUE</p>
+<p>等同于EXCEPTION_CONTINUE_EXECUTION</p>
+</li>
+<li><p>DBG_EXCEPTION_NOT_HANDLED</p>
+<p>等同于EXCEPTION_CONTINUE_SEARCH</p>
+</li>
+</ul>
+<p>异常处理器包含内核异常处理和R3异常处理</p>
+<h2 id="R3程序产生异常时，异常处理器处理顺序："><a href="#R3程序产生异常时，异常处理器处理顺序：" class="headerlink" title="R3程序产生异常时，异常处理器处理顺序："></a>R3程序产生异常时，异常处理器处理顺序：</h2><ol>
+<li><p>交给调试器</p>
+</li>
+<li><p>执行VEH</p>
+</li>
+<li><p>执行SEH</p>
+</li>
+<li><p>TopLevelEH</p>
+</li>
+<li><p>交给调试器</p>
+</li>
+<li><p>调试异常端口通知csrss.exe</p>
+</li>
+</ol>
+<h3 id="第一次交给调试器"><a href="#第一次交给调试器" class="headerlink" title="第一次交给调试器"></a>第一次交给调试器</h3><p>判断是否处理该异常</p>
+<ul>
+<li><p>处理返回DBG_CONTINUE</p>
+</li>
+<li><p>否则返回DBG_EXECUTE_NOT_HANDLED</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(!bExit)</span><br><span class="line">&#123;</span><br><span class="line">    DWORD dwContinueStatus = DBG_EXCEPTION_NOT_HANDLED;</span><br><span class="line">    DEBUG_EVENT debugEvent;</span><br><span class="line">    WaitForDebugEvent(&amp;debugEvent, INFINITE);</span><br><span class="line">    <span class="keyword">switch</span> ( debugEvent.dwDebugEventCode )</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> EXCEPTION_DEBUG_EVENT:</span><br><span class="line">        &#123;</span><br><span class="line">            EXCEPTION_DEBUG_INFO* pExcpInfo = &amp;debugEvent.u.Exception;</span><br><span class="line">            <span class="keyword">if</span> ( MessageBox(<span class="number">0</span>,_T(<span class="string">&quot;处理该异常?&quot;</span>), _T(<span class="string">&quot;我是调试器&quot;</span>),MB_YESNO)==IDYES )</span><br><span class="line">            &#123;</span><br><span class="line">                dwContinueStatus = DBG_CONTINUE;</span><br><span class="line">                <span class="comment">//...</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    ContinueDebugEvent(debugEvent.dwProcessId,  debugEvent.dwThreadId, dwContinueStatus);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="执行VEH"><a href="#执行VEH" class="headerlink" title="执行VEH"></a>执行VEH</h3><p>如果没有被调试，或者调试器不处理该异常(返回DBG_EXCEPTION_NOT_HANDLED)，就会把异常交给VEH</p>
+<p>VEH是个链表，每个VEH按顺序调用</p>
+<p>VEH在SEH之前执行，不依赖某一线程，返回值：</p>
+<ul>
+<li><p>EXCEPTION_CONTINUE_SEARCH 交给下一个VEH</p>
+</li>
+<li><p>EXCEPTION_CONTINUE_EXECUTION 认为已被处理，退出异常处理器在异常指令处继续执行</p>
+</li>
+<li><p>EXCEPTION_EXECUTE_HANDLED 无效，等同于EXCEPTION_CONTINUE_SEARCH</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LONG NTAPI <span class="title">FirstVectExcepHandler</span><span class="params">( PEXCEPTION_POINTERS pExcepInfo )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>( ... )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> EXCEPTION_CONTINUE_EXECUTION;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> EXCEPTION_CONTINUE_SEARCH;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//参数1=1表示插入Veh链的头部，=0表示插入到VEH链的尾部</span></span><br><span class="line">AddVectoredExceptionHandler( <span class="number">1</span>, &amp;FirstVectExcepHandler );</span><br></pre></td></tr></table></figure>
+<h3 id="执行SEH"><a href="#执行SEH" class="headerlink" title="执行SEH"></a>执行SEH</h3><p>当所有的VEH都不处理该异常，该异常就会让SEH处理，SEH只能处理自己线程的异常，基于线程栈的异常处理机制</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LONG <span class="title">FirstSEHer</span><span class="params">( PEXCEPTION_POINTERS pExcepInfo )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TCHAR* pTitle = _T(<span class="string">&quot;第一个SEH处理器&quot;</span>);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][1] in \n&quot;</span>) );</span><br><span class="line">    LONG nRet = ShowSelectMessageBox(pTitle);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][1] out \n&quot;</span>) );</span><br><span class="line">    <span class="keyword">return</span> nRet;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LONG <span class="title">SecondSEHer</span><span class="params">( PEXCEPTION_POINTERS pExcepInfo )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TCHAR* pTitle = _T(<span class="string">&quot;第二个SEH处理器&quot;</span>);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][2] in \n&quot;</span>) );</span><br><span class="line">    LONG nRet = ShowSelectMessageBox(pTitle);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][2] out \n&quot;</span>) );;</span><br><span class="line">    <span class="keyword">return</span> nRet;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ExcepFunction</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    __try</span><br><span class="line">    &#123;</span><br><span class="line">        __try</span><br><span class="line">        &#123;</span><br><span class="line">            __try</span><br><span class="line">            &#123;</span><br><span class="line"> </span><br><span class="line">                _tprintf( _T(<span class="string">&quot;[EH.Exe] *[CALL] int 3\n&quot;</span>) );</span><br><span class="line">                __asm <span class="keyword">int</span> <span class="number">3</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            __finally</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">printf</span>( <span class="string">&quot;[EH.Exe] *[SEH][0] finally call...\n&quot;</span> );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        __except( FirstSEHer(GetExceptionInformation()) )</span><br><span class="line">        &#123;</span><br><span class="line">            _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][1] 被俺处理了~(只有返回EXCEPTION_EXECUTE_HANDLER才会走到这里)\n&quot;</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    __except( SecondSEHer(GetExceptionInformation()) )</span><br><span class="line">    &#123;</span><br><span class="line">        _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][2] 被俺处理了(只有返回EXCEPTION_EXECUTE_HANDLER才会走到这里)\n&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="执行TopLevelEH"><a href="#执行TopLevelEH" class="headerlink" title="执行TopLevelEH"></a>执行TopLevelEH</h3><p>利用SEH实现，但是可以处理所有线程抛出的异常。如果正在被调试，则顶层异常会被忽略。</p>
+<p>返回值：</p>
+<ul>
+<li><p>EXCEPTION_CONTINUE_SEARCH</p>
+<p>查注册表，如果存在调试器，则抛给调试器</p>
+<p>注册表路径：KLM\software\microsoft\windows nt\currentvsrsion\aedebug。如果Auto==1，Debugger!=NULL</p>
+</li>
+<li><p>EXCEPTION_EXECUTE_HANDLER</p>
+<p>杀死该进程</p>
+</li>
+<li><p>EXCEPTION_CONTINUE_EXECUTION</p>
+<p>和SEH一样</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LONG NTAPI <span class="title">TopLevelExcepFilter</span><span class="params">( PEXCEPTION_POINTERS pExcepInfo )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TCHAR* pTitle = _T(<span class="string">&quot;*顶级* 异常处理器&quot;</span>);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [TOP] in \n&quot;</span>) );</span><br><span class="line">    LONG nRet = ShowSelectMessageBox(pTitle);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [TOP] out \n&quot;</span>) );;</span><br><span class="line">    <span class="keyword">return</span> nRet;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//注册</span></span><br><span class="line">SetUnhandledExceptionFilter( &amp;TopLevelExcepFilter );</span><br></pre></td></tr></table></figure>
+<h3 id="再次交给调试器"><a href="#再次交给调试器" class="headerlink" title="再次交给调试器"></a>再次交给调试器</h3><p>返回值</p>
+<ul>
+<li><p>DBG_CONTINUE</p>
+<p>和第一次相同</p>
+</li>
+<li><p>DBG_EXCEPTION_NOT_HANDLED</p>
+<p>直接杀死进程</p>
+</li>
+</ul>
+<h3 id="调试异常端口通知csrss-exe"><a href="#调试异常端口通知csrss-exe" class="headerlink" title="调试异常端口通知csrss.exe"></a>调试异常端口通知csrss.exe</h3><p>上面的异常处理机制都没有处理该异常，则调用csrss.exe，弹出一个对话框</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-173853.htm">[原创]白话windows之四 异常处理机制(VEH、SEH、TopLevelEH…)</a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2020/10/28/note/rev/win-ehs/">
+    <time datetime="2020-10-28T00:35:26.000Z" class="entry-date">
+        2020-10-28
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2020/10/28/note/rev/win-hook/" rel="prev"><span class="meta-nav">←</span> Windows hook介绍</a></span>
+    
+    
+        <span class="nav-next"><a href="/2020/10/27/note/rev/ehs/" rel="next">Windows异常处理机制 <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/27/note/papers/1-1/">app行为的语义提取方案读论文笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/26/note/rev/qiling/">麒麟框架使用--官方示例</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/24/note/web/pentist-1/">靶机看答案渗透记录-1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/writeup/kctf2020-10/wp/">kctf2020部分wp</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/20/note/web/DiD/">网络安全中的纵深防御概念</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2020 John Doe
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>
