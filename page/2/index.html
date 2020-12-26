@@ -169,6 +169,64 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-note/web/scripts" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/11/13/note/web/scripts/" class="article-date">
+  	<time datetime="2020-11-13T01:24:51.000Z" itemprop="datePublished">2020-11-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/13/note/web/scripts/">
+        每日读大佬jio本
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>itertools.permutations 返回对象的全排列，第二个参数指出数量<br>dedecms如果不允许上传文件会返回Upload filetype not allow !<br>post请求方式中带有_FILES[mochazz][tmp_name] 表示上传<br>adminer配置文件在common.inc.php<br>sql注入注释绕过//%0A select &lt;?php //%0Aphpinfo()?&gt;<br>哥斯拉的马</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2></blockquote>
+<p>[1] <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/XYZWlIZQLgA86tJPiOpM6A">记一次偶遇Adminer </a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/pwn/dynelf" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -943,104 +1001,6 @@
 </li>
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> random,string</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">check = [</span><br><span class="line"> <span class="string">&#x27;e5438e78ec1de10a2693f9cffb930d23&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;08e8e8855af8ea652df54845d21b9d67&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;a905095f0d801abd5865d649a646b397&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;bac8510b0902185146c838cdf8ead8e0&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;f26f009a6dc171e0ca7a4a770fecd326&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cffd0b9d37e7187483dc8dd19f4a8fa8&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;4cb467175ab6763a9867b9ed694a2780&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cffd0b9d37e7187483dc8dd19f4a8fa8&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;fd311e9877c3db59027597352999e91f&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;49733de19d912d4ad559736b1ae418a7&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;7fb523b42413495cc4e610456d1f1c84&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;acb465dc618e6754de2193bf0410aafe&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;bc52c927138231e29e0b05419e741902&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;515b7eceeb8f22b53575afec4123e878&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;451660d67c64da6de6fadc66079e1d8a&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;fe86104ce1853cb140b7ec0412d93837&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;acb465dc618e6754de2193bf0410aafe&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;c2bab7ea31577b955e2c2cac680fb2f4&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;f077b3a47c09b44d7077877a5aff3699&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;620741f57e7fafe43216d6aa51666f1d&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;9e3b206e50925792c3234036de6a25ab&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;49733de19d912d4ad559736b1ae418a7&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;874992ac91866ce1430687aa9f7121fc&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">num</span>):</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">while</span> num != <span class="number">1</span>:</span><br><span class="line">        num = num * <span class="number">3</span> + <span class="number">1</span> <span class="keyword">if</span> num % <span class="number">2</span> <span class="keyword">else</span> num // <span class="number">2</span></span><br><span class="line">        result.append(num)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(<span class="string">&#x27;Your input is not the FLAG!&#x27;</span>)</span><br><span class="line">    flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">27</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0x20</span>,<span class="number">0x7f</span>):</span><br><span class="line">            ret_list = func(i)</span><br><span class="line">            s = <span class="string">&#x27;&#x27;</span></span><br><span class="line">            <span class="keyword">for</span> idx <span class="keyword">in</span> range(len(ret_list)):</span><br><span class="line">                s += str(ret_list[idx])</span><br><span class="line">                s += str(ret_list[(len(ret_list) - idx - <span class="number">1</span>)])</span><br><span class="line">            md5 = hashlib.md5()</span><br><span class="line">            md5.update(s.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">            <span class="keyword">if</span> md5.hexdigest()==check[j]:</span><br><span class="line">                flag+=chr(i)</span><br><span class="line">                print(flag)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    md5 = hashlib.md5()</span><br><span class="line">    md5.update(flag.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">    print(<span class="string">&#x27;You win!&#x27;</span>)</span><br><span class="line">    print(<span class="string">&#x27;flag&#123;&#x27;</span> + md5.hexdigest() + <span class="string">&#x27;&#125;&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/attack/1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/10/31/note/attack/1/" class="article-date">
-  	<time datetime="2020-10-31T00:53:51.000Z" itemprop="datePublished">2020-10-31</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/31/note/attack/1/">
-        红蓝对抗中学到的东西
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="信息搜集非常重要"><a href="#信息搜集非常重要" class="headerlink" title="信息搜集非常重要"></a>信息搜集非常重要</h2><ul>
-<li><p>使用扫描器对网站进行扫描</p>
-</li>
-<li><p>使用搜索引擎google, baidu</p>
-<p>inurl:</p>
-<p>site:</p>
-<p>domain:</p>
-<p>+/-</p>
-</li>
-<li><p>github</p>
-</li>
-</ul>
-<p>  <a target="_blank" rel="noopener" href="https://docs.github.com/cn/free-pro-team@latest/github/searching-for-information-on-github/searching-on-github">https://docs.github.com/cn/free-pro-team@latest/github/searching-for-information-on-github/searching-on-github</a></p>
-<ul>
-<li><p>reg007</p>
-<p>查询注册过哪些网站</p>
-</li>
-<li><p>各类违法公式网站</p>
-</li>
-<li><p>社工库</p>
-</li>
-</ul>
-<h2 id="口令爆破"><a href="#口令爆破" class="headerlink" title="口令爆破"></a>口令爆破</h2><ul>
-<li><p>慎用远程穷举爆破</p>
-<p>容易被蓝方发现，入侵检测器发现，还有被当成ddos而禁IP</p>
-</li>
-<li><p>可以尝试常用密码，一些中间件或管理工具的默认密码</p>
-</li>
-<li><p>信息收集非常重要</p>
-</li>
-</ul>
-<h2 id="突破点"><a href="#突破点" class="headerlink" title="突破点"></a>突破点</h2><ul>
-<li><p>上传文件的地方</p>
-</li>
-<li><p>下载文件的地方</p>
-</li>
-<li><p>搜索命令</p>
-</li>
-<li><p>有的信息系统是外边强，内网弱，找到一个突破口进去</p>
-</li>
-<li><p>要有耐心，多思考，多动手，多抓包分析</p>
-</li>
-</ul>
-<p>如果有大佬，以上可无视</p>
 
       
     </div>
