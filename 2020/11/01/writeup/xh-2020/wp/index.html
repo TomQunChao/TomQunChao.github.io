@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>湘湖杯2020wp(只有RE部分) | Hexo</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="easyZ 使用strings找到input相关字符串  使用vim搜索到偏移量  根据偏移量找到主函数汇编指令代码  判断相关的字符串偏移量 1000bc2 wrong 1000bb2 win  猜测 brasl 为跳转指令，后面还有判断指令  网上搜索到一个pdf http:&#x2F;&#x2F;read.pudn.com&#x2F;downloads92&#x2F;ebook&#x2F;356133&#x2F;IBM%20S390%20%BB%E3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="湘湖杯2020wp(只有RE部分)">
+<meta property="og:url" content="http://example.com/2020/11/01/writeup/xh-2020/wp/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="easyZ 使用strings找到input相关字符串  使用vim搜索到偏移量  根据偏移量找到主函数汇编指令代码  判断相关的字符串偏移量 1000bc2 wrong 1000bb2 win  猜测 brasl 为跳转指令，后面还有判断指令  网上搜索到一个pdf http:&#x2F;&#x2F;read.pudn.com&#x2F;downloads92&#x2F;ebook&#x2F;356133&#x2F;IBM%20S390%20%BB%E3">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-11-01T02:02:12.000Z">
+<meta property="article:modified_time" content="2020-11-05T04:40:41.899Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+
+  
+<script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+
+  
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/"></a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide"></h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author"></h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-writeup/xh-2020/wp" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/11/01/writeup/xh-2020/wp/" class="article-date">
+  	<time datetime="2020-11-01T02:02:12.000Z" itemprop="datePublished">2020-11-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      湘湖杯2020wp(只有RE部分)
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="easyZ"><a href="#easyZ" class="headerlink" title="easyZ"></a>easyZ</h2><ol>
+<li><p>使用strings找到input相关字符串</p>
+</li>
+<li><p>使用vim搜索到偏移量</p>
+</li>
+<li><p>根据偏移量找到主函数汇编指令代码</p>
+</li>
+<li><p>判断相关的字符串偏移量</p>
+<p>1000bc2 wrong</p>
+<p>1000bb2 win</p>
+</li>
+<li><p>猜测 brasl 为跳转指令，后面还有判断指令</p>
+</li>
+<li><p>网上搜索到一个pdf <a target="_blank" rel="noopener" href="http://read.pudn.com/downloads92/ebook/356133/IBM%20S390%20%BB%E3%B1%E0%D3%EF%D1%D4.pdf">http://read.pudn.com/downloads92/ebook/356133/IBM%20S390%20%BB%E3%B1%E0%D3%EF%D1%D4.pdf</a></p>
+<p>从这里面看到了函数结尾的形式，即先加载地址，然后br跳转到那个地址，由此可以确定两个关键函数的结尾</p>
+</li>
+<li><p>1000910 判断字符集合法性，只能0-9 a-f 长度为32</p>
+<p>1000a08 验证函数</p>
+</li>
+<li><p>google搜索 llcr site:<a target="_blank" rel="noopener" href="http://www.ibm.com得到一个指令集文档/">www.ibm.com得到一个指令集文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/support/pages/sites/default/files/2020-07/SA22-7871-10.pdf">https://www.ibm.com/support/pages/sites/default/files/2020-07/SA22-7871-10.pdf</a></p>
+<p>起飞</p>
+</li>
+<li><p>实际程序逻辑是一个多项式，可以按位穷举</p>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;inttypes.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">char</span> *name,<span class="keyword">uint8_t</span> *data,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;==============%s========\n&quot;</span>,name);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;0x%02x,&quot;</span>,data[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n================================\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">uint32_t</span> <span class="title">calc</span><span class="params">(<span class="keyword">uint32_t</span> d1,<span class="keyword">uint32_t</span> d2,<span class="keyword">uint32_t</span> d3,<span class="keyword">uint32_t</span> d4)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> d1*d1*d2+d1*d3+d4;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">uint32_t</span> addDat[] = &#123;<span class="number">0xb2b0</span>,<span class="number">0x6e72</span>,<span class="number">0x6061</span>,<span class="number">0x565d</span>,<span class="number">0x942d</span>,<span class="number">0xac79</span>,<span class="number">0x391c</span>,<span class="number">0x643d</span>,<span class="number">0xec3f</span>,<span class="number">0xbd10</span>,<span class="number">0xc43e</span>,<span class="number">0x7a65</span>,<span class="number">0x184b</span>,<span class="number">0xef5b</span>,<span class="number">0x5a06</span>,<span class="number">0xa8c0</span>,<span class="number">0xf64b</span>,<span class="number">0xc774</span>,<span class="number">0x02ff</span>,<span class="number">0x8e57</span>,<span class="number">0xaed9</span>,<span class="number">0xd8a9</span>,<span class="number">0x230c</span>,<span class="number">0x74e8</span>,<span class="number">0xc2a6</span>,<span class="number">0x88b3</span>,<span class="number">0xaf2a</span>,<span class="number">0x9ea7</span>,<span class="number">0xce8a</span>,<span class="number">0x5924</span>,<span class="number">0xd276</span>,<span class="number">0x56d4</span>,<span class="number">0x77d7</span>,<span class="number">0x990e</span>,<span class="number">0xb585</span>,<span class="number">0x4bcd</span>,<span class="number">0x5277</span>,<span class="number">0x1afc</span>,<span class="number">0x8c8a</span>,<span class="number">0xcdb5</span>,<span class="number">0x6e26</span>,<span class="number">0x4c22</span>,<span class="number">0x673f</span>,<span class="number">0xdaff</span>,<span class="number">0x0fac</span>,<span class="number">0x86c7</span>,<span class="number">0xe048</span>,<span class="number">0xc483</span>,<span class="number">0x85d3</span>,<span class="number">0x2204</span>,<span class="number">0xc2ee</span>,<span class="number">0xe07f</span>,<span class="number">0x0caf</span>,<span class="number">0xbf76</span>,<span class="number">0x63fe</span>,<span class="number">0xbffb</span>,<span class="number">0x4b09</span>,<span class="number">0xe5b3</span>,<span class="number">0x8bda</span>,<span class="number">0x96df</span>,<span class="number">0x866d</span>,<span class="number">0x1719</span>,<span class="number">0x6bcf</span>,<span class="number">0xadcc</span>,<span class="number">0x0f2b</span>,<span class="number">0x51ce</span>,<span class="number">0x1549</span>,<span class="number">0x20c1</span>,<span class="number">0x3a8d</span>,<span class="number">0x05f5</span>,<span class="number">0x5403</span>,<span class="number">0x1125</span>,<span class="number">0x9161</span>,<span class="number">0xe2a5</span>,<span class="number">0x5196</span>,<span class="number">0xd8d2</span>,<span class="number">0xd644</span>,<span class="number">0xee86</span>,<span class="number">0x3896</span>,<span class="number">0x2e71</span>,<span class="number">0xa6f1</span>,<span class="number">0xdfcf</span>,<span class="number">0x3ece</span>,<span class="number">0x7d49</span>,<span class="number">0xc24d</span>,<span class="number">0x237e</span>,<span class="number">0x9352</span>,<span class="number">0x7a97</span>,<span class="number">0x7bfa</span>,<span class="number">0xcbaa</span>,<span class="number">0x10dc</span>,<span class="number">0x3bd9</span>,<span class="number">0x7d7b</span>,<span class="number">0x3b88</span>,<span class="number">0xb0d0</span>,<span class="number">0xe8bc</span>&#125;;</span><br><span class="line">    <span class="keyword">uint32_t</span> cmpDat[] = &#123;<span class="number">0x08a73233</span>,<span class="number">0x116db0f6</span>,<span class="number">0x0e654937</span>,<span class="number">0x03c374a7</span>,<span class="number">0x16bc8ed9</span>,<span class="number">0x0846b755</span>,<span class="number">0x08949f47</span>,<span class="number">0x04a13c27</span>,<span class="number">0x0976cf0a</span>,<span class="number">0x07461189</span>,<span class="number">0x1e1a5c12</span>,<span class="number">0x11e64d96</span>,<span class="number">0x03cf09b3</span>,<span class="number">0x093cb610</span>,<span class="number">0x0d41ea64</span>,<span class="number">0x07648050</span>,<span class="number">0x092039bf</span>,<span class="number">0x08e7f1f7</span>,<span class="number">0x004d871f</span>,<span class="number">0x1680f823</span>,<span class="number">0x06f3c3eb</span>,<span class="number">0x2205134d</span>,<span class="number">0x015c6a7c</span>,<span class="number">0x11c67ed0</span>,<span class="number">0x0817b32e</span>,<span class="number">0x06bd9b92</span>,<span class="number">0x08806b0c</span>,<span class="number">0x06aaa515</span>,<span class="number">0x205b9f76</span>,<span class="number">0x0de963e9</span>,<span class="number">0x2194e8e2</span>,<span class="number">0x047593bc</span>&#125;;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,<span class="keyword">sizeof</span>(addDat)/<span class="number">4</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,<span class="keyword">sizeof</span>(cmpDat)/<span class="number">4</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0x%08x 0x%08x 0x%08x\n&quot;</span>,addDat[<span class="number">0</span>],addDat[<span class="number">1</span>],cmpDat[<span class="number">0</span>]);</span><br><span class="line">    <span class="keyword">uint8_t</span> flag[<span class="number">33</span>]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">uint32_t</span> addT;</span><br><span class="line">    <span class="keyword">char</span> dic[] = <span class="string">&quot;0123456789abcdef&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;<span class="number">32</span>;i++)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// flag[i]=(uint32_t)sqrt(cmpDat[i]);</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">size_t</span> j=<span class="number">0</span>;j&lt;<span class="number">16</span>;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(calc(dic[j],addDat[i],addDat[i+<span class="number">32</span>],addDat[i+<span class="number">64</span>])==cmpDat[i])&#123;</span><br><span class="line">                flag[i]=dic[j];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    printArray(<span class="string">&quot;flag&quot;</span>,flag,<span class="number">32</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,flag);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,<span class="built_in">strlen</span>(flag));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="rev-easyre"><a href="#rev-easyre" class="headerlink" title="[rev] easyre"></a>[rev] easyre</h2><ol>
+<li><p>IDA进入主函数没发现什么</p>
+</li>
+<li><p>使用调试器发现返回后进入变换和检测函数</p>
+</li>
+<li><p>程序逻辑为所有数组成一个整体循环右移5位，之后每一个数异或自己的下标。第0Byte异或0所以不受影响。</p>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;inttypes.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">char</span> *name,<span class="keyword">uint8_t</span> *data,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;==============%s========\n&quot;</span>,name);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;0x%02x,&quot;</span>,data[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n================================\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">uint8_t</span> a[] = &#123;<span class="number">0x2b</span>, <span class="number">0x08</span>, <span class="number">0xa9</span>, <span class="number">0xc8</span>, <span class="number">0x97</span>, <span class="number">0x2f</span>, <span class="number">0xff</span>, <span class="number">0x8c</span>, <span class="number">0x92</span>, <span class="number">0xf0</span>, <span class="number">0xa3</span>, <span class="number">0x89</span>, <span class="number">0xf7</span>, <span class="number">0x26</span>, <span class="number">0x07</span>, <span class="number">0xa4</span>, <span class="number">0xda</span>, <span class="number">0xea</span>, <span class="number">0xb3</span>, <span class="number">0x91</span>, <span class="number">0xef</span>, <span class="number">0xdc</span>, <span class="number">0x95</span>, <span class="number">0xab</span>,<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,<span class="keyword">sizeof</span>(a));</span><br><span class="line">    <span class="keyword">uint8_t</span> flag[<span class="number">25</span>]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;<span class="number">24</span>;i++)&#123;</span><br><span class="line">        a[i]^=i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;<span class="number">24</span>;i++)&#123;</span><br><span class="line">        flag[i]=a[(i<span class="number">-1</span>)%<span class="number">24</span>]&lt;&lt;<span class="number">5</span>|a[i]&gt;&gt;<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    printArray(<span class="string">&quot;flag&quot;</span>,flag,<span class="number">24</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,flag);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个脚本跑出来最后一位错误，但是根据语义推测最后一位为u</p>
+<h2 id="easy-c"><a href="#easy-c" class="headerlink" title="easy_c++"></a>easy_c++</h2><p>把用户输入和下标做异或处理</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;inttypes.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">char</span> *name,<span class="keyword">uint8_t</span> *data,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;==============%s========\n&quot;</span>,name);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;0x%02x,&quot;</span>,data[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n================================\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> s[] = <span class="string">&quot;7d21e&lt;e3&lt;:3;9;ji t r#w\&quot;$*&#123;*+*$|,&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;<span class="built_in">strlen</span>(s);i++)&#123;</span><br><span class="line">        s[i]^=i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,s);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,<span class="built_in">strlen</span>(s));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="rev-ReMe"><a href="#rev-ReMe" class="headerlink" title="[rev]ReMe"></a>[rev]ReMe</h2><ol>
+<li><p>有个python图标，猜测是pyinstaller打包的</p>
+<p>这一点也可以ida打开查看字符串</p>
+</li>
+<li><p>使用pyinstxtractor解包程序</p>
+</li>
+<li><p>解包之后，猜测文件夹中ReMe是主程序的pyc文件，但是没有pyc的文件头</p>
+</li>
+<li><p>找个同文件夹下的pyc文件头，插入到这个文件开头，使用uncompyle6反编译，得到1.py文件</p>
+</li>
+<li><p>查看程序逻辑之后发现可以按位穷举</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> random,string</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">check = [</span><br><span class="line"> <span class="string">&#x27;e5438e78ec1de10a2693f9cffb930d23&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;08e8e8855af8ea652df54845d21b9d67&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;a905095f0d801abd5865d649a646b397&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;bac8510b0902185146c838cdf8ead8e0&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;f26f009a6dc171e0ca7a4a770fecd326&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cffd0b9d37e7187483dc8dd19f4a8fa8&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;4cb467175ab6763a9867b9ed694a2780&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cffd0b9d37e7187483dc8dd19f4a8fa8&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;fd311e9877c3db59027597352999e91f&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;49733de19d912d4ad559736b1ae418a7&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;7fb523b42413495cc4e610456d1f1c84&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;acb465dc618e6754de2193bf0410aafe&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;bc52c927138231e29e0b05419e741902&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;515b7eceeb8f22b53575afec4123e878&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;451660d67c64da6de6fadc66079e1d8a&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;fe86104ce1853cb140b7ec0412d93837&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;acb465dc618e6754de2193bf0410aafe&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;c2bab7ea31577b955e2c2cac680fb2f4&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;8e50684ac9ef90dfdc6b2e75f2e23741&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;f077b3a47c09b44d7077877a5aff3699&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;620741f57e7fafe43216d6aa51666f1d&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;9e3b206e50925792c3234036de6a25ab&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;49733de19d912d4ad559736b1ae418a7&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;874992ac91866ce1430687aa9f7121fc&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">num</span>):</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">while</span> num != <span class="number">1</span>:</span><br><span class="line">        num = num * <span class="number">3</span> + <span class="number">1</span> <span class="keyword">if</span> num % <span class="number">2</span> <span class="keyword">else</span> num // <span class="number">2</span></span><br><span class="line">        result.append(num)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(<span class="string">&#x27;Your input is not the FLAG!&#x27;</span>)</span><br><span class="line">    flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">27</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0x20</span>,<span class="number">0x7f</span>):</span><br><span class="line">            ret_list = func(i)</span><br><span class="line">            s = <span class="string">&#x27;&#x27;</span></span><br><span class="line">            <span class="keyword">for</span> idx <span class="keyword">in</span> range(len(ret_list)):</span><br><span class="line">                s += str(ret_list[idx])</span><br><span class="line">                s += str(ret_list[(len(ret_list) - idx - <span class="number">1</span>)])</span><br><span class="line">            md5 = hashlib.md5()</span><br><span class="line">            md5.update(s.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">            <span class="keyword">if</span> md5.hexdigest()==check[j]:</span><br><span class="line">                flag+=chr(i)</span><br><span class="line">                print(flag)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    md5 = hashlib.md5()</span><br><span class="line">    md5.update(flag.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">    print(<span class="string">&#x27;You win!&#x27;</span>)</span><br><span class="line">    print(<span class="string">&#x27;flag&#123;&#x27;</span> + md5.hexdigest() + <span class="string">&#x27;&#125;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/11/02/note/rev/dll-inject/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          dll注入技术
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/10/31/note/attack/1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">红蓝对抗中学到的东西</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="writeup/xh-2020/wp" data-title="湘湖杯2020wp(只有RE部分)" data-url="http://example.com/2020/11/01/writeup/xh-2020/wp/"  data-images="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" data-content="湘湖杯2020wp(只有RE部分)">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2020 John Doe
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>c中的setjump和longjump | Hexo</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概念goto可能会导致程序逻辑的混乱，并且非常容易导致程序栈帧的混乱，造成不可预知的后果。 setjump和longjump用于代替goto。由于操作系统调用会有很“深”的函数调用，当某些操作完成后，系统调用函数想要快速返回用户层函数而不是一层层地返回，所以这里经常用setjmp&#x2F;longjmp。 另外笔者实践发现，某些时候递归函数使用setump&#x2F;longjmp也能有很神奇的用处。  使用set">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c中的setjump和longjump">
+<meta property="og:url" content="http://example.com/2020/11/09/note/develop/c-jump/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="概念goto可能会导致程序逻辑的混乱，并且非常容易导致程序栈帧的混乱，造成不可预知的后果。 setjump和longjump用于代替goto。由于操作系统调用会有很“深”的函数调用，当某些操作完成后，系统调用函数想要快速返回用户层函数而不是一层层地返回，所以这里经常用setjmp&#x2F;longjmp。 另外笔者实践发现，某些时候递归函数使用setump&#x2F;longjmp也能有很神奇的用处。  使用set">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-11-09T11:48:35.000Z">
+<meta property="article:modified_time" content="2020-11-09T12:11:50.590Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+
+  
+<script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+
+  
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/"></a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide"></h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author"></h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-note/develop/c-jump" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/11/09/note/develop/c-jump/" class="article-date">
+  	<time datetime="2020-11-09T11:48:35.000Z" itemprop="datePublished">2020-11-09</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      c中的setjump和longjump
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>goto可能会导致程序逻辑的混乱，并且非常容易导致程序栈帧的混乱，造成不可预知的后果。</p>
+<p>setjump和longjump用于代替goto。由于操作系统调用会有很“深”的函数调用，当某些操作完成后，系统调用函数想要快速返回用户层函数而不是一层层地返回，所以这里经常用setjmp/longjmp。</p>
+<p>另外笔者实践发现，某些时候递归函数使用setump/longjmp也能有很神奇的用处。</p>
+<ul>
+<li>使用setjmp/longjmp宏要包含setjmp.h<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setjmp</span><span class="params">(jmp_buf env)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>env是jmp_buf类型的变量，用于保存setjmp时的环境</li>
+<li>第一次调用setjmp必返回0，之后依据longjmp返回</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">longjmp</span><span class="params">(jmp_buf env,<span class="keyword">int</span> ret_val)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>(void是我猜的)</p>
+<ul>
+<li>env 之前setjmp保存的环境，跳转到保存的那一行</li>
+<li>ret_val 跳转到setjmp时返回值</li>
+</ul>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">jmp_buf buf;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">second</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;second\n&quot;</span>);</span><br><span class="line">    longjmp(buf,<span class="number">1</span>); <span class="comment">// setjmp返回1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">first</span><span class="params">()</span></span>&#123;</span><br><span class="line">    second();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;first\n&quot;</span>); <span class="comment">// 执行不到这一行</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!setjmp(buf))&#123; <span class="comment">// 第一次返回0，所以执行first，第二次由于longjmp，返回1，执行else</span></span><br><span class="line">        first();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;main\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">second</span><br><span class="line">main</span><br></pre></td></tr></table></figure>
+
+<h2 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">buf:</span><br><span class="line">        .zero   200</span><br><span class="line">.LC0:</span><br><span class="line">        .string &quot;second&quot;</span><br><span class="line">second():</span><br><span class="line">        push    rbp</span><br><span class="line">        mov     rbp, rsp</span><br><span class="line">        mov     edi, OFFSET FLAT:.LC0</span><br><span class="line">        call    puts</span><br><span class="line">        mov     esi, 1</span><br><span class="line">        mov     edi, OFFSET FLAT:buf</span><br><span class="line">        call    longjmp</span><br><span class="line">.LC1:</span><br><span class="line">        .string &quot;first&quot;</span><br><span class="line">first():</span><br><span class="line">        push    rbp</span><br><span class="line">        mov     rbp, rsp</span><br><span class="line">        call    second()</span><br><span class="line">        mov     edi, OFFSET FLAT:.LC1</span><br><span class="line">        call    puts</span><br><span class="line">        nop</span><br><span class="line">        pop     rbp</span><br><span class="line">        ret</span><br><span class="line">.LC2:</span><br><span class="line">        .string &quot;main&quot;</span><br><span class="line">main:</span><br><span class="line">        push    rbp</span><br><span class="line">        mov     rbp, rsp</span><br><span class="line">        mov     edi, OFFSET FLAT:buf</span><br><span class="line">        call    _setjmp</span><br><span class="line">        test    eax, eax</span><br><span class="line">        sete    al</span><br><span class="line">        test    al, al</span><br><span class="line">        je      .L5</span><br><span class="line">        call    first()</span><br><span class="line">        jmp     .L6</span><br><span class="line">.L5:</span><br><span class="line">        mov     edi, OFFSET FLAT:.LC2</span><br><span class="line">        call    puts</span><br><span class="line">.L6:</span><br><span class="line">        mov     eax, 0</span><br><span class="line">        pop     rbp</span><br><span class="line">        ret</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">JUMP_BUFFER</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Frame;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rbx;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rsp;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rbp;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rsi;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rdi;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 R12;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 R13;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 R14;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 R15;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rip;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> MxCsr;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span> FpCsr;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span> Spare;</span><br><span class="line"></span><br><span class="line">    SETJMP_FLOAT128 Xmm6;</span><br><span class="line">    SETJMP_FLOAT128 Xmm7;</span><br><span class="line">    SETJMP_FLOAT128 Xmm8;</span><br><span class="line">    SETJMP_FLOAT128 Xmm9;</span><br><span class="line">    SETJMP_FLOAT128 Xmm10;</span><br><span class="line">    SETJMP_FLOAT128 Xmm11;</span><br><span class="line">    SETJMP_FLOAT128 Xmm12;</span><br><span class="line">    SETJMP_FLOAT128 Xmm13;</span><br><span class="line">    SETJMP_FLOAT128 Xmm14;</span><br><span class="line">    SETJMP_FLOAT128 Xmm15;</span><br><span class="line">&#125; _JUMP_BUFFER;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到buffer内保存了所有寄存器和相关信息</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-macro-setjmp.html">C 库宏 - setjmp()</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/11/09/note/rev/radare2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          radare2使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/11/09/note/develop/cpp-lambda/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">c++中的lambda表达式</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="note/develop/c-jump" data-title="c中的setjump和longjump" data-url="http://example.com/2020/11/09/note/develop/c-jump/"  data-images="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" data-content="c中的setjump和longjump">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2020 John Doe
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>

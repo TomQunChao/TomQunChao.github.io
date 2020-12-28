@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>线性代数入门-1 | Hexo</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本来想看格密码的，可是发现自己好多线性代数基础都忘了，于是开始复(yu)习线性代数 这个系列是我的线性代数笔记，课程是MIT 线性代数，挺有名的那个，课程网站，教材是 Introduction to LinearAlgorithm, 5th 方程组的几何解释考虑如下线性方程组 $$\begin{cases}2x-y&#x3D;0\-x+y&#x3D;3\end{cases}$$ 行图像：两个线性方程画成平面上的两条直">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数入门-1">
+<meta property="og:url" content="http://example.com/2020/12/26/note/math/linear-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本来想看格密码的，可是发现自己好多线性代数基础都忘了，于是开始复(yu)习线性代数 这个系列是我的线性代数笔记，课程是MIT 线性代数，挺有名的那个，课程网站，教材是 Introduction to LinearAlgorithm, 5th 方程组的几何解释考虑如下线性方程组 $$\begin{cases}2x-y&#x3D;0\-x+y&#x3D;3\end{cases}$$ 行图像：两个线性方程画成平面上的两条直">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/.com//1.png">
+<meta property="og:image" content="http://example.com/.com//2.png">
+<meta property="og:image" content="http://example.com/.com//3.png">
+<meta property="article:published_time" content="2020-12-26T11:01:13.000Z">
+<meta property="article:modified_time" content="2020-12-27T12:49:44.906Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/.com//1.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+
+  
+<script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+
+  
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/"></a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide"></h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author"></h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-note/math/linear-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/12/26/note/math/linear-1/" class="article-date">
+  	<time datetime="2020-12-26T11:01:13.000Z" itemprop="datePublished">2020-12-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      线性代数入门-1
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本来想看格密码的，可是发现自己好多线性代数基础都忘了，于是开始复(yu)习线性代数</p>
+<p>这个系列是我的线性代数笔记，课程是<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1bb411H7JN?from=search&seid=16473507744870637372">MIT 线性代数</a>，挺有名的那个，<a target="_blank" rel="noopener" href="https://mitmath.github.io/1806/">课程网站</a>，教材是 Introduction to LinearAlgorithm, 5th</p>
+<h2 id="方程组的几何解释"><a href="#方程组的几何解释" class="headerlink" title="方程组的几何解释"></a>方程组的几何解释</h2><p>考虑如下线性方程组</p>
+<p>$$<br>\begin{cases}<br>2x-y=0<br>\-x+y=3<br>\end{cases}<br>$$</p>
+<p><strong>行图像</strong>：两个线性方程画成平面上的两条直线，直线的交点就是方程组的解</p>
+<p><img src="/.com//1.png"></p>
+<p>线性方程组的”线性“也是来源于此，在平面上表现为一条直线</p>
+<p><strong>列图像</strong>：线性方程组就是矩阵的线性组合</p>
+<p>上面的方程组可以写成下面的形式</p>
+<p>$$<br>x<br>\begin{bmatrix}<br>2\-1<br>\end{bmatrix}<br>+y\begin{bmatrix}-1\1\end{bmatrix}<br>=\begin{bmatrix}0\3\end{bmatrix}<br>$$</p>
+<p>其中$\begin{bmatrix}2\-1\end{bmatrix}$这种可以看成一个从$(0,0)$到$(2,-1)$的一个向量，如图<br><img src="/.com//2.png"></p>
+<p>这样问题就变成了向量$\begin{bmatrix}2\-1\end{bmatrix}$和向量$\begin{bmatrix}-1\1\end{bmatrix}$如何组合可以得到向量$\begin{bmatrix}0\3\end{bmatrix}$</p>
+<p>向量的相加，在图上表现为将向量平移后首尾相接，如图中虚线所示</p>
+<p><img src="/.com//3.png"></p>
+<p>3维空间(3个未知数)同理，只是行图像中，一个方程不再代表一条线，而是一个3维空间的一个平面；两个平面只能相交与一条直线(非奇异情况)</p>
+<h3 id="矩阵乘法"><a href="#矩阵乘法" class="headerlink" title="矩阵乘法"></a>矩阵乘法</h3><p>视频中介绍了矩阵乘法的两种方法，举例说明</p>
+<p>上面的方程组写成矩阵形式如下<br>$$<br>\begin{bmatrix}2 &amp; -1\ -1 &amp; 1\end{bmatrix}<br>\begin{bmatrix}x\y\end{bmatrix}<br>=<br>\begin{bmatrix}0\3\end{bmatrix}<br>$$<br>其中$x,y$可以是具体的数(解限定情况下就固定了)</p>
+<p>算法1：使用上面的方法，将矩阵相乘转化为矩阵分别相加</p>
+<p>$$<br>x<br>\begin{bmatrix}<br>2\-1<br>\end{bmatrix}<br>+y\begin{bmatrix}-1\1\end{bmatrix}<br>=\begin{bmatrix}0\3\end{bmatrix}<br>$$</p>
+<p>算法2：矩阵相乘算法</p>
+<p>将第一个矩阵的第一行分别与第二个矩阵的第一列点乘，结果作为结果矩阵的第一行第一列，然后是1的第二行和2的第一列，结果作为第二行第一列，以此类推</p>
+<p>形式化说法：将第一个矩阵的第$i$行和第二个矩阵的第$j$列相乘，结果作为结果矩阵的位于$(i,j)$的元素</p>
+<p>点乘($\cdot$)</p>
+<p>$[a,b,c]\cdot[d,e,f]=ad+be+cf$</p>
+<p>也可以看出矩阵相乘的充分必要条件，即第一个矩阵的行数等于第二个矩阵的列数，结果矩阵为(第一个矩阵的行数，第二个矩阵的列数)大小</p>
+<h3 id="知识回忆"><a href="#知识回忆" class="headerlink" title="知识回忆"></a>知识回忆</h3><p>如果一个矩阵中，任意一个行向量都不能成为其它行向量的线性表示，则称这个矩阵是非奇异的，并且是可逆的</p>
+<h2 id="矩阵消元"><a href="#矩阵消元" class="headerlink" title="矩阵消元"></a>矩阵消元</h2><h3 id="消元法"><a href="#消元法" class="headerlink" title="消元法"></a>消元法</h3><p>考虑三元一次方程组，解的时候使用消元法<br>$$<br>\begin{cases}<br>x+2y+z=2<br>\3x+8y+z=12<br>\\ \ \ \ \  \ \ \ \ 4y+z=2<br>\end{cases}<br>$$<br>可以写成矩阵形式<br>$$<br>\begin{bmatrix}<br>1&amp;2&amp;1\<br>3&amp;8&amp;1\<br>0&amp;4&amp;1<br>\end{bmatrix}<br>\begin{bmatrix}<br>x\y\z<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>2\12\2<br>\end{bmatrix}<br>$$<br>矩阵的坐标从左上角开始，如(1,2)代表第一行第二列的元素</p>
+<p>消元法首先选择(1,1)的元素作为主元，然后消去第二行和第三行的对应主元参数的系数(使它变为0)，再选择(2,2)作为主元，继续做</p>
+<p>主元的系数不能是0，如果是0需要进行行交换</p>
+<p>设上面的矩阵表达式为$Ax=b$，则$A$和$b$合并成为$A$的增长矩阵</p>
+<p>$$<br>\begin{bmatrix}<br>1&amp;2&amp;1&amp;2\<br>3&amp;8&amp;1&amp;12\<br>0&amp;4&amp;1&amp;2<br>\end{bmatrix}<br>$$</p>
+<p>回代即把消元后的矩阵回代到方程组中</p>
+<h3 id="矩阵乘法-1"><a href="#矩阵乘法-1" class="headerlink" title="矩阵乘法"></a>矩阵乘法</h3><p>上节课讲到了矩阵右乘一个列向量，那么矩阵左乘一个行向量也同理，可以理解为各个行相加</p>
+<p>$$<br>\begin{bmatrix}<br>x&amp;y&amp;z<br>\end{bmatrix}<br>\begin{bmatrix}<br>1&amp;2&amp;1\<br>3&amp;8&amp;1\<br>0&amp;4&amp;1<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>2&amp;12&amp;2<br>\end{bmatrix}<br>$$<br>可以理解为x倍第一行加y倍第二行加z倍第三行</p>
+<p>从这个算法可以看出，左乘矩阵即对矩阵进行行变换，同理右乘矩阵是列变换</p>
+<p>单位阵乘一个矩阵，矩阵的值不变</p>
+<p>$$<br>\begin{bmatrix}<br>1&amp;0&amp;0\0&amp;1&amp;0\0&amp;0&amp;1<br>\end{bmatrix}<br>$$</p>
+<p>矩阵消元进行的是行变换，可以理解为左乘一个矩阵。左乘的矩阵称为初等矩阵，如果为了消去(2,1)的系数，用$E_{2,1}$表示，同理有$E_{3,1},E_{3,2}$</p>
+<p>矩阵乘法具有结合律，但没有交换律</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/12/26/note/math/lattice-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">格密码入门--格-1</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="note/math/linear-1" data-title="线性代数入门-1" data-url="http://example.com/2020/12/26/note/math/linear-1/"  data-images="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg" data-content="线性代数入门-1">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2020 John Doe
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>
