@@ -173,6 +173,105 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-note/rev/rev-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/10/10/note/rev/rev-1/" class="article-date">
+  	<time datetime="2020-10-10T11:35:12.000Z" itemprop="datePublished">2020-10-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/10/note/rev/rev-1/">
+        IDA使用技巧--导入头文件和导入函数签名
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>做了一道题，虽然没做出来，但是学到了很多。</p>
+<h2 id="使用IDA导入头文件"><a href="#使用IDA导入头文件" class="headerlink" title="使用IDA导入头文件"></a>使用IDA导入头文件</h2><p>在IDA中按Ctrl+F9，导入对应的头文件即可。这个最好在对应的操作系统下导入。</p>
+<h2 id="导入函数签名"><a href="#导入函数签名" class="headerlink" title="导入函数签名"></a>导入函数签名</h2><p>使用Shift+F5键可以导入使用已经存在的函数签名</p>
+<p>如果没有已经存在的函数签名，要自己使用Flair制作</p>
+<p>以下教程使用<a target="_blank" rel="noopener" href="https://gmplib.org/">libgmp.a</a>做例子</p>
+<ol>
+<li><p>使用pelf制作pat</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./pelf libgmp.a gmp.pat</span><br></pre></td></tr></table></figure>
+
+<p>如果出现</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Fatal [PATH_TO_libgmp.a] (mp_set_fns.o): Unknown relocation <span class="built_in">type</span> 42 (offset <span class="keyword">in</span> section=0x2b).</span><br></pre></td></tr></table></figure>
+
+<p>就增加选项</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./pelf -r42:0:0 libgmp.a gmp.pat</span><br></pre></td></tr></table></figure>
+
+<p>或者使用ar删除报错的地址，直到错误消失(未测试)</p>
+</li>
+<li><p>使用sigmake制作签名</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sigmake gmp.pat gmp.sig</span><br></pre></td></tr></table></figure>
+
+<p>如果出现</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gmp.sig: modules/leaves: 475/517, COLLISIONS: 2</span><br><span class="line">See the documentation to learn how to resolve collisions.</span><br></pre></td></tr></table></figure>
+
+<p>说明有冲突，此时在目录下会生成一个gmp.exc，打开这个文件，删除注释，然后在你想保留的函数前面增加一个+</p>
+</li>
+<li><p>如果一切顺利，则会生成sig文件</p>
+</li>
+<li><p>把sig文件复制到IDA_INSTALL_PATH/sig/pc目录下，打开IDA</p>
+</li>
+<li><p>Shift+F5，打开函数签名页面，右键，选择你刚刚添加的签名</p>
+</li>
+</ol>
+<p>注意：不同版本的gcc编译出的静态链接库不同，有时导入了函数还是不起作用，可能就是版本问题。</p>
+<blockquote>
+<p>可以使用别人制作好的sig签名库</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Maktm/FLIRTDB">https://github.com/Maktm/FLIRTDB</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/push0ebp/sig-database">https://github.com/push0ebp/sig-database</a></p>
+<p>匹配最佳sig</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/maroueneboubakri/lscan">https://github.com/maroueneboubakri/lscan</a></p>
+</blockquote>
+<h2 id="其它确定函数名的方法"><a href="#其它确定函数名的方法" class="headerlink" title="其它确定函数名的方法"></a>其它确定函数名的方法</h2><p>调试 = =，gdb会显示使用了哪个库。如果要对对应的库调试，使用dir命令。</p>
+<h2 id="参考资料-不分先后"><a href="#参考资料-不分先后" class="headerlink" title="参考资料(不分先后)"></a>参考资料(不分先后)</h2><p>[1] <a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-175607.htm">https://bbs.pediy.com/thread-175607.htm</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4484">https://xz.aliyun.com/t/4484</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33438733/article/details/79968964">https://blog.csdn.net/qq_33438733/article/details/79968964</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="https://blog.csdn.net/dupei/article/details/99835255">https://blog.csdn.net/dupei/article/details/99835255</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-writeup/xhlj2020-10/wp" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -639,7 +738,7 @@ DEFAULT_MMAP_MAX           65536</code></pre>
   <div class="outer">
     <div id="footer-info">
       <div class="footer-left">
-        &copy; 2020 John Doe
+        &copy; 2021 John Doe
       </div>
         <div class="footer-right">
           <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>

