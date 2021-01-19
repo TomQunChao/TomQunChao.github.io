@@ -235,6 +235,144 @@
 
 
   
+    <article id="post-note/rev/game-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/19/note/rev/game-1/" class="article-date">
+  	<time datetime="2021-01-19T14:10:11.000Z" itemprop="datePublished">2021-01-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/19/note/rev/game-1/">
+        Android下实现ptrace注入&amp;hook
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>通过目标进程名找到进程PID</li>
+<li>将so注入到进程空间</li>
+<li>如果hook Native层函数，则有IAT hook，调试hook，inline hook，hotfix hook等多种手段；如果是Java层hook，可以使用反射机制</li>
+</ol>
+<h2 id="查找PID"><a href="#查找PID" class="headerlink" title="查找PID"></a>查找PID</h2>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-note/linux/vim-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/19/note/linux/vim-1/" class="article-date">
+  	<time datetime="2021-01-19T03:44:46.000Z" itemprop="datePublished">2021-01-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/19/note/linux/vim-1/">
+        some tips when use vim
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>linux安装vim时需要的插件和一些坑</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S gvim <span class="comment"># 安装gvim以支持系统剪切板</span></span><br></pre></td></tr></table></figure>
+
+<p>文件组织</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-~</span><br><span class="line">--.vimrc </span><br><span class="line">--.vim </span><br><span class="line">---my_config.vim</span><br><span class="line">---my_plugins.vim</span><br><span class="line">--+bundle</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> ~/.<span class="keyword">vim</span>/my_plugins.<span class="keyword">vim</span></span><br><span class="line"><span class="keyword">source</span> ~/.<span class="keyword">vim</span>/my_config.<span class="keyword">vim</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&quot; my_config.vim</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">nu</span> <span class="comment">&quot;显示行号</span></span><br><span class="line"><span class="keyword">syntax</span> <span class="keyword">on</span> <span class="comment">&quot;语法高亮</span></span><br></pre></td></tr></table></figure>
+
+
+<p>安装vundle插件 <a target="_blank" rel="noopener" href="https://github.com/VundleVim/Vundle.vim">https://github.com/VundleVim/Vundle.vim</a> ，把对应的配置放在my_plugins里面</p>
+<p>安装YCM插件 <a target="_blank" rel="noopener" href="https://github.com/ycm-core/YouCompleteMe">https://github.com/ycm-core/YouCompleteMe</a> ，这里要注意的是，go和mono，jdt的language-server会下载失败，对应的解决方法如下</p>
+<ol>
+<li>go</li>
+</ol>
+<p>设置go代理和github代理</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">go env -w GO111MODULE=on</span><br><span class="line">go env -w GOPROXY=https://goproxy.cn,direct</span><br></pre></td></tr></table></figure>
+<p>设置github代理，需要自己有代理</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line">git config --global https.proxy https://127.0.0.1:1080</span><br><span class="line">git config --global http.proxy <span class="string">&#x27;socks5://127.0.0.1:1080&#x27;</span> </span><br><span class="line">git config --global https.proxy <span class="string">&#x27;socks5://127.0.0.1:1080&#x27;</span></span><br><span class="line"><span class="comment"># 取消</span></span><br><span class="line">git config --global --<span class="built_in">unset</span> http.proxy</span><br><span class="line">git config --global --<span class="built_in">unset</span> https.proxy</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>npm<br>使用cnpm自己安装<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install cnpm -g --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure></li>
+<li>其它</li>
+</ol>
+<p>使用find命令确定下的包在哪，使用proxychains配合wget/curl/axel自己下载放在对应的位置</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/rev/rev-4" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -726,130 +864,6 @@
         <p>格，按照我的理解，就是一个空间内，位于空间中的几个基向量生成所有整数点的集合。</p>
 <p>比如平面直角坐标系上(二维空间) (1,0),(0,1)生成的所有整数点的集合。</p>
 <p>假设一个格拥有基向量$b_0,b_1,…,b_n$，则可以把格表示为基向量的任意线性组合的集合</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-writeup/bjd4th/wp" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/12/26/writeup/bjd4th/wp/" class="article-date">
-  	<time datetime="2020-12-26T08:15:15.000Z" itemprop="datePublished">2020-12-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/26/writeup/bjd4th/wp/">
-        第四届bjdctfWriteup
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>做出了rex1和密码x1，我太菜了，雪殇yyds</p>
-<p>直接贴雪殇的链接好了(～￣▽￣)～</p>
-<p><a target="_blank" rel="noopener" href="http://snowywar.top/wordpress/index.php/2020/12/25/bjd4th-writeup/">http://snowywar.top/wordpress/index.php/2020/12/25/bjd4th-writeup/</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/rev/android-database-decryption" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/12/07/note/rev/android-database-decryption/" class="article-date">
-  	<time datetime="2020-12-07T11:06:30.000Z" itemprop="datePublished">2020-12-07</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/07/note/rev/android-database-decryption/">
-        高版本Android数据库加密分析
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Android系统采用SQLite数据库，应用数据库存储在/data/data/报名/databases目录下</p>
-<p>相关API为</p>
-<ul>
-<li>SQLiteOpenHelper</li>
-<li>-getReadableDatabase</li>
-<li>-getWritableDatabase</li>
-</ul>
-<p>相关资料</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://source.android.com/security/encryption/file-based">https://source.android.com/security/encryption/file-based</a></li>
-<li><a target="_blank" rel="noopener" href="https://source.android.com/security/encryption/metadata">https://source.android.com/security/encryption/metadata</a></li>
-<li><a target="_blank" rel="noopener" href="https://source.android.com/security/trusty">https://source.android.com/security/trusty</a></li>
-</ul>
 
       
     </div>
