@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Linux ptrace注入教程 | Hexo</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="注入技术在外挂、热修复技术中非常常见，由于Android使用Linux内核，所以先实现Linux下ptrace注入，后面再逐步改为Android版本 被注入的程序123456789101112131415161718#include &lt;stdio.h&gt;#include &lt;dlfcn.h&gt;#include &lt;sys&#x2F;mman.h&gt;#include &lt;unis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux ptrace注入教程">
+<meta property="og:url" content="http://example.com/2021/01/21/note/linux/inject-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="注入技术在外挂、热修复技术中非常常见，由于Android使用Linux内核，所以先实现Linux下ptrace注入，后面再逐步改为Android版本 被注入的程序123456789101112131415161718#include &lt;stdio.h&gt;#include &lt;dlfcn.h&gt;#include &lt;sys&#x2F;mman.h&gt;#include &lt;unis">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-21T08:48:46.000Z">
+<meta property="article:modified_time" content="2021-01-21T08:56:24.294Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+
+  
+<script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+
+  
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/"></a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide"></h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author"></h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-note/linux/inject-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/21/note/linux/inject-1/" class="article-date">
+  	<time datetime="2021-01-21T08:48:46.000Z" itemprop="datePublished">2021-01-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux ptrace注入教程
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>注入技术在外挂、热修复技术中非常常见，由于Android使用Linux内核，所以先实现Linux下ptrace注入，后面再逐步改为Android版本</p>
+<h2 id="被注入的程序"><a href="#被注入的程序" class="headerlink" title="被注入的程序"></a>被注入的程序</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;HelloWorld\n&quot;</span>);</span><br><span class="line">    <span class="comment">//mmap(0,0x1000,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_ANONYMOUS|MAP_PRIVATE,0,0);</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pid:%d\n&quot;</span>,getpid());</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;mmap:%p\ndlopen%p\ndlclose%p\ndlsym%p\ndlerror%p\n&quot;</span>,mmap,dlopen,dlclose,dlsym,dlerror);</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;a);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,a);</span><br><span class="line">        <span class="comment">// sleep(1);</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里打印各个函数的地址，便于出问题的时候debug</p>
+<h2 id="要注入的so文件"><a href="#要注入的so文件" class="headerlink" title="要注入的so文件"></a>要注入的so文件</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testEntry</span><span class="params">()</span></span>&#123;</span><br><span class="line">    FILE *f = fopen(<span class="string">&quot;/tmp/test.txt&quot;</span>,<span class="string">&quot;w&quot;</span>);</span><br><span class="line">    <span class="built_in">fputs</span>(<span class="string">&quot;Ok to load&quot;</span>,f);</span><br><span class="line">    fclose(f);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用下面的命令编译为so文件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o libtest.so test.c -fPIC -shared</span><br></pre></td></tr></table></figure>
+<h2 id="注入器"><a href="#注入器" class="headerlink" title="注入器"></a>注入器</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;inttypes.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ptrace.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/user.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ptrace.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_PATH 0x512</span></span><br><span class="line"><span class="keyword">char</span> libcPath[]=<span class="string">&quot;/usr/lib/libc-2.32.so&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceWriteData</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">void</span>*addr,<span class="keyword">const</span> <span class="keyword">char</span>*data,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(;i&lt;len;i+=<span class="keyword">sizeof</span>(<span class="keyword">long</span>))&#123;</span><br><span class="line">        ptrace(PTRACE_POKETEXT,pid,addr+i,(<span class="keyword">void</span>*)*(<span class="keyword">long</span>*)&amp;data[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 每次写sizeof(long)字节，直接对齐</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceReadData</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">void</span>*addr,<span class="keyword">char</span>*data,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">long</span> rdata;</span><br><span class="line">    <span class="keyword">for</span>(;i&lt;len;i+=<span class="keyword">sizeof</span>(<span class="keyword">long</span>))&#123;</span><br><span class="line">        rdata=ptrace(PTRACE_PEEKTEXT,pid,addr+i,<span class="literal">NULL</span>);</span><br><span class="line">        *(<span class="keyword">long</span>*)&amp;data[i]=rdata;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceAttach</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_ATTACH,pid,<span class="literal">NULL</span>,<span class="literal">NULL</span>)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT F]Failed to attach:%d\n&quot;</span>,pid);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> stat=<span class="number">0</span>;</span><br><span class="line">    waitpid(pid,&amp;stat,WUNTRACED);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceGetRegs</span><span class="params">(<span class="keyword">pid_t</span> pid,struct user_regs_struct*regs_addr)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_GETREGS,pid,<span class="literal">NULL</span>,(<span class="keyword">void</span>*)regs_addr)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Get regs error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceSetRegs</span><span class="params">(<span class="keyword">pid_t</span> pid,struct user_regs_struct*regs_addr)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_SETREGS,pid,<span class="literal">NULL</span>,(<span class="keyword">void</span>*)regs_addr)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Set regs error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceDetach</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>&#123;</span><br><span class="line">    ptrace(PTRACE_DETACH,pid,<span class="literal">NULL</span>,<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceContinue</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_CONT,pid,<span class="literal">NULL</span>,<span class="literal">NULL</span>)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;ptrace continue error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getModuleBaseAddr</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">const</span> <span class="keyword">char</span>*moduleName)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(pid==<span class="number">-1</span>)pid=getpid();</span><br><span class="line">    <span class="comment">// 通过解析/proc/pid/maps 获得基址</span></span><br><span class="line">    <span class="keyword">char</span> filepath[MAX_PATH];</span><br><span class="line">    <span class="keyword">void</span>*moduleBaseAddr=<span class="literal">NULL</span>;</span><br><span class="line">    <span class="built_in">snprintf</span>(filepath,MAX_PATH,<span class="string">&quot;/proc/%d/maps&quot;</span>,pid);</span><br><span class="line">    FILE *f = fopen(filepath,<span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">char</span> line[MAX_PATH];</span><br><span class="line">    <span class="keyword">char</span> base[MAX_PATH],name[MAX_PATH];</span><br><span class="line">    <span class="keyword">size_t</span> cnt,start;</span><br><span class="line">    <span class="keyword">while</span>(!feof(f))&#123;</span><br><span class="line">        <span class="built_in">memset</span>(line,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">        <span class="built_in">memset</span>(name,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">        fgets(line,MAX_PATH,f);</span><br><span class="line">        cnt=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(line[cnt]!=<span class="string">&#x27;/&#x27;</span>)cnt++;</span><br><span class="line">        start=cnt;</span><br><span class="line">        <span class="keyword">while</span>(line[cnt])&#123;</span><br><span class="line">            name[cnt-start]=line[cnt];</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">        name[cnt-start<span class="number">-1</span>]=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">strncmp</span>(name,moduleName,MAX_PATH))<span class="keyword">continue</span>;</span><br><span class="line">        <span class="built_in">memset</span>(base,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">        cnt=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(line[cnt]!=<span class="string">&#x27;-&#x27;</span>)&#123;</span><br><span class="line">            base[cnt]=line[cnt];</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">        base[cnt]=<span class="number">0</span>;</span><br><span class="line">        <span class="built_in">sscanf</span>(base,<span class="string">&quot;%llx&quot;</span>,(<span class="keyword">long</span> <span class="keyword">long</span>*)(&amp;moduleBaseAddr));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] GotBaseAddr %p of %s\n&quot;</span>,moduleBaseAddr,moduleName);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    fclose(f);</span><br><span class="line">    <span class="keyword">return</span> moduleBaseAddr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getRemoteFuncAddr</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">const</span> <span class="keyword">char</span> *moduleName,<span class="keyword">void</span> *localFuncAddr)</span></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *localModuleAddr,*remoteModuleAddr,*remoteFuncAddr;</span><br><span class="line">    <span class="comment">// 通过计算指定函数的偏移量获取目标函数地址</span></span><br><span class="line">    localModuleAddr = getModuleBaseAddr(<span class="number">-1</span>,moduleName);</span><br><span class="line">    remoteModuleAddr = getModuleBaseAddr(pid,moduleName);</span><br><span class="line">    remoteFuncAddr=localFuncAddr-localModuleAddr+remoteModuleAddr;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] GotFuncAddr:%p\n&quot;</span>,remoteFuncAddr);</span><br><span class="line">    <span class="keyword">return</span> remoteFuncAddr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ptraceCall</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">void</span>* funcAddr,<span class="keyword">long</span>*paras,<span class="keyword">long</span> paraLen,struct user_regs_struct *regs)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 多于6个参数通过栈传递</span></span><br><span class="line">    regs-&gt;rsp-=<span class="keyword">sizeof</span>(<span class="keyword">void</span>*);</span><br><span class="line">    <span class="keyword">size_t</span> errRet=<span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 返回地址弄成0导致错误停止</span></span><br><span class="line">    ptraceWriteData(pid,(<span class="keyword">void</span>*)regs-&gt;rsp,(<span class="keyword">char</span>*)&amp;errRet,<span class="keyword">sizeof</span>(<span class="keyword">void</span>*));</span><br><span class="line">    <span class="keyword">if</span>(paraLen&gt;<span class="number">6</span>)&#123;</span><br><span class="line">        regs-&gt;rsp-=(paraLen<span class="number">-6</span>)*<span class="keyword">sizeof</span>(<span class="keyword">long</span>);</span><br><span class="line">        ptraceWriteData(pid,(<span class="keyword">void</span>*)regs-&gt;rsp,(<span class="keyword">char</span>*)&amp;paras[<span class="number">6</span>],<span class="keyword">sizeof</span>(<span class="keyword">long</span>)*(paraLen<span class="number">-6</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 前6个参数通过寄存器传递</span></span><br><span class="line">    <span class="keyword">switch</span>(paraLen)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">6</span>:</span><br><span class="line">            regs-&gt;r9=paras[<span class="number">5</span>];</span><br><span class="line">        <span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">            regs-&gt;r8=paras[<span class="number">4</span>];</span><br><span class="line">        <span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">            regs-&gt;rcx=paras[<span class="number">3</span>];</span><br><span class="line">        <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">            regs-&gt;rdx=paras[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">            regs-&gt;rsi=paras[<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">            regs-&gt;rdi=paras[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 调用函数</span></span><br><span class="line">    regs-&gt;rip=(<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>)funcAddr;</span><br><span class="line">    ptraceSetRegs(pid,regs);</span><br><span class="line">    <span class="keyword">int</span> stat=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(stat!=<span class="number">0xb7f</span>)&#123;</span><br><span class="line">        ptraceContinue(pid);</span><br><span class="line">        waitpid(pid,&amp;stat,WUNTRACED);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] substatus: %x\n&quot;</span>,stat);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ptraceGetRegs(pid,regs);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">const</span> <span class="keyword">char</span>*libname,<span class="keyword">const</span> <span class="keyword">char</span>*funcName)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">user_regs_struct</span> <span class="title">oldRegs</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">user_regs_struct</span> <span class="title">regs</span>;</span></span><br><span class="line">    <span class="keyword">long</span> paras[<span class="number">6</span>];</span><br><span class="line">    <span class="keyword">char</span> realLibPath[MAX_PATH];</span><br><span class="line">    realpath(libname,realLibPath);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]Real path of lib found:%s\n&quot;</span>,realLibPath);</span><br><span class="line">    </span><br><span class="line">    ptraceAttach(pid);</span><br><span class="line">    <span class="comment">// 保存寄存器环境</span></span><br><span class="line">    ptraceGetRegs(pid,&amp;oldRegs);</span><br><span class="line">    <span class="built_in">memcpy</span>(&amp;regs,&amp;oldRegs,<span class="keyword">sizeof</span>(struct user_regs_struct));</span><br><span class="line">    <span class="comment">// 获取mmap地址</span></span><br><span class="line">    <span class="keyword">void</span> *mmapAddr = getRemoteFuncAddr(pid,libcPath,mmap);</span><br><span class="line">    <span class="comment">// 调用mmap</span></span><br><span class="line">    paras[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">    paras[<span class="number">1</span>]=<span class="number">0x1000</span>;</span><br><span class="line">    paras[<span class="number">2</span>]=PROT_READ|PROT_WRITE|PROT_EXEC;</span><br><span class="line">    paras[<span class="number">3</span>]=MAP_ANONYMOUS|MAP_PRIVATE;</span><br><span class="line">    paras[<span class="number">4</span>]=<span class="number">0</span>;</span><br><span class="line">    paras[<span class="number">5</span>]=<span class="number">0</span>;</span><br><span class="line">    ptraceCall(pid,mmapAddr,paras,<span class="number">6</span>,&amp;regs);</span><br><span class="line">    <span class="keyword">void</span> *remoteMemAddr=(<span class="keyword">void</span>*)regs.rax;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] remote mmaped addr:%p\n&quot;</span>,remoteMemAddr);</span><br><span class="line">    <span class="comment">// 调用dlopen</span></span><br><span class="line">    <span class="keyword">void</span> *dlopenAddr=getRemoteFuncAddr(pid,libcPath,dlopen);</span><br><span class="line">    <span class="keyword">void</span> *dlcloseAddr=getRemoteFuncAddr(pid,libcPath,dlclose);</span><br><span class="line">    <span class="keyword">void</span> *dlErrorAddr=getRemoteFuncAddr(pid,libcPath,dlerror);</span><br><span class="line">    ptraceWriteData(pid,remoteMemAddr,realLibPath,<span class="built_in">strlen</span>(realLibPath)+<span class="number">1</span>);   <span class="comment">// 作为dlopen的参数</span></span><br><span class="line">    <span class="comment">//debug start</span></span><br><span class="line">    <span class="keyword">char</span> buf[MAX_PATH];</span><br><span class="line">    <span class="built_in">memset</span>(buf,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">    ptraceReadData(pid,remoteMemAddr,buf,<span class="built_in">strlen</span>(realLibPath)+<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,buf);</span><br><span class="line">    <span class="comment">//debug end</span></span><br><span class="line">    paras[<span class="number">0</span>]=(<span class="keyword">long</span>)remoteMemAddr;</span><br><span class="line">    paras[<span class="number">1</span>]=RTLD_NOW|RTLD_GLOBAL;</span><br><span class="line">    ptraceCall(pid,dlopenAddr,paras,<span class="number">2</span>,&amp;regs);</span><br><span class="line">    <span class="keyword">void</span>*libBaseAddr=(<span class="keyword">void</span>*)regs.rax;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]remote lib base:0x%llx of %s\n&quot;</span>,(<span class="keyword">long</span> <span class="keyword">long</span>)libBaseAddr,realLibPath);</span><br><span class="line">    <span class="comment">// 调用dlsym</span></span><br><span class="line">    <span class="keyword">void</span>*dlsymAddr=getRemoteFuncAddr(pid,libcPath,dlsym);</span><br><span class="line">    ptraceWriteData(pid,remoteMemAddr,funcName,<span class="built_in">strlen</span>(funcName)+<span class="number">1</span>);</span><br><span class="line">    <span class="comment">//debug start</span></span><br><span class="line">    <span class="built_in">memset</span>(buf,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">    ptraceReadData(pid,remoteMemAddr,buf,<span class="built_in">strlen</span>(funcName)+<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,buf);</span><br><span class="line">    <span class="comment">//debug end</span></span><br><span class="line">    paras[<span class="number">0</span>]=(<span class="keyword">long</span>)libBaseAddr;</span><br><span class="line">    paras[<span class="number">1</span>]=(<span class="keyword">long</span>)remoteMemAddr;</span><br><span class="line">    ptraceCall(pid,dlsymAddr,paras,<span class="number">2</span>,&amp;regs);</span><br><span class="line">    <span class="keyword">void</span>*remoteFuncAddr = (<span class="keyword">void</span>*)regs.rax;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]addr:0x%llx of func %s\n&quot;</span>,(<span class="keyword">long</span> <span class="keyword">long</span>)remoteFuncAddr,funcName);</span><br><span class="line">    <span class="comment">// 调用目标函数</span></span><br><span class="line">    ptraceCall(pid,remoteFuncAddr,paras,<span class="number">0</span>,&amp;regs);</span><br><span class="line">    <span class="comment">// 恢复寄存器环境</span></span><br><span class="line">    ptraceSetRegs(pid,&amp;oldRegs);</span><br><span class="line">    ptraceDetach(pid);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">findPIdByName</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> pDirId = <span class="number">0</span>; <span class="comment">// process dir id</span></span><br><span class="line">    FILE *f;</span><br><span class="line">    <span class="keyword">char</span> filename[MAX_PATH]; </span><br><span class="line">    <span class="keyword">char</span> cmdline[MAX_PATH];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span>=<span class="title">NULL</span>;</span></span><br><span class="line">    <span class="keyword">int</span> cnt;</span><br><span class="line">    <span class="keyword">if</span>(name==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    DIR *dir = opendir(<span class="string">&quot;/proc&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(dir==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>((entry=readdir(dir))!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">        pDirId=atoi(entry-&gt;d_name); </span><br><span class="line">        <span class="keyword">if</span>(pDirId!=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">snprintf</span>(filename,MAX_PATH,<span class="string">&quot;/proc/%d/cmdline&quot;</span>,pDirId);</span><br><span class="line">            f = fopen(filename,<span class="string">&quot;r&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span>(f)&#123;</span><br><span class="line">                fgets(cmdline,<span class="keyword">sizeof</span>(cmdline),f);</span><br><span class="line">                cnt = (<span class="keyword">int</span>)<span class="built_in">strlen</span>(cmdline);</span><br><span class="line">                <span class="keyword">while</span>(cnt&gt;=<span class="number">0</span>&amp;&amp;cmdline[cnt]!=<span class="string">&#x27;/&#x27;</span>)cnt--; <span class="comment">// cmdline是完整路径，这里只找最后一个/之后的，就是可执行文件的文件名</span></span><br><span class="line">                cnt++;</span><br><span class="line">                <span class="keyword">if</span>(!<span class="built_in">strncmp</span>(name,&amp;cmdline[cnt],<span class="built_in">strlen</span>(name)))&#123;</span><br><span class="line">                    pid=pDirId;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            fclose(f);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    closedir(dir);</span><br><span class="line">    <span class="keyword">return</span> pid; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(argc!=<span class="number">4</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;usage: inject processname libexample.so funcname\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = findPIdByName(argv[<span class="number">1</span>]);</span><br><span class="line">    inject(pid,argv[<span class="number">2</span>],argv[<span class="number">3</span>]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/5361?spm=5176.12901015.0.i12901015.2ad3525c5zq8Kz">https://xz.aliyun.com/t/5361?spm=5176.12901015.0.i12901015.2ad3525c5zq8Kz</a> 一直跟着这个教程学的</p>
+<p><a target="_blank" rel="noopener" href="https://man7.org/linux/man-pages/">https://man7.org/linux/man-pages/</a> linux的手册真的挺详细的</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/01/19/note/papers/ai/nlp-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">多语种语料库搜集</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="note/linux/inject-1" data-title="Linux ptrace注入教程" data-url="http://example.com/2021/01/21/note/linux/inject-1/"  data-images="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" data-content="Linux ptrace注入教程">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2021 John Doe
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>

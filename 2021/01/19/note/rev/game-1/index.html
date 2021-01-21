@@ -17,7 +17,7 @@
 <meta property="og:description" content="思路 通过目标进程名找到进程PID 将so注入到进程空间 如果hook Native层函数，则有IAT hook，调试hook，inline hook，hotfix hook等多种手段；如果是Java层hook，可以使用反射机制  使用ndk编译linux原生应用程序建立工程文件夹，工程文件夹内建立jni文件夹 进入jni文件夹 创建源文件，Android.mk，Application.mk An">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-01-19T14:10:11.000Z">
-<meta property="article:modified_time" content="2021-01-20T11:24:42.867Z">
+<meta property="article:modified_time" content="2021-01-21T08:48:06.280Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -232,7 +232,7 @@
 <ol>
 <li>attach到目标进程</li>
 <li>保存寄存器上下文</li>
-<li>调用mmap函数分配内存空间</li>
+<li>调用mmap函数分配内存空间-这里主要为了传递一些字符串参数</li>
 <li>向内存空间写入加载模块名和调用函数</li>
 <li>调用dlopen打开注入模块</li>
 <li>调用dlsym获取调用函数的地址</li>
