@@ -235,6 +235,128 @@
 
 
   
+    <article id="post-note/papers/emotion-analysis-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/02/01/note/papers/emotion-analysis-1/" class="article-date">
+  	<time datetime="2021-02-01T08:12:09.000Z" itemprop="datePublished">2021-02-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/01/note/papers/emotion-analysis-1/">
+        情感分析论文阅读
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Emotion-Recognition-by-Textual-Tweets-Classification-Using-Voting-Classifier-LR-SGD"><a href="#Emotion-Recognition-by-Textual-Tweets-Classification-Using-Voting-Classifier-LR-SGD" class="headerlink" title="Emotion Recognition by Textual Tweets Classification Using Voting Classifier (LR-SGD)"></a>Emotion Recognition by Textual Tweets Classification Using Voting Classifier (LR-SGD)</h2><p><img src="/.com//1.png"></p>
+<p>其中tokenize后每个词用一个向量表示，一个句子是一个二维矩，使用TF-IDF提取出句子中的关键词，所以训练的时候输入到每个句子中就是一个一维向量</p>
+<p><img src="/.com//2.png"></p>
+<p>最后投票的方式就是认为是正面的概率两个模型求平均，认为是负面的求平均，就实现了投票操作</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-writeup/starctf2021/wp" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/23/writeup/starctf2021/wp/" class="article-date">
+  	<time datetime="2021-01-23T03:34:29.000Z" itemprop="datePublished">2021-01-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/23/writeup/starctf2021/wp/">
+        \*CTF2021 writeup(部分re)
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1rep"><a href="#1rep" class="headerlink" title="1rep"></a>1rep</h2><p><a target="_blank" rel="noopener" href="https://x-nagi.com/post/starctf2021.html#1rep">https://x-nagi.com/post/starctf2021.html#1rep</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/229322">https://www.anquanke.com/post/id/229322</a></p>
+<p>github上有官方wp</p>
+<ol>
+<li>有个Perl_run函数，应该是执行Perl的结构体</li>
+<li>审计libperl.so.5.22.1导出表，发现perl_dump_all函数，查阅文档知道和perl_run参数相同</li>
+<li>在perl_run下断点，设置$rip到perl_dump_all函数，通过在write下断点知道perl_dump_all函数使用文件句柄2，所以重定向输出2到文件</li>
+<li>dump出的文件585M</li>
+<li></li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/linux/inject-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -512,7 +634,7 @@
 
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> ~/.<span class="keyword">vim</span>/my_plugins.<span class="keyword">vim</span></span><br><span class="line"><span class="keyword">source</span> ~/.<span class="keyword">vim</span>/my_config.<span class="keyword">vim</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&quot; my_config.vim</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">nu</span> <span class="comment">&quot;显示行号</span></span><br><span class="line"><span class="keyword">syntax</span> <span class="keyword">on</span> <span class="comment">&quot;语法高亮</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">ts</span>=<span class="number">4</span> <span class="comment">&quot;用4个空格替换tab</span></span><br><span class="line"><span class="keyword">set</span> expandtab</span><br><span class="line"><span class="keyword">set</span> autoindent</span><br><span class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span> “设置之后可以使用gg=G自动格式化</span><br><span class="line"><span class="keyword">set</span> incsearch <span class="comment">&quot;搜索的实时预览</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&quot; my_config.vim</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">nu</span> <span class="comment">&quot;显示行号</span></span><br><span class="line"><span class="keyword">syntax</span> <span class="keyword">on</span> <span class="comment">&quot;语法高亮</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">ts</span>=<span class="number">4</span> <span class="comment">&quot;用4个空格替换tab</span></span><br><span class="line"><span class="keyword">set</span> expandtab</span><br><span class="line"><span class="keyword">set</span> autoindent</span><br><span class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span> “设置之后可以使用gg=G自动格式化</span><br><span class="line"><span class="keyword">set</span> incsearch <span class="comment">&quot;搜索的实时预览</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:ycm_min_num_identifier_candidate_chars</span> = <span class="number">2</span> <span class="comment">&quot;设置ycm自动补全触发字符为2</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:ycm_key_invoke_completion</span> = <span class="string">&#x27;&lt;c-z&gt;&#x27;</span> <span class="comment">&quot;设置ycm自动不全触发健为Ctrl+z</span></span><br></pre></td></tr></table></figure>
 
 
 <p>安装vundle插件 <a target="_blank" rel="noopener" href="https://github.com/VundleVim/Vundle.vim">https://github.com/VundleVim/Vundle.vim</a> ，把对应的配置放在my_plugins里面</p>
@@ -767,122 +889,6 @@
 <p>run autoroute -s 192.168.93.0/24<br>background<br>use auxiliary/scanner/smb/smb_version<br>set rhosts 192.168.93.0/24<br>exploit</p>
 <p>192.168.93.10 2012<br>192.168.93.20 2008<br>192.168.93.30 7</p>
 <p>爆破2008密码这块出问题了，总是readtimeout，先参考其它大师傅的结果吧，Windows 2008密码为123qwe!ASD</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/papers/ai/nlp-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/12/30/note/papers/ai/nlp-1/" class="article-date">
-  	<time datetime="2020-12-30T13:17:48.000Z" itemprop="datePublished">2020-12-30</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/30/note/papers/ai/nlp-1/">
-        自然语言处理论文阅读笔记
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我太菜了，英语还要开着有道翻译读</p>
-<h2 id="A-Systematic-Study-of-Inner-Attention-Based-Sentence-Representations-in-Multilingual-Neural-Machine-Translation"><a href="#A-Systematic-Study-of-Inner-Attention-Based-Sentence-Representations-in-Multilingual-Neural-Machine-Translation" class="headerlink" title="A Systematic Study of Inner-Attention-Based Sentence Representations in Multilingual Neural Machine Translation"></a>A Systematic Study of Inner-Attention-Based Sentence Representations in Multilingual Neural Machine Translation</h2><p><a target="_blank" rel="noopener" href="https://www.mitpressjournals.org/doi/full/10.1162/coli_a_00377">https://www.mitpressjournals.org/doi/full/10.1162/coli_a_00377</a></p>
-<p>探索了一种表示方法，可以产生固定大小的句子代表，被称为“Attention bridge”。这个相当于字然语言处理的一个中间层，这一层提取语句中的语义并且转化为语言无关的意思表示。并证明了下游任务中语句代表不影响翻译性能，并且提升了翻译质量，尤其是长句子翻译。短的语句代表有很多压缩，在不可训练的相似性任务中有益。多余的语句信号对不可训练的任务无益。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/papers/suggest" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/12/30/note/papers/suggest/" class="article-date">
-  	<time datetime="2020-12-30T11:12:14.000Z" itemprop="datePublished">2020-12-30</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/30/note/papers/suggest/">
-        有用的期刊列表
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>来自学长</p>
-<h2 id="自然语言处理"><a href="#自然语言处理" class="headerlink" title="自然语言处理"></a>自然语言处理</h2><p>cl<a target="_blank" rel="noopener" href="http://cljournal.org/">Computational Linguistics (cljournal.org)</a></p>
-<p>TACL<a target="_blank" rel="noopener" href="https://transacl.org/index.php/tacl">Transactions of the Association for Computational Linguistics (transacl.org)</a></p>
-<h2 id="相关会议"><a href="#相关会议" class="headerlink" title="相关会议"></a>相关会议</h2><p>ual Meeting of the Association for Computational Linguistics)<br>NAACL (Annual Conference of the North American Chapter of Association for Computational Linguistics)<br>EMNLP (Empirical Methods in Natural Language Processing)<br>EACL (Annual Conference of the European Chapter of Association for Computational Linguistics)<br>COLING (International Conference on Computational Linguistics)<br>SIGKDD (ACM SIGKDD Conference on Knowledge Discovery and Data Mining)<br>SIGIR (ACM SIGIR Conference on Research and Development in Information Retrieval)<br>WWW (International World Wide Web Conference)</p>
-<p>还有IEEE相关trans</p>
 
       
     </div>
