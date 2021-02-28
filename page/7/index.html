@@ -3,19 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>看靶机渗透测试-4 | Hexo</title>
+  <title>Hexo</title>
 
   <!-- keywords -->
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="看靶机渗透测试-4">
-<meta property="og:url" content="http://example.com/2021/02/27/note/web/pentist-4/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/page/7/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-02-27T13:02:14.000Z">
-<meta property="article:modified_time" content="2021-02-27T13:02:14.945Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -173,11 +171,13 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-note/web/pentist-4" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap">
+  
+    <article id="post-writeup/b01lers/wp" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2021/02/27/note/web/pentist-4/" class="article-date">
-  	<time datetime="2021-02-27T13:02:14.000Z" itemprop="datePublished">2021-02-27</time>
+      <a href="/2020/10/05/writeup/b01lers/wp/" class="article-date">
+  	<time datetime="2020-10-05T13:02:54.000Z" itemprop="datePublished">2020-10-05</time>
 </a>
     </div>
   
@@ -189,74 +189,56 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      看靶机渗透测试-4
-      
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/05/writeup/b01lers/wp/">
+        B01lers Writeup(部分)
+        
+      </a>
     </h1>
   
 
       </header>
       
-      <div class="article-info article-info-post">
-        
-        
-
-        
-        <div class="clearfix"></div>
-      </div>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="Rev-superspy"><a href="#Rev-superspy" class="headerlink" title="[Rev] superspy"></a>[Rev] superspy</h2><p>google搜索Reversing Gameboy Advaced，找到这篇文章</p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/@bruno.macabeus/reverse-engineering-a-gameboy-advance-game-introduction-ec185bd8e02">https://medium.com/@bruno.macabeus/reverse-engineering-a-gameboy-advance-game-introduction-ec185bd8e02</a></p>
+<p>使用文章里的debug工具，根据指引，发现屏幕显示的数据中，如果位<code>01 00</code> 则是背景，如果为</p>
+<figure class="highlight plain"><figcaption><span>00 03 00 03 00 03 00 0B 00```则为台阶</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>根据这个规律，使用二进制编辑工具打开super-spy.gba，搜索hex串<code>01 00 01 00</code>，找到之后可以看到有个地方正好满足这一规律，并且经过改动实验发现这里存储的就是地图数据。</p>
+<p>这样就可以改动最上面两个墙的长度，从而轻松拿到金币，获取flag</p>
+
       
     </div>
     
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2021/02/28/note/papers/ai/nlp-4/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">&lt;</strong>
-      <div class="article-nav-title">
-        
-          NLP学习4-情感分析
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2021/02/27/note/papers/ai/nlp-3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">nlp学习3-BERT系列学习</div>
-      <strong class="article-nav-caption">&gt;</strong>
-    </a>
-  
-</nav>
+    <div class="article-info article-info-index">
+      
+      
+      
 
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
   
 </article>
 
 
-<div class="ds-share share" data-thread-key="note/web/pentist-4" data-title="看靶机渗透测试-4" data-url="http://example.com/2021/02/27/note/web/pentist-4/"  data-images="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" data-content="看靶机渗透测试-4">
-    <div class="ds-share-inline">
-      <ul  class="ds-share-icons-16">
-      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
-        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
-        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
-        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
-        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
-      </ul>
-      <div class="ds-share-icons-more">
-      </div>
-    </div>
- </div>
- 
 
 
 
 
 
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/6/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span>
+    </nav>
+  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -282,8 +264,8 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: false,
-		isPost: true,
+		isHome: true,
+		isPost: false,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
