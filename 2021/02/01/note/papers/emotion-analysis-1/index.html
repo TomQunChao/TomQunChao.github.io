@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://example.com/.com//2.png">
 <meta property="og:image" content="http://example.com/.com//3.png">
 <meta property="article:published_time" content="2021-02-01T08:12:09.000Z">
-<meta property="article:modified_time" content="2021-02-26T11:50:52.891Z">
+<meta property="article:modified_time" content="2021-02-28T08:46:19.046Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/.com//1.png">
@@ -243,14 +243,93 @@
 <p>测试数据集参考文献.M. Mohammad, F. Bravo-Marquez, M. Salameh, S. Kiritchenko, SemEval-<br>2018 task 1: Affect in tweets, in: Proceedings of International Workshop<br>on Semantic Evaluation (SemEval-2018), New Orleans, LA, USA, 2018.</p>
 <p>采用Best–Worst Scaling方法对数据进行手动标注，避免数据内部和数据之间的矛盾。但是还有个强度量使用0-1之间的数值进行标注。</p>
 <p>训练时数据集分三份，一份训练，一份development(用于评估模型的性能)，一份test-gold,test-gold用于排名各个队伍。</p>
-<p>使用Sentence BERT提取属性，使用CrystalFeel情感分析。优于一元分词(一个字看成一个向量)和二元分词(使用条件概率进行分词)。</p>
+<p>使用Sentence BERT提取属性，使用<a target="_blank" rel="noopener" href="https://socialanalyticsplus.net/crystalfeel/">CrystalFeel</a>情感分析。优于一元分词(一个字看成一个向量)和二元分词(使用条件概率进行分词)。</p>
 <p>使用Pearson correlations(皮尔逊相关系数)评测模型准确率。</p>
 <p>这篇论文还测试了逻辑回归、随机森林、SVM等情感分类方法。对于葡萄牙语，另外使用了使用朴素贝叶斯，多层感知器，梯度上升等方式。</p>
 <p>使用GSDMM识别topic，给出一个topic集合。一个消息只能有一个topic。topic分类的同时指出句子中关于这个topic的单词。</p>
 <p>fastText文本分类方法。</p>
 <p>架构</p>
 <p><img src="/.com//3.png"></p>
-<h2 id="Attitude-of-Chinese-public-towards-municipal-solid-waste-sorting-policy-A-text-mining-study"><a href="#Attitude-of-Chinese-public-towards-municipal-solid-waste-sorting-policy-A-text-mining-study" class="headerlink" title="Attitude of Chinese public towards municipal solid waste sorting policy: A text mining study"></a>Attitude of Chinese public towards municipal solid waste sorting policy: A text mining study</h2>
+<h2 id="Attitude-of-Chinese-public-towards-municipal-solid-waste-sorting-policy-A-text-mining-study"><a href="#Attitude-of-Chinese-public-towards-municipal-solid-waste-sorting-policy-A-text-mining-study" class="headerlink" title="Attitude of Chinese public towards municipal solid waste sorting policy: A text mining study"></a>Attitude of Chinese public towards municipal solid waste sorting policy: A text mining study</h2><h3 id="有用的参考文献"><a href="#有用的参考文献" class="headerlink" title="有用的参考文献"></a>有用的参考文献</h3><p>Liu, X., Hu, W., 2019. Attention and sentiment of Chinese public toward green buildings based on Sina Weibo. Sustain. Cities Soc. 44, 550–558. <a target="_blank" rel="noopener" href="https://doi.org/10.1016/j.scs.2018.10.047">https://doi.org/10.1016/j.scs.2018.10.047</a></p>
+<p>Wang, Y., Li, H., Wu, Z., 2019. Attitude of the Chinese public toward off-site construction: a text mining study. J. Clean. Prod. 238, 117926. <a target="_blank" rel="noopener" href="https://doi.org/10.1016/j.jclepro.2019.117926">https://doi.org/10.1016/j.jclepro.2019.117926</a></p>
+<h3 id="语言处理步骤"><a href="#语言处理步骤" class="headerlink" title="语言处理步骤"></a>语言处理步骤</h3><ol>
+<li>R 3.5.3(R语言)对数据进行去噪处理</li>
+<li>jiebaR用于分词</li>
+<li>NLPIR-Parser用于情感分析</li>
+<li>LDA topic model用于提取话题，LDAvis包用于可视化结果</li>
+</ol>
+<h2 id="What-factors-affect-consumers’-dining-sentiments-and-their-ratings-Evidence-from-restaurant-online-review-data"><a href="#What-factors-affect-consumers’-dining-sentiments-and-their-ratings-Evidence-from-restaurant-online-review-data" class="headerlink" title="What factors affect consumers’ dining sentiments and their ratings: Evidence from restaurant online review data"></a>What factors affect consumers’ dining sentiments and their ratings: Evidence from restaurant online review data</h2><p>使用软件Linguistic Inquiry and Word Count (LIWC)进行分词、还原词根等预处理操作</p>
+<p>没有正则化文本，而是正则化了情感分析的结果数值</p>
+<p>使用lexion-based方法提取关键词</p>
+<p>Pennebaker, J. W., &amp; Francis, M. E. (1996). Cognitive, emotional, and language processes in disclosure. Cognition &amp; Emotion, 10(6), 601–626</p>
+<p>通过寻找表达情感的词的数量来进行情感分析，字典也是用LIWC的。$\frac{积极/消极情感词数量}{单词总量}$</p>
+<h2 id="语种识别技术–知乎"><a href="#语种识别技术–知乎" class="headerlink" title="语种识别技术–知乎"></a>语种识别技术–知乎</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/165863653">https://zhuanlan.zhihu.com/p/165863653</a></p>
+<ol>
+<li>out-of-space</li>
+<li>朴素贝叶斯</li>
+<li>多类别逻辑回归</li>
+</ol>
+<h2 id="非技术也能看懂的-NLP-入门科普-pdf"><a href="#非技术也能看懂的-NLP-入门科普-pdf" class="headerlink" title="非技术也能看懂的 NLP 入门科普.pdf"></a>非技术也能看懂的 NLP 入门科普.pdf</h2><p><a target="_blank" rel="noopener" href="https://easyai.tech/ai-definition/">https://easyai.tech/ai-definition/</a></p>
+<p>NLP两个任务：NLU(机器理解人)，NLG(人理解机器)</p>
+<h3 id="NLU"><a href="#NLU" class="headerlink" title="NLU"></a>NLU</h3><p>NLU处理流程</p>
+<p>传统<br>语料预处理&gt;特征工程&gt;选择分类器</p>
+<p>深度学习<br>预料预处理&gt;设计模型&gt;训练模型</p>
+<p>英文语料预处理</p>
+<ol>
+<li>分词 Tokenization</li>
+<li>词干提取-Stemming cites-&gt;city/children-&gt;child，推荐Snowball</li>
+<li>词性还原-Lemmatization doing/did/does-&gt;do，可以用NLTK的WordNet</li>
+<li>词性标注-Parts of Speech</li>
+<li>命名实体识别-NER</li>
+<li>分块-Chunking</li>
+</ol>
+<p>英文语料预处理</p>
+<ol>
+<li>分词</li>
+<li>词性标注<ul>
+<li>规则</li>
+<li>统计</li>
+<li>规则+统计</li>
+<li>基于深度学习</li>
+<li>Jieba，SnowNLP，THULAC，StandfordCoreNLP，HanLP，NLTK，SpaCy</li>
+</ul>
+</li>
+<li>命名实体识别</li>
+<li>去除停用词</li>
+</ol>
+<p>Transformer是目前NLP最先进的方法，用于语义特征提取</p>
+<p>分词是非结构化数据结构化的第一步，词是表达完整含义的最小单位，字含的信息太少，句子信息量太大。</p>
+<p>中英文分词有一定的区别</p>
+<p>分词方法</p>
+<ol>
+<li>基于词典</li>
+<li>基于统计</li>
+<li>基于深度学习<br>中文分词工具star排名</li>
+<li>Hanlp</li>
+<li>Stanford分词</li>
+<li>ansj分词</li>
+<li>哈工大LTP</li>
+<li>KCWS分词</li>
+<li>jieba</li>
+<li>IK</li>
+<li>清华THULAC</li>
+<li>ICTCLAS<br>英文分词工具排名</li>
+<li>Keras</li>
+<li>Spacy</li>
+<li>Gensim</li>
+<li>NLTK</li>
+</ol>
+<h3 id="NLG"><a href="#NLG" class="headerlink" title="NLG"></a>NLG</h3><p>步骤</p>
+<ol>
+<li>内容确定</li>
+<li>文本结构</li>
+<li>句子聚合</li>
+<li>语法化</li>
+<li>参考表达生成</li>
+<li>语言实现</li>
+</ol>
+<p>还有个停用词去除，即去除无关紧要的词。</p>
+
       
     </div>
     
