@@ -9,16 +9,19 @@
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="编码器和解码器编码器即把自然语言转化为向量(一般为二维)，解码器即把特征向量转化为人类可阅读的语言 Attention注意力机制到底是什么——基于常识的基本结构介绍 - 李鹏宇的文章 - 知乎 用于自动学习中计算数据对输出数据的贡献大小，即有选择性地处理信号 特征工程就是选择和目标最有关系的特征，减少工作量。一般的特征工程为各个特征赋予固定权值，而注意力机制让模型自己学习如何分配注意力(特征加权)">
+  <meta name="description" content="RNN循环神经网络 编码器和解码器编码器即把自然语言转化为向量(一般为二维)，解码器即把特征向量转化为人类可阅读的语言 Attention注意力机制到底是什么——基于常识的基本结构介绍 - 李鹏宇的文章 - 知乎 用于自动学习中计算数据对输出数据的贡献大小，即有选择性地处理信号 特征工程就是选择和目标最有关系的特征，减少工作量。一般的特征工程为各个特征赋予固定权值，而注意力机制让模型自己学习如何分">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nlp学习3-BERT系列学习">
 <meta property="og:url" content="http://example.com/2021/02/27/note/papers/ai/nlp-3/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="编码器和解码器编码器即把自然语言转化为向量(一般为二维)，解码器即把特征向量转化为人类可阅读的语言 Attention注意力机制到底是什么——基于常识的基本结构介绍 - 李鹏宇的文章 - 知乎 用于自动学习中计算数据对输出数据的贡献大小，即有选择性地处理信号 特征工程就是选择和目标最有关系的特征，减少工作量。一般的特征工程为各个特征赋予固定权值，而注意力机制让模型自己学习如何分配注意力(特征加权)">
+<meta property="og:description" content="RNN循环神经网络 编码器和解码器编码器即把自然语言转化为向量(一般为二维)，解码器即把特征向量转化为人类可阅读的语言 Attention注意力机制到底是什么——基于常识的基本结构介绍 - 李鹏宇的文章 - 知乎 用于自动学习中计算数据对输出数据的贡献大小，即有选择性地处理信号 特征工程就是选择和目标最有关系的特征，减少工作量。一般的特征工程为各个特征赋予固定权值，而注意力机制让模型自己学习如何分">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/.com//attention-1.jpg">
+<meta property="og:image" content="http://example.com/.com//transformer-1.jpg">
+<meta property="og:image" content="http://example.com/.com//self-attention-1.jpg">
+<meta property="og:image" content="http://example.com/.com//self-attention-2.jpg">
 <meta property="article:published_time" content="2021-02-27T13:01:47.000Z">
-<meta property="article:modified_time" content="2021-03-01T02:05:05.750Z">
+<meta property="article:modified_time" content="2021-03-01T08:23:54.690Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/.com//attention-1.jpg">
@@ -212,7 +215,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="编码器和解码器"><a href="#编码器和解码器" class="headerlink" title="编码器和解码器"></a>编码器和解码器</h2><p>编码器即把自然语言转化为向量(一般为二维)，解码器即把特征向量转化为人类可阅读的语言</p>
+        <h2 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h2><p>循环神经网络</p>
+<h2 id="编码器和解码器"><a href="#编码器和解码器" class="headerlink" title="编码器和解码器"></a>编码器和解码器</h2><p>编码器即把自然语言转化为向量(一般为二维)，解码器即把特征向量转化为人类可阅读的语言</p>
 <h2 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/105335191">注意力机制到底是什么——基于常识的基本结构介绍 - 李鹏宇的文章 - 知乎</a></p>
 <p>用于自动学习中计算数据对输出数据的贡献大小，即有选择性地处理信号</p>
 <p>特征工程就是选择和目标最有关系的特征，减少工作量。一般的特征工程为各个特征赋予固定权值，而注意力机制让模型自己学习如何分配注意力(特征加权)。</p>
@@ -224,10 +228,37 @@
 <p>直到解码器输出了&lt;end&gt;标签。</p>
 <p>让解码器根据自身历史输出计算$y_i$与$Z$的相关性，即可得到$W$矩阵</p>
 <p>可以看出，注意力机制增加了额外的运算量，降低了推理速度。</p>
-<h2 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h2><p>BERT大火却不懂Transformer？读这一篇就够了 - 数据汪的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/54356279">https://zhuanlan.zhihu.com/p/54356279</a></p>
-<p>用放大镜看Transformer——总体和各个模块的结构到底是什么样的 - 李鹏宇的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/122977439">https://zhuanlan.zhihu.com/p/122977439</a></p>
-<h2 id="GPT"><a href="#GPT" class="headerlink" title="GPT"></a>GPT</h2><p>GPT——生成式预训练Transformer - 李鹏宇的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/125139936">https://zhuanlan.zhihu.com/p/125139936</a></p>
-<h2 id="BERT"><a href="#BERT" class="headerlink" title="BERT"></a>BERT</h2><p>基于Transformer的双向编码器表示(BERT)——结构和训练 - 李鹏宇的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/125655364">https://zhuanlan.zhihu.com/p/125655364</a></p>
+<h2 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h2><p>BERT大火却不懂Transformer？读这一篇就够了 - 数据汪的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/54356280">https://zhuanlan.zhihu.com/p/54356280</a></p>
+<p>用放大镜看Transformer——总体和各个模块的结构到底是什么样的 - 李鹏宇的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/122977440">https://zhuanlan.zhihu.com/p/122977440</a></p>
+<p>Transformer结构示意图</p>
+<p><img src="/.com//transformer-1.jpg"></p>
+<p>编码-解码器结构，其中编码器和解码器都利用了类似RNN的时间循环结构。由编码组件、解码组件和它们之间的连接构成。</p>
+<p>Transformer会利用上一时刻的输出和当前时刻的输入</p>
+<p>编码组件由一堆编码器构成，解码组件由相同数量的解码器构成。</p>
+<p>编码器结构上相同，之间未共享参数。每个编码器都可以分解成两个子层：前馈神经网络层和自注意力层。</p>
+<p>输入是向量列表，列表大小是可以设置的超参数。</p>
+<p>自注意力曾中，各个词有互相连接，互相影响；前馈神经网络曾无相互连接和相互影响，可以并行进行。每一个单词的前馈神经网络完全相同。</p>
+<p>自注意力机制会将所有相关单词的理解融入到我们正在处理的单词中。</p>
+<h3 id="计算自注意力"><a href="#计算自注意力" class="headerlink" title="计算自注意力"></a>计算自注意力</h3><ol>
+<li>使用输入词嵌入后的向量$X$承三个矩阵生成 查询向量、键向量和值向量$Q,K,V$</li>
+<li>被打分查询向量$K_s$与每一个键向量$Q_i$点积即得到对应分数</li>
+<li>将分数除以维数的平方根，之后使用softmax归一化</li>
+<li>将每个值向量$V_i$乘softmax分数</li>
+<li>对加权值的向量求和</li>
+</ol>
+<p>可以用矩阵运算以加快运算速度</p>
+<p>这样得到的向量就可以传给前馈网络了</p>
+<p>注意力头：使用几个不同的查询/键/值矩阵，计算不同的结果，然后使用一定的方法合并输入到前馈层</p>
+<p><img src="/.com//self-attention-1.jpg"></p>
+<h3 id="使用位置编码表示序列的顺序"><a href="#使用位置编码表示序列的顺序" class="headerlink" title="使用位置编码表示序列的顺序"></a>使用位置编码表示序列的顺序</h3><p>使用正弦函数进行位置编码</p>
+<h3 id="残差连接"><a href="#残差连接" class="headerlink" title="残差连接"></a>残差连接</h3><p>每个编码器中每个子层之间都有一个残差连接，并且都跟随着一个层归一化步骤。相应地，解码器也有这些结构。</p>
+<p><img src="/.com//self-attention-2.jpg"></p>
+<h3 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h3><blockquote>
+<p>编码器通过处理输入序列开启工作。顶端编码器的输出之后会变转化为一个包含向量K（键向量）和V（值向量）的注意力向量集 。这些向量将被每个解码器用于自身的“编码-解码注意力层”，而这些层可以帮助解码器关注输入序列哪些位置合适</p>
+</blockquote>
+<p>解码器最终输出一个实数，然后会进行线性变换，</p>
+<h2 id="GPT"><a href="#GPT" class="headerlink" title="GPT"></a>GPT</h2><p>GPT——生成式预训练Transformer - 李鹏宇的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/125139937">https://zhuanlan.zhihu.com/p/125139937</a></p>
+<h2 id="BERT"><a href="#BERT" class="headerlink" title="BERT"></a>BERT</h2><p>基于Transformer的双向编码器表示(BERT)——结构和训练 - 李鹏宇的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/125655365">https://zhuanlan.zhihu.com/p/125655365</a></p>
 
       
     </div>
