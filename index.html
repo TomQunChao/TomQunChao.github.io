@@ -235,6 +235,67 @@
 
 
   
+    <article id="post-writeup/google/2021-3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/03/01/writeup/google/2021-3/" class="article-date">
+  	<time datetime="2021-03-01T12:34:35.000Z" itemprop="datePublished">2021-03-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/03/01/writeup/google/2021-3/">
+        google2021年3月
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="beginners"><a href="#beginners" class="headerlink" title="beginners"></a>beginners</h2><p>simple changes using intel xmm instructions, these are docs</p>
+<p><a target="_blank" rel="noopener" href="https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_xor_si128&amp;expand=6170">https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_xor_si128&amp;expand=6170</a></p>
+<p><a target="_blank" rel="noopener" href="https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_shuffle_epi8&amp;expand=5153">https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_shuffle_epi8&amp;expand=5153</a></p>
+<p><a target="_blank" rel="noopener" href="https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_add_epi32&amp;expand=94">https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_add_epi32&amp;expand=94</a></p>
+<p>It is worthy to notice that the docs are operate on bits</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> z3 <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"></span><br><span class="line">xord = [<span class="number">118</span>, <span class="number">88</span>, <span class="number">180</span>, <span class="number">73</span>, <span class="number">141</span>, <span class="number">26</span>, <span class="number">95</span>, <span class="number">56</span>, <span class="number">212</span>, <span class="number">35</span>, <span class="number">248</span>, <span class="number">52</span>, <span class="number">235</span>, <span class="number">134</span>, <span class="number">249</span>, <span class="number">170</span>]</span><br><span class="line">addd = [<span class="number">239</span>, <span class="number">190</span>, <span class="number">173</span>, <span class="number">222</span>, <span class="number">173</span>, <span class="number">222</span>, <span class="number">225</span>, <span class="number">254</span>, <span class="number">55</span>, <span class="number">19</span>, <span class="number">55</span>, <span class="number">19</span>, <span class="number">102</span>, <span class="number">116</span>, <span class="number">99</span>, <span class="number">103</span>]</span><br><span class="line">shuffle = [<span class="number">2</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">11</span>, <span class="number">9</span>, <span class="number">14</span>, <span class="number">3</span>, <span class="number">15</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">13</span>, <span class="number">0</span>]</span><br><span class="line">xordw = <span class="number">0</span></span><br><span class="line">adddw = <span class="number">0</span></span><br><span class="line">pack = <span class="keyword">lambda</span> x,i:x[i]|(x[i+<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)|(x[i+<span class="number">2</span>]&lt;&lt;<span class="number">16</span>)|(x[i+<span class="number">3</span>]&lt;&lt;<span class="number">24</span>)</span><br><span class="line">xorp = [pack(xord,i) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">16</span>,<span class="number">4</span>)]</span><br><span class="line">addp = [pack(addd,i) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">16</span>,<span class="number">4</span>)]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">    print(hex(xorp[i]),hex(addp[i]))</span><br><span class="line">v = [BitVec(<span class="string">&quot;v%d&quot;</span>%i,<span class="number">32</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">16</span>)]</span><br><span class="line">s = Solver()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">16</span>):</span><br><span class="line">    s.add(v[i]&gt;=<span class="number">0</span>)</span><br><span class="line">    s.add(v[i]&lt;=<span class="number">0xff</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">16</span>,<span class="number">4</span>):</span><br><span class="line">    s.add((v[i]|(v[i+<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)|(v[i+<span class="number">2</span>]&lt;&lt;<span class="number">16</span>)|(v[i+<span class="number">3</span>]&lt;&lt;<span class="number">24</span>))^xorp[i//<span class="number">4</span>]==(v[shuffle[i]]|(v[shuffle[i+<span class="number">1</span>]]&lt;&lt;<span class="number">8</span>)|(v[shuffle[i+<span class="number">2</span>]]&lt;&lt;<span class="number">16</span>)|(v[shuffle[i+<span class="number">3</span>]]&lt;&lt;<span class="number">24</span>))+addp[i//<span class="number">4</span>])</span><br><span class="line">s.add(v[<span class="number">0</span>]==ord(<span class="string">&#x27;C&#x27;</span>))</span><br><span class="line">s.add(v[<span class="number">1</span>]==ord(<span class="string">&#x27;T&#x27;</span>))</span><br><span class="line">s.add(v[<span class="number">2</span>]==ord(<span class="string">&#x27;F&#x27;</span>))</span><br><span class="line">s.add(v[<span class="number">3</span>]==ord(<span class="string">&#x27;&#123;&#x27;</span>))</span><br><span class="line">res = []</span><br><span class="line"><span class="keyword">if</span> s.check()==sat:</span><br><span class="line">    m = s.model()</span><br><span class="line">    print(m)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> v:</span><br><span class="line">        res.append(m[i].as_long())</span><br><span class="line">print(res,bytes(res))</span><br></pre></td></tr></table></figure>
+
+<h2 id><a href="#" class="headerlink" title></a></h2>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/linux/git-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -508,7 +569,7 @@
 <h3 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h3><blockquote>
 <p>编码器通过处理输入序列开启工作。顶端编码器的输出之后会变转化为一个包含向量K（键向量）和V（值向量）的注意力向量集 。这些向量将被每个解码器用于自身的“编码-解码注意力层”，而这些层可以帮助解码器关注输入序列哪些位置合适</p>
 </blockquote>
-<p>解码器最终输出一个实数，然后会进行线性变换，</p>
+<p>解码器最终输出一个实数，然后会进行线性变换，再到softmax层W</p>
 <h2 id="GPT"><a href="#GPT" class="headerlink" title="GPT"></a>GPT</h2><p>GPT——生成式预训练Transformer - 李鹏宇的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/125139937">https://zhuanlan.zhihu.com/p/125139937</a></p>
 <h2 id="BERT"><a href="#BERT" class="headerlink" title="BERT"></a>BERT</h2><p>基于Transformer的双向编码器表示(BERT)——结构和训练 - 李鹏宇的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/125655365">https://zhuanlan.zhihu.com/p/125655365</a></p>
 
@@ -872,70 +933,6 @@
 <li>语言实现</li>
 </ol>
 <p>还有个停用词去除，即去除无关紧要的词。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-writeup/starctf2021/wp" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/01/23/writeup/starctf2021/wp/" class="article-date">
-  	<time datetime="2021-01-23T03:34:29.000Z" itemprop="datePublished">2021-01-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/23/writeup/starctf2021/wp/">
-        \*CTF2021 writeup(部分re)
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1rep"><a href="#1rep" class="headerlink" title="1rep"></a>1rep</h2><p><a target="_blank" rel="noopener" href="https://x-nagi.com/post/starctf2021.html#1rep">https://x-nagi.com/post/starctf2021.html#1rep</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/229322">https://www.anquanke.com/post/id/229322</a></p>
-<p>github上有官方wp</p>
-<ol>
-<li>有个Perl_run函数，应该是执行Perl的结构体</li>
-<li>审计libperl.so.5.22.1导出表，发现perl_dump_all函数，查阅文档知道和perl_run参数相同</li>
-<li>在perl_run下断点，设置$rip到perl_dump_all函数，通过在write下断点知道perl_dump_all函数使用文件句柄2，所以重定向输出2到文件</li>
-<li>dump出的文件585M</li>
-<li></li>
-</ol>
 
       
     </div>

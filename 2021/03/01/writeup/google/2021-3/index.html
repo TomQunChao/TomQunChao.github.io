@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>google2021年3月 | Hexo</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="beginnerssimple changes using intel xmm instructions, these are docs https:&#x2F;&#x2F;software.intel.com&#x2F;sites&#x2F;landingpage&#x2F;IntrinsicsGuide&#x2F;#text&#x3D;_mm_xor_si128&amp;expand&#x3D;6170 https:&#x2F;&#x2F;software.intel.com&#x2F;sites&#x2F;l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="google2021年3月">
+<meta property="og:url" content="http://example.com/2021/03/01/writeup/google/2021-3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="beginnerssimple changes using intel xmm instructions, these are docs https:&#x2F;&#x2F;software.intel.com&#x2F;sites&#x2F;landingpage&#x2F;IntrinsicsGuide&#x2F;#text&#x3D;_mm_xor_si128&amp;expand&#x3D;6170 https:&#x2F;&#x2F;software.intel.com&#x2F;sites&#x2F;l">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-01T12:34:35.000Z">
+<meta property="article:modified_time" content="2021-03-01T12:37:02.767Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+
+  
+<script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+
+  
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/"></a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide"></h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author"></h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-writeup/google/2021-3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/03/01/writeup/google/2021-3/" class="article-date">
+  	<time datetime="2021-03-01T12:34:35.000Z" itemprop="datePublished">2021-03-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      google2021年3月
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="beginners"><a href="#beginners" class="headerlink" title="beginners"></a>beginners</h2><p>simple changes using intel xmm instructions, these are docs</p>
+<p><a target="_blank" rel="noopener" href="https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_xor_si128&amp;expand=6170">https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_xor_si128&amp;expand=6170</a></p>
+<p><a target="_blank" rel="noopener" href="https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_shuffle_epi8&amp;expand=5153">https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_shuffle_epi8&amp;expand=5153</a></p>
+<p><a target="_blank" rel="noopener" href="https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_add_epi32&amp;expand=94">https://software.intel.com/sites/landingpage/IntrinsicsGuide/#text=_mm_add_epi32&amp;expand=94</a></p>
+<p>It is worthy to notice that the docs are operate on bits</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> z3 <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"></span><br><span class="line">xord = [<span class="number">118</span>, <span class="number">88</span>, <span class="number">180</span>, <span class="number">73</span>, <span class="number">141</span>, <span class="number">26</span>, <span class="number">95</span>, <span class="number">56</span>, <span class="number">212</span>, <span class="number">35</span>, <span class="number">248</span>, <span class="number">52</span>, <span class="number">235</span>, <span class="number">134</span>, <span class="number">249</span>, <span class="number">170</span>]</span><br><span class="line">addd = [<span class="number">239</span>, <span class="number">190</span>, <span class="number">173</span>, <span class="number">222</span>, <span class="number">173</span>, <span class="number">222</span>, <span class="number">225</span>, <span class="number">254</span>, <span class="number">55</span>, <span class="number">19</span>, <span class="number">55</span>, <span class="number">19</span>, <span class="number">102</span>, <span class="number">116</span>, <span class="number">99</span>, <span class="number">103</span>]</span><br><span class="line">shuffle = [<span class="number">2</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">11</span>, <span class="number">9</span>, <span class="number">14</span>, <span class="number">3</span>, <span class="number">15</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">13</span>, <span class="number">0</span>]</span><br><span class="line">xordw = <span class="number">0</span></span><br><span class="line">adddw = <span class="number">0</span></span><br><span class="line">pack = <span class="keyword">lambda</span> x,i:x[i]|(x[i+<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)|(x[i+<span class="number">2</span>]&lt;&lt;<span class="number">16</span>)|(x[i+<span class="number">3</span>]&lt;&lt;<span class="number">24</span>)</span><br><span class="line">xorp = [pack(xord,i) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">16</span>,<span class="number">4</span>)]</span><br><span class="line">addp = [pack(addd,i) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">16</span>,<span class="number">4</span>)]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">    print(hex(xorp[i]),hex(addp[i]))</span><br><span class="line">v = [BitVec(<span class="string">&quot;v%d&quot;</span>%i,<span class="number">32</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">16</span>)]</span><br><span class="line">s = Solver()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">16</span>):</span><br><span class="line">    s.add(v[i]&gt;=<span class="number">0</span>)</span><br><span class="line">    s.add(v[i]&lt;=<span class="number">0xff</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">16</span>,<span class="number">4</span>):</span><br><span class="line">    s.add((v[i]|(v[i+<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)|(v[i+<span class="number">2</span>]&lt;&lt;<span class="number">16</span>)|(v[i+<span class="number">3</span>]&lt;&lt;<span class="number">24</span>))^xorp[i//<span class="number">4</span>]==(v[shuffle[i]]|(v[shuffle[i+<span class="number">1</span>]]&lt;&lt;<span class="number">8</span>)|(v[shuffle[i+<span class="number">2</span>]]&lt;&lt;<span class="number">16</span>)|(v[shuffle[i+<span class="number">3</span>]]&lt;&lt;<span class="number">24</span>))+addp[i//<span class="number">4</span>])</span><br><span class="line">s.add(v[<span class="number">0</span>]==ord(<span class="string">&#x27;C&#x27;</span>))</span><br><span class="line">s.add(v[<span class="number">1</span>]==ord(<span class="string">&#x27;T&#x27;</span>))</span><br><span class="line">s.add(v[<span class="number">2</span>]==ord(<span class="string">&#x27;F&#x27;</span>))</span><br><span class="line">s.add(v[<span class="number">3</span>]==ord(<span class="string">&#x27;&#123;&#x27;</span>))</span><br><span class="line">res = []</span><br><span class="line"><span class="keyword">if</span> s.check()==sat:</span><br><span class="line">    m = s.model()</span><br><span class="line">    print(m)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> v:</span><br><span class="line">        res.append(m[i].as_long())</span><br><span class="line">print(res,bytes(res))</span><br></pre></td></tr></table></figure>
+
+<h2 id><a href="#" class="headerlink" title></a></h2>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/02/28/note/linux/git-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">git入门笔记</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="writeup/google/2021-3" data-title="google2021年3月" data-url="http://example.com/2021/03/01/writeup/google/2021-3/"  data-images="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" data-content="google2021年3月">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2021 John Doe
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>
