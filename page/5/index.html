@@ -173,6 +173,136 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-note/rev/dll-inject" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/11/02/note/rev/dll-inject/" class="article-date">
+  	<time datetime="2020-11-02T11:41:24.000Z" itemprop="datePublished">2020-11-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/02/note/rev/dll-inject/">
+        dll注入技术
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>由于学习hook技术过程中需要dll注入，递归学习至此</p>
+<h2 id="总体步骤"><a href="#总体步骤" class="headerlink" title="总体步骤"></a>总体步骤</h2><ol>
+<li><p>附加到目标/远程进程</p>
+</li>
+<li><p>在目标/远程进程内分配内存</p>
+</li>
+<li><p>将DLL文件路径，dll文件，复制到目标/远程进程的内存空间</p>
+</li>
+<li><p>控制进程运行dll文件</p>
+</li>
+</ol>
+<p>相关API</p>
+<ul>
+<li><p>CreateRemoteThread()</p>
+</li>
+<li><p>NtCreateThreadEx()</p>
+</li>
+<li><p>QueueUserAPC()</p>
+</li>
+<li><p>SetWindowsHookEx()</p>
+</li>
+<li><p>RtlCreateUserThread()</p>
+</li>
+<li><p>SetThreadContext()</p>
+</li>
+<li><p>反射DLL</p>
+</li>
+</ul>
+<p>实现方法</p>
+<ul>
+<li><p>创建远程线程</p>
+</li>
+<li><p>使用注册表</p>
+</li>
+<li><p>消息hook</p>
+</li>
+</ul>
+<h2 id="注册表方法"><a href="#注册表方法" class="headerlink" title="注册表方法"></a>注册表方法</h2><p>Windows注册表中有AppInit_DLLs与LoadAppInit_DLLs两个注册表项，把要注入的DLL路径写入AppInit_DLLs，然后将LoadAppInit_DLLs项设置为1.重启后，指定DLL就会注入所有运行进程。</p>
+<p>原理：user32.dll被加载到进程时，会读取AppInit_DLLs注册表项，如果有值，就加载到加载user32.dll的进程。WindowsXP会忽略LoadAppInit_DLLs的注册表项。</p>
+<h2 id="创建远程线程方法"><a href="#创建远程线程方法" class="headerlink" title="创建远程线程方法"></a>创建远程线程方法</h2><ol>
+<li><p>获取目标进程句柄</p>
+</li>
+<li><p>将要注入的dll路径写入目标进程内存</p>
+</li>
+<li><p>获取LoadLibraryW() API地址</p>
+</li>
+<li><p>在目标进程中运行远程线程</p>
+</li>
+</ol>
+<p>注入器</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;tchar.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;TlHelp32.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;comdef.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DEF_PROCESS_NAME <span class="meta-string">&quot;notepad.exe&quot;</span></span></span><br><span class="line"></span><br><span class="line">LPVOID WriteFileAddress = <span class="literal">NULL</span>;</span><br><span class="line">CREATE_PROCESS_DEBUG_INFO CreateProcessDebugInfomation;</span><br><span class="line">BYTE INT3 = <span class="number">0xCC</span>, OldByte = <span class="number">0</span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* @method 注入dll到指定进程</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function">BOOL <span class="title">injectDll</span><span class="params">(<span class="keyword">int</span> pid, <span class="keyword">wchar_t</span>* szDllPath)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    HANDLE hProcess = <span class="literal">NULL</span>, hThread = <span class="literal">NULL</span>;</span><br><span class="line">    HMODULE hMod = <span class="literal">NULL</span>;</span><br><span class="line">    LPVOID pRemoteBuf = <span class="literal">NULL</span>;</span><br><span class="line">    DWORD dwBufSize = (DWORD)(_tcslen(szDllPath) + <span class="number">1</span>) * <span class="keyword">sizeof</span>(TCHAR);</span><br><span class="line">    LPTHREAD_START_ROUTINE pThreadProc;</span><br><span class="line">    <span class="comment">// 使用pid获取目标进程句柄</span></span><br><span class="line">    <span class="keyword">if</span> (!(hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid))) &#123;</span><br><span class="line">        _tprintf(<span class="string">L&quot;OpenProcess(%d) failed [%d]\n&quot;</span>, pid,GetLastError());</span><br><span class="line">        <span class="keyword">return</span> FALSE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 在目标进程中分配内存</span></span><br><span class="line">    <span class="comment">// 这个API返回的地址是目标进程的地址</span></span><br><span class="line">    pRemoteBuf = VirtualAllocEx(hProcess, <span class="literal">NULL</span>, dwBufSize, MEM_COMMIT, PAGE_READWRITE);</span><br><span class="line">    <span class="comment">// 将dll写入内存</span></span><br><span class="line">    WriteProcessMemory(hProcess, pRemoteBuf, (LPVOID)szDllPath, dwBufSize, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">// 获取LoadLibraryW() API地址</span></span><br><span class="line">    hMod = GetModuleHandle(<span class="string">L&quot;kernel32.dll&quot;</span>);</span><br><span class="line">    pThreadProc = (LPTHREAD_START_ROUTINE)GetProcAddress(hMod, <span class="string">&quot;LoadLibraryW&quot;</span>);</span><br><span class="line">    <span class="comment">// 运行线程</span></span><br><span class="line">    hThread = CreateRemoteThread(hProcess, <span class="literal">NULL</span>, <span class="number">0</span>, pThreadProc, pRemoteBuf, <span class="number">0</span>, <span class="literal">NULL</span>);</span><br><span class="line">    WaitForSingleObject(hThread, INFINITE);</span><br><span class="line">    CloseHandle(hThread);</span><br><span class="line">    CloseHandle(hProcess);</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* @method 遍历进程寻找notepad.exe的pid</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">traverseProcesses</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    PROCESSENTRY32 pe32;</span><br><span class="line">    pe32.dwSize = <span class="keyword">sizeof</span>(pe32);</span><br><span class="line">    HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hProcessSnap == INVALID_HANDLE_VALUE) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Create snap Error!\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    BOOL bResult = Process32First(hProcessSnap, &amp;pe32);</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">num</span><span class="params">(<span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">while</span> (bResult) &#123;</span><br><span class="line">        <span class="function"><span class="keyword">_bstr_t</span> <span class="title">b</span><span class="params">(pe32.szExeFile)</span></span>; <span class="comment">// 将宽字节转化为窄字节</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(b, <span class="string">&quot;notepad.exe&quot;</span>)) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;[*] Find notepad.exe: %d\n&quot;</span>, pe32.th32ProcessID);</span><br><span class="line">            <span class="keyword">return</span> pe32.th32ProcessID;</span><br><span class="line">        &#125;</span><br><span class="line">        bResult = Process32Next(hProcessSnap, &amp;pe32);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> _tmain(<span class="keyword">int</span> argc, TCHAR* argv[]) &#123;</span><br><span class="line">    <span class="keyword">wchar_t</span> dllName[] = <span class="string">L&quot;myhackdll.dll&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> pid = traverseProcesses();</span><br><span class="line">    <span class="keyword">if</span> (pid == <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[-] Not found\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (injectDll(pid, dllName)) &#123;</span><br><span class="line">        _tprintf(<span class="string">L&quot;Inject success\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        _tprintf(<span class="string">L&quot;Inject failed\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>myhackdll.dll代码(要注入的dll)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;pch.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;tchar.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 加载静态链接库</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(lib,<span class="meta-string">&quot;urlmon.lib&quot;</span>)</span></span><br><span class="line"><span class="comment">// dllMain函数是程序的入口点</span></span><br><span class="line">HMODULE g_hMod = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">ThreadProc</span><span class="params">(LPVOID lParam)</span> </span>&#123;</span><br><span class="line">    TCHAR szPath[MAX_PATH] = &#123; <span class="number">0</span>, &#125;;</span><br><span class="line">    <span class="keyword">if</span> (!GetModuleFileName(g_hMod, szPath, MAX_PATH)) &#123;</span><br><span class="line">        <span class="keyword">return</span> FALSE;</span><br><span class="line">    &#125;</span><br><span class="line">    FILE* f = fopen(<span class="string">&quot;Hello.txt&quot;</span>,<span class="string">&quot;w&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!f)<span class="keyword">return</span> FALSE;</span><br><span class="line">    <span class="built_in">fprintf</span>(f, <span class="string">&quot;Hello! You are hacked!\n&quot;</span>);</span><br><span class="line">    fclose(f);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">BOOL APIENTRY <span class="title">DllMain</span><span class="params">( HMODULE hModule,</span></span></span><br><span class="line"><span class="function"><span class="params">                       DWORD  ul_reason_for_call,</span></span></span><br><span class="line"><span class="function"><span class="params">                       LPVOID lpReserved</span></span></span><br><span class="line"><span class="function"><span class="params">                     )</span></span>&#123;</span><br><span class="line">    HANDLE hThread = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">        OutputDebugString(<span class="string">L&quot;myhack.dll Inject!!!&quot;</span>);</span><br><span class="line">        hThread = CreateThread(<span class="literal">NULL</span>, <span class="number">0</span>, ThreadProc, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>);</span><br><span class="line">        CloseHandle(hThread);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="调试的方法"><a href="#调试的方法" class="headerlink" title="调试的方法"></a>调试的方法</h3><p>这里讲如何在调试器中看到dll注入后的效果</p>
+<ol>
+<li><p>使用调试器attach后按f9继续运行</p>
+</li>
+<li><p>选项中选中”pause on new modules”</p>
+</li>
+<li><p>运行注入器，dll将在注入的dll入口点暂停</p>
+</li>
+</ol>
+<h2 id="dll卸载"><a href="#dll卸载" class="headerlink" title="dll卸载"></a>dll卸载</h2><ol>
+<li><p>获取目标进程pid</p>
+</li>
+<li><p>获取进程加载的dll信息</p>
+</li>
+<li><p>获取FreeLibraryAPI地址</p>
+</li>
+<li><p>在目标进程中运行线程</p>
+</li>
+</ol>
+<h2 id="SetWindowsHookEx方法"><a href="#SetWindowsHookEx方法" class="headerlink" title="SetWindowsHookEx方法"></a>SetWindowsHookEx方法</h2><p>这同时也是一种hook方法，参见windows hook</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] 《逆向工程核心原理》</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-writeup/xh-2020/wp" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -2717,100 +2847,6 @@ off_input=off_counter+4</code></pre>
 
 <p>不报错即可</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43302174/article/details/102933164">基于python3在windows下安装gmpy2</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/compiler/lex_and_yacc" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/10/21/note/compiler/lex_and_yacc/" class="article-date">
-  	<time datetime="2020-10-21T07:55:31.000Z" itemprop="datePublished">2020-10-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/21/note/compiler/lex_and_yacc/">
-        lex，yacc学习笔记
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="lex和yacc是什么"><a href="#lex和yacc是什么" class="headerlink" title="lex和yacc是什么"></a>lex和yacc是什么</h2><p>lex是一个生成词法分析器的程序，flex是其开源版本。</p>
-<p>所谓生成词法分析器，就是按照你的意愿，遇到某个词法时执行某个动作</p>
-<p>yacc时生成编译器的编译器，生成的主要是编译器的词法解析器。配合yacc使用，当解析到某种语法时执行一定的动作。</p>
-<p>lex的开源版本为flex，yacc对应gnu的bison</p>
-<p>kali安装</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install flex bison</span><br></pre></td></tr></table></figure>
-
-<h2 id="lex使用简单介绍"><a href="#lex使用简单介绍" class="headerlink" title="lex使用简单介绍"></a>lex使用简单介绍</h2><p>lex文件格式为*.l，例子：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line">%&#125;</span><br><span class="line">%%</span><br><span class="line"><span class="function">stop <span class="title">printf</span><span class="params">(<span class="string">&quot;Stop command received\n&quot;</span>)</span></span>;</span><br><span class="line"><span class="function">start <span class="title">printf</span><span class="params">(<span class="string">&quot;Start command received\n&quot;</span>)</span></span>;</span><br><span class="line">%%</span><br></pre></td></tr></table></figure>
-
-<p>保存，然后执行</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lex 文件名.l</span><br></pre></td></tr></table></figure>
-
-<p>会在同目录下生成lex.yy.c</p>
-<p>执行命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cc lex.yy.c -ll -o a # -ll代表使用lex库，提供了main函数，-o a代表输出到</span><br></pre></td></tr></table></figure>
-
-<p>运行a程序，发现输入stop和start时会打印对应的东西，其他情况回显</p>
-<p>lex使用正则表达式</p>
-<h2 id="yacc使用"><a href="#yacc使用" class="headerlink" title="yacc使用"></a>yacc使用</h2><p>yacc语法分析器解析一个标识流符，这里就需要lex配合了。因为yacc并不知道输入流中的字符是什么东西。</p>
-<p>假定有一个温度计，使用如下语言控制它</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">heat on</span><br><span class="line">Heater on!</span><br><span class="line">heat off</span><br><span class="line">Header off!</span><br><span class="line">target temperature set!</span><br></pre></td></tr></table></figure>
-
-<p>lex的tokenizer为</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;y.tab.h&quot;</span></span></span><br><span class="line">%&#125;</span><br><span class="line"></span><br><span class="line">%%</span><br><span class="line">[<span class="number">0</span><span class="number">-9</span>]+ <span class="keyword">return</span> NUMBER;</span><br><span class="line">heat <span class="keyword">return</span> TOKHEAT;</span><br><span class="line">on|off <span class="keyword">return</span> STATE;</span><br><span class="line">target <span class="keyword">return</span> TOKTARGET;</span><br><span class="line">temperature <span class="keyword">return</span> TOKTEMPERATURE;</span><br><span class="line">\n <span class="comment">/* ignore end of line */</span>;</span><br><span class="line">[ \t]+ <span class="comment">/* ignore whitespace */</span></span><br><span class="line">%%ure <span class="built_in">set</span>\n<span class="string">&quot;);</span></span><br><span class="line"><span class="string">&#125;;</span></span><br></pre></td></tr></table></figure>
-
-<p>y.tab.h中定义了NUMBER，TOKHEAT这些常量，这个文件由yacc根据我们编写的语法规则生成</p>
-<p>yacc的文件后缀名为*.y</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//在lex.yy.c里定义，会被yyparse()调用。在此声明消除编译和链接错误。</span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">yylex</span><span class="params">(<span class="keyword">void</span>)</span></span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">// 在此声明，消除yacc生成代码时的告警</span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">yyparse</span><span class="params">(<span class="keyword">void</span>)</span></span>; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">yywrap</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该函数在y.tab.c里会被调用，需要在此定义</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">yyerror</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;[error] %s\n&quot;</span>, s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	yyparse();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">%&#125;</span><br><span class="line"></span><br><span class="line">%token NUMBER TOKHEAT STATE TOKTARGET TOKTEMPERATURE</span><br><span class="line"></span><br><span class="line">%%</span><br><span class="line">commands: <span class="comment">/* empty */</span></span><br><span class="line">| commands command</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">command: heat_switch | target_set ;</span><br><span class="line"></span><br><span class="line">heat_switch:</span><br><span class="line">TOKHEAT STATE</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\tHeat turned on or off\n&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">target_set:</span><br><span class="line">TOKTARGET TOKTEMPERATURE NUMBER</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\tTemperature set\n&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line">%%</span><br></pre></td></tr></table></figure>
-
-<p>编译运行这个程序</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lex a.l</span><br><span class="line">yacc -d a.y # 增加-d选项以生成y.tab.h</span><br><span class="line">cc lex.yy.c y.tab.c -o a</span><br></pre></td></tr></table></figure>
-
-<p>现在为止，已经具备一个编译器的基本单元。但是考虑这个问题：lex识别了一个标识符，但是C语言中不同的标识符有不同的含义，所以还需要为它生成一个ID，为语义分析做准备。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;y.tab.h&quot;</span></span></span><br><span class="line">%&#125;</span><br><span class="line"><span class="comment">// yytext指识别到的语句，yyval用来向yacc传递值</span></span><br><span class="line">%%</span><br><span class="line">[<span class="number">0</span><span class="number">-9</span>]+ yylval = atoi(yytext); <span class="keyword">return</span> NUMBER;</span><br><span class="line">heat <span class="keyword">return</span> TOKHEAT;</span><br><span class="line">on|off yylval = !<span class="built_in">strcmp</span>(yytext, <span class="string">&quot;on&quot;</span>); <span class="keyword">return</span> STATE;</span><br><span class="line">target <span class="keyword">return</span> TOKTARGET;</span><br><span class="line">temperature <span class="keyword">return</span> TOKTEMPERATURE;</span><br><span class="line">\n <span class="comment">/* ignore end of line */</span></span><br><span class="line">[ \t]+ <span class="comment">/* ignore whitespace */</span></span><br><span class="line">%%</span><br></pre></td></tr></table></figure>
-
-<p>yacc规则中也需要做出一些更改</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">target_set:</span><br><span class="line">TOKTARGET TOKTEMPERATURE NUMBER</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\tTemperature set to %d\n&quot;</span>, $<span class="number">3</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// $3表示这个语法的第三个单元中的参数</span></span><br><span class="line">heat_switch:</span><br><span class="line">TOKHEAT STATE</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> ($<span class="number">2</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\tHeat turned on\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\tHeat turned off\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// $2表示这个语法中第二个单元的参数</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/143867739">Lex与YACC详解 - Deepliu的文章 - 知乎</a></p>
 
       
     </div>
