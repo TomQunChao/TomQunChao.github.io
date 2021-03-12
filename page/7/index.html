@@ -173,6 +173,70 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-writeup/jarvisoj/wp" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/10/06/writeup/jarvisoj/wp/" class="article-date">
+  	<time datetime="2020-10-06T12:42:25.000Z" itemprop="datePublished">2020-10-06</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/06/writeup/jarvisoj/wp/">
+        JarvisOJ 做题记录
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="pwn-guestbook2"><a href="#pwn-guestbook2" class="headerlink" title="[pwn]guestbook2"></a>[pwn]guestbook2</h2><h3 id="问题-amp-读别人wp-10-6"><a href="#问题-amp-读别人wp-10-6" class="headerlink" title="问题&amp;读别人wp 10-6"></a>问题&amp;读别人wp 10-6</h3><ul>
+<li>unlink操作</li>
+<li>glibc版本为2.28</li>
+<li>需要阅读源码</li>
+<li>局部性原理 locality</li>
+</ul>
+<h2 id="rev-bbencode"><a href="#rev-bbencode" class="headerlink" title="[rev]bbencode"></a>[rev]bbencode</h2><p>是一个流密钥生成器，这种密钥生成器一般都有一个周期， 并且不是很大，所以直接爆破即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bbencode</span>(<span class="params">n</span>):</span></span><br><span class="line">    a = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> bin(n)[<span class="number">2</span>:]:</span><br><span class="line">        a = a &lt;&lt; <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> (int(i)):</span><br><span class="line">            a = a ^ n</span><br><span class="line">        <span class="keyword">if</span> a &gt;&gt; <span class="number">256</span>:</span><br><span class="line">            a = a ^ <span class="number">0x10000000000000000000000000000000000000000000000000000000000000223</span></span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line">a = <span class="number">61406787709715709430385495960238216763226399960658358000016620560764164045692</span></span><br><span class="line">s = <span class="number">61406787709715709430385495960238216763226399960658358000016620560764164045692</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">if</span> bbencode(s)==a:</span><br><span class="line">        print(s.to_bytes(<span class="number">32</span>,<span class="string">&#x27;big&#x27;</span>))</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    s = bbencode(s)</span><br></pre></td></tr></table></figure>
+
+<h2 id="rev-爬楼梯"><a href="#rev-爬楼梯" class="headerlink" title="[rev]爬楼梯"></a>[rev]爬楼梯</h2><p>直接使用ApkIDE把onCreate的v5改成1即可获取flag</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="note/math/lattice-1-格密码入门-格-1" class="article article-type-note/math/lattice-1" itemscope itemprop="blogPost">
   
     <div class="article-meta">
