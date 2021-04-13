@@ -235,6 +235,65 @@
 
 
   
+    <article id="post-note/rev/virus-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/04/13/note/rev/virus-1/" class="article-date">
+  	<time datetime="2021-04-13T15:17:25.000Z" itemprop="datePublished">2021-04-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/13/note/rev/virus-1/">
+        常见的病毒样本下载网站
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><a target="_blank" rel="noopener" href="https://app.any.run/submissions">app.any.run </a></li>
+<li><a target="_blank" rel="noopener" href="https://bazaar.abuse.ch/browse">https://bazaar.abuse.ch/browse</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum-32-1.html">52破解病毒分析区</a></li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/develop/driver-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -891,173 +950,6 @@
 <li>修改默认布局，使显示支持hud</li>
 <li>配合交通同学的设备，根据设备传来的数据来进行车路协同预警。比如红灯预警</li>
 <li>自己开发了速度计View组件，便于hud显示</li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-review/rev/re-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/03/15/review/rev/re-1/" class="article-date">
-  	<time datetime="2021-03-15T15:37:28.000Z" itemprop="datePublished">2021-03-15</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/15/review/rev/re-1/">
-        软件逆向工程知识总结
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="计算机基础知识"><a href="#计算机基础知识" class="headerlink" title="计算机基础知识"></a>计算机基础知识</h2><h2 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h2><p>定义、静态分析、动态分析</p>
-<h2 id="常用算法识别"><a href="#常用算法识别" class="headerlink" title="常用算法识别"></a>常用算法识别</h2><p>流密码，对称加密算法，非对称加密法，hash算法，树算法，图算法，大整数相加算法，常见数据结构</p>
-<h2 id="断点类型"><a href="#断点类型" class="headerlink" title="断点类型"></a>断点类型</h2><ul>
-<li>软件断点：修改断点处为0xcc</li>
-<li>硬件断点：利用x86架构的CPU的CR0~CR7调试寄存器</li>
-<li>内存断点：修改内存页属性引发异常</li>
-</ul>
-<h2 id="dll注入技术"><a href="#dll注入技术" class="headerlink" title="dll注入技术"></a>dll注入技术</h2><p><a target="_blank" rel="noopener" href="https://tomqunchao.github.io/2020/11/02/note/rev/dll-inject/">https://tomqunchao.github.io/2020/11/02/note/rev/dll-inject/</a></p>
-<ol>
-<li>附加到目标进程</li>
-<li>在目标进程中分配内存：用于存储参数、dll等</li>
-<li>将dll文件路径，dll文件，复制到远程进程的内存空间</li>
-<li>控制进程运行dll文件</li>
-</ol>
-<h2 id="hook相关"><a href="#hook相关" class="headerlink" title="hook相关"></a>hook相关</h2><h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><p><a target="_blank" rel="noopener" href="https://tomqunchao.github.io/2020/10/28/note/rev/win-hook/">https://tomqunchao.github.io/2020/10/28/note/rev/win-hook/</a></p>
-<p>内核层hook</p>
-<ul>
-<li>SSDThook</li>
-</ul>
-<p>应用层hook</p>
-<ul>
-<li>消息hook<ul>
-<li>SetWindowsHook</li>
-</ul>
-</li>
-<li>注入hook<ul>
-<li>IAT hook 修改导入表</li>
-<li>inline hook 修改函数前5个字节；不支持多线程</li>
-<li>HotFix hook 利用hotfix机制，修改函数前2个字节为short jmp，到函数上面，然后再修改那5个字节；需要函数开头有mov edi,edi且上方有5个nop；支持多线程</li>
-</ul>
-</li>
-<li>调试Hook<ul>
-<li>OpenProcess，DebugActiveProcess，附加到已经运行的进程</li>
-<li>CreateProcessA 创建进程，然后用上面的API进行调试</li>
-</ul>
-</li>
-<li>修改注册表</li>
-</ul>
-<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><p><a target="_blank" rel="noopener" href="https://tomqunchao.github.io/2021/01/19/note/rev/game-1/">https://tomqunchao.github.io/2021/01/19/note/rev/game-1/</a></p>
-<p>注入hook和win差不多，但是dll注入和调试使用ptrace。</p>
-<p>还有个LD_PRELOAD</p>
-<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><p>native层hook即Linux hook，frida的hook也是ptrace</p>
-<p>dalvik层hook可以使用xposed，利用了zygote特性</p>
-<p><a target="_blank" rel="noopener" href="https://tomqunchao.github.io/2020/10/14/note/rev/rev-3/">https://tomqunchao.github.io/2020/10/14/note/rev/rev-3/</a></p>
-<h2 id="Windows异常处理机制"><a href="#Windows异常处理机制" class="headerlink" title="Windows异常处理机制"></a>Windows异常处理机制</h2><p><a target="_blank" rel="noopener" href="https://tomqunchao.github.io/2020/10/28/note/rev/win-ehs/">https://tomqunchao.github.io/2020/10/28/note/rev/win-ehs/</a></p>
-<p>异常处理步骤</p>
-<ol>
-<li>交给调试器</li>
-<li>执行VEH</li>
-<li>执行SEH</li>
-<li>执行TopLevelEH</li>
-<li>交给调试器</li>
-<li>调试异常端口通知csrss.exe</li>
-</ol>
-<h2 id="Linux异常处理机制"><a href="#Linux异常处理机制" class="headerlink" title="Linux异常处理机制"></a>Linux异常处理机制</h2><h2 id="软件保护技术"><a href="#软件保护技术" class="headerlink" title="软件保护技术"></a>软件保护技术</h2><p>静态（部分静态动态通用）</p>
-<ul>
-<li>花指令（代码混淆）</li>
-<li>ollvm（逻辑混淆）</li>
-<li>SMC（自修改代码）</li>
-<li>压缩壳（通常为了减少体积），加密壳</li>
-<li>虚拟机保护技术</li>
-</ul>
-<p>动态（主要是反调试技术）</p>
-<ul>
-<li>基于时间的反调试</li>
-<li>基于异常的反调试</li>
-<li>基于API的反调试（Windows的IsDebuggerPresent, Linux的ptrace）</li>
-<li>ZwQueryProcessInformation</li>
-<li>父子进程反调试</li>
-<li>代码校验（主要用于对抗软件断点）</li>
-</ul>
-<h2 id="Android逆向"><a href="#Android逆向" class="headerlink" title="Android逆向"></a>Android逆向</h2><ul>
-<li>反射机制</li>
-<li>JNI_OnLoad函数</li>
-<li>反调试</li>
-</ul>
-<h2 id="IoT逆向"><a href="#IoT逆向" class="headerlink" title="IoT逆向"></a>IoT逆向</h2><ul>
-<li>CPU差异</li>
-<li>datasheet</li>
-</ul>
-<h2 id="高级语言逆向"><a href="#高级语言逆向" class="headerlink" title="高级语言逆向"></a>高级语言逆向</h2><ul>
-<li>python</li>
-<li>c#</li>
-<li>java</li>
-<li>rust</li>
-<li>go (IDA Golang helper)</li>
-</ul>
-<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><p>静态分析</p>
-<ul>
-<li>ida</li>
-<li>ghirda 弥补IDA部分缺点</li>
-<li>radare2</li>
-<li>binutils</li>
-<li>BinaryNinja</li>
-</ul>
-<p>动态分析</p>
-<ul>
-<li>ida</li>
-<li>gdb</li>
-<li>x64dbg</li>
-</ul>
-<p>高级语言</p>
-<ul>
-<li>dnspy</li>
-<li>jadx,jeb</li>
-<li>jd-gui,luyten</li>
-</ul>
-<p>解题库</p>
-<ul>
-<li>z3 线性求解</li>
-<li>angr符号执行，利用执行图去混淆等</li>
-<li>其他库</li>
 </ul>
 
       
