@@ -17,7 +17,7 @@
 <meta property="og:description" content="justnews 5.2.3破解版后门52pojie链接 https:&#x2F;&#x2F;www.52pojie.cn&#x2F;thread-1084019-1-1.html 没有搜到样本，后门流程如下：  functions.php 添加了一个后门的动作，增加了一个访问密钥为go,backdoor&#x2F;123456的账户 后面一个panel.php多层base64编码了网站、作者等信息。  这个作者的另一篇文章 https">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-04-19T10:42:48.000Z">
-<meta property="article:modified_time" content="2021-04-19T12:09:11.023Z">
+<meta property="article:modified_time" content="2021-04-19T12:24:55.890Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -263,6 +263,10 @@
 <li>复制一个矩形</li>
 <li>还是随机画矩形</li>
 </ol>
+<h2 id="leetcode每日一题-27-移除元素"><a href="#leetcode每日一题-27-移除元素" class="headerlink" title="leetcode每日一题 27. 移除元素"></a>leetcode每日一题 27. 移除元素</h2><p>思路：先从后向前扫描相等的，直到数组空或遇到不相等的为止。然后从前向后扫描，直到遇到last为止。如果从前向后遇到要去除的数，则让last指向的数替换这个数，last前移，直到遇到下一个不相等的数为止</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> numsSize, <span class="keyword">int</span> val)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!numsSize)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> last=numsSize<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span>(last&gt;<span class="number">-1</span>&amp;&amp;nums[last]==val)&#123;</span><br><span class="line">        last--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// if(!last)return last;</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;last;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums[i]==val)&#123;</span><br><span class="line">            nums[i]=nums[last];</span><br><span class="line">            last--;</span><br><span class="line">            <span class="keyword">while</span>(last&amp;&amp;nums[last]==val)&#123;</span><br><span class="line">                last--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> last+<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 
       
     </div>
