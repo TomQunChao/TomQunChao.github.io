@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2021 | Hexo</title>
+  <title>Hexo</title>
 
   <!-- keywords -->
   
@@ -11,7 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2021/page/4/index.html">
+<meta property="og:url" content="http://example.com/page/9/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="John Doe">
@@ -173,211 +173,72 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-writeup/b01lers/wp" class="article article-type-post" itemscope itemprop="blogPost">
   
+    <div class="article-meta">
+      <a href="/2020/10/05/writeup/b01lers/wp/" class="article-date">
+  	<time datetime="2020-10-05T13:02:54.000Z" itemprop="datePublished">2020-10-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/05/writeup/b01lers/wp/">
+        B01lers Writeup(部分)
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Rev-superspy"><a href="#Rev-superspy" class="headerlink" title="[Rev] superspy"></a>[Rev] superspy</h2><p>google搜索Reversing Gameboy Advaced，找到这篇文章</p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/@bruno.macabeus/reverse-engineering-a-gameboy-advance-game-introduction-ec185bd8e02">https://medium.com/@bruno.macabeus/reverse-engineering-a-gameboy-advance-game-introduction-ec185bd8e02</a></p>
+<p>使用文章里的debug工具，根据指引，发现屏幕显示的数据中，如果位<code>01 00</code> 则是背景，如果为</p>
+<figure class="highlight plain"><figcaption><span>00 03 00 03 00 03 00 0B 00```则为台阶</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>根据这个规律，使用二进制编辑工具打开super-spy.gba，搜索hex串<code>01 00 01 00</code>，找到之后可以看到有个地方正好满足这一规律，并且经过改动实验发现这里存储的就是地图数据。</p>
+<p>这样就可以改动最上面两个墙的长度，从而轻松拿到金币，获取flag</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/19/note/papers/ai/nlp-2/" class="archive-article-date">
-  	<time datetime="2021-01-19T14:23:02.000Z" itemprop="datePublished">Jan 19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/19/note/papers/ai/nlp-2/">
-        多语种语料库搜集
-        
-      </a>
-    </h1>
-  
-
-        <div class="article-info info-on-left">
-          
-          
-
-          
-        </div>
-        <div class="clearfix"></div>
-    </header>
   </div>
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/19/note/rev/game-1/" class="archive-article-date">
-  	<time datetime="2021-01-19T14:10:11.000Z" itemprop="datePublished">Jan 19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/19/note/rev/game-1/">
-        Android下实现ptrace注入&amp;hook
-        
-      </a>
-    </h1>
-  
 
-        <div class="article-info info-on-left">
-          
-          
 
-          
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/19/note/linux/vim-1/" class="archive-article-date">
-  	<time datetime="2021-01-19T03:44:46.000Z" itemprop="datePublished">Jan 19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/19/note/linux/vim-1/">
-        some tips when use vim
-        
-      </a>
-    </h1>
-  
 
-        <div class="article-info info-on-left">
-          
-          
 
-          
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/05/note/rev/rev-4/" class="archive-article-date">
-  	<time datetime="2021-01-05T03:32:48.000Z" itemprop="datePublished">Jan 5</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/05/note/rev/rev-4/">
-        IDA插件编写学习笔记
-        
-      </a>
-    </h1>
-  
 
-        <div class="article-info info-on-left">
-          
-          
 
-          
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/04/review/interview/wp/" class="archive-article-date">
-  	<time datetime="2021-01-04T12:11:41.000Z" itemprop="datePublished">Jan 4</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/04/review/interview/wp/">
-        面试获得的感想
-        
-      </a>
-    </h1>
-  
 
-        <div class="article-info info-on-left">
-          
-          
-
-          
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/01/note/web/pentist-3/" class="archive-article-date">
-  	<time datetime="2021-01-01T08:32:17.000Z" itemprop="datePublished">Jan 1</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/01/note/web/pentist-3/">
-        靶机看答案渗透记录-3
-        
-      </a>
-    </h1>
-  
-
-        <div class="article-info info-on-left">
-          
-          
-
-          
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
-  
-
-    
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2021/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/archives/2021/">1</a><a class="page-number" href="/archives/2021/page/2/">2</a><a class="page-number" href="/archives/2021/page/3/">3</a><span class="page-number current">4</span>
+      <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
     </nav>
   
-
 </div>
       <footer id="footer">
   <div class="outer">
@@ -403,9 +264,9 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: false,
+		isHome: true,
 		isPost: false,
-		isArchive: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

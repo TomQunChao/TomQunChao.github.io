@@ -173,6 +173,169 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-note/rev/buuoj-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/10/18/note/rev/buuoj-1/" class="article-date">
+  	<time datetime="2020-10-18T11:05:12.000Z" itemprop="datePublished">2020-10-18</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/18/note/rev/buuoj-1/">
+        buuoj中学到的东西
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="键盘扫描码"><a href="#键盘扫描码" class="headerlink" title="键盘扫描码"></a>键盘扫描码</h2><p>问题来源于逆向题BabyDirver</p>
+<p>这道题本来是迷宫问题，判断条件是37,38。这里是键盘扫描码，和ascii码不同。</p>
+<p>注意驱动中的编码问题。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43876357/article/details/108523865">buuoj-babydriver</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://www.supfree.net/search.asp?id=6386">键盘扫描码</a></p>
+<h2 id="二叉树的还原"><a href="#二叉树的还原" class="headerlink" title="二叉树的还原"></a>二叉树的还原</h2><p>问题来自于buuoj[2019红帽杯]childRE</p>
+<p>二叉树，给定先序和中序遍历，还原过程如下</p>
+<p>先序遍历中，根节点总是第一个遍历，找到根节点之后就可以在中序遍历中分开左右子树节点。在左右子树中分别应用这个规律。</p>
+<p>给定后续遍历时，根节点总是最后一个被遍历，还原过程和先序遍历类似</p>
+<h2 id="MSVC预定义宏"><a href="#MSVC预定义宏" class="headerlink" title="MSVC预定义宏"></a>MSVC预定义宏</h2><p>__FUNCDNAME__定义为封闭函数修饰名的字符串文本，这个宏只在函数中定义</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Demonstrates functionality of __FUNCTION__, __FUNCDNAME__, and __FUNCSIG__ macros</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">exampleFunction</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Function name: %s\n&quot;</span>, __FUNCTION__);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Decorated function name: %s\n&quot;</span>, __FUNCDNAME__);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Function signature: %s\n&quot;</span>, __FUNCSIG__);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Sample Output</span></span><br><span class="line">    <span class="comment">// -------------------------------------------------</span></span><br><span class="line">    <span class="comment">// Function name: exampleFunction</span></span><br><span class="line">    <span class="comment">// Decorated function name: ?exampleFunction@@YAXXZ</span></span><br><span class="line">    <span class="comment">// Function signature: void __cdecl exampleFunction(void)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以用UnDecorateSymbolName进行反修饰得到函数签名</p>
+<p>修饰名是链接器用于查找方法使用的</p>
+<p>参考资料 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/cpp/preprocessor/predefined-macros?view=vs-2019">预定义宏 | Microsoft Docs</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/cpp/build/reference/decorated-names?view=vs-2019">修饰名 | Microsoft Docs</a></p>
+<h2 id="bool类型比较和赋值"><a href="#bool类型比较和赋值" class="headerlink" title="bool类型比较和赋值"></a>bool类型比较和赋值</h2><p>示例代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> a=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">bool</span> b=<span class="number">2</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,a==b); <span class="comment">// 1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">.LC0:</span><br><span class="line">        .string &quot;%d\n&quot;</span><br><span class="line">main:</span><br><span class="line">        push    rbp</span><br><span class="line">        mov     rbp, rsp</span><br><span class="line">        sub     rsp, 16</span><br><span class="line">        mov     BYTE PTR [rbp-1], 1</span><br><span class="line">        mov     BYTE PTR [rbp-2], 1</span><br><span class="line">        movzx   eax, BYTE PTR [rbp-1]</span><br><span class="line">        cmp     al, BYTE PTR [rbp-2]</span><br><span class="line">        sete    al</span><br><span class="line">        movzx   eax, al</span><br><span class="line">        mov     esi, eax</span><br><span class="line">        mov     edi, OFFSET FLAT:.LC0</span><br><span class="line">        mov     eax, 0</span><br><span class="line">        call    printf</span><br><span class="line">        mov     eax, 0</span><br><span class="line">        leave</span><br><span class="line">        ret</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，编译器是通过cmp,setne命令组合赋值的</p>
+<p>那如果是变量赋值呢</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> a=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> b=<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">bool</span> c=b;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,a==c);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">.LC0:</span><br><span class="line">        .string &quot;%d\n&quot;</span><br><span class="line">main:</span><br><span class="line">        push    rbp</span><br><span class="line">        mov     rbp, rsp</span><br><span class="line">        sub     rsp, 16</span><br><span class="line">        mov     BYTE PTR [rbp-1], 1</span><br><span class="line">        mov     DWORD PTR [rbp-8], 2</span><br><span class="line">        cmp     DWORD PTR [rbp-8], 0</span><br><span class="line">        setne   al</span><br><span class="line">        mov     BYTE PTR [rbp-9], al</span><br><span class="line">        movzx   eax, BYTE PTR [rbp-1]</span><br><span class="line">        cmp     al, BYTE PTR [rbp-9]</span><br><span class="line">        sete    al</span><br><span class="line">        movzx   eax, al</span><br><span class="line">        mov     esi, eax</span><br><span class="line">        mov     edi, OFFSET FLAT:.LC0</span><br><span class="line">        mov     eax, 0</span><br><span class="line">        call    printf</span><br><span class="line">        mov     eax, 0</span><br><span class="line">        leave</span><br><span class="line">        ret</span><br></pre></td></tr></table></figure>
+
+<h2 id="MFC程序逆向"><a href="#MFC程序逆向" class="headerlink" title="MFC程序逆向"></a>MFC程序逆向</h2><p>出自[HDCTF2019]MFC</p>
+<p>可以使用xspy查看程序收到消息的函数，发送消息需要先找到窗体再发送消息</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="RSA低加密指数攻击和低解密指数攻击"><a href="#RSA低加密指数攻击和低解密指数攻击" class="headerlink" title="RSA低加密指数攻击和低解密指数攻击"></a>RSA低加密指数攻击和低解密指数攻击</h2><p>来自rsa2</p>
+<p>rsa加密原理:$c=a^e(mod n)$，则$c+i*n=a^e$，如果e和a不太大，则$a^e$也不会太大，此时$i$就不会太大，可以通过穷举$i$然后开方达到解密目的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">att</span>(<span class="params">e,n,c,maxi=<span class="number">127</span></span>):</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(maxi):</span><br><span class="line">                a,ok = gmpy2.iroot(c+i*n)</span><br><span class="line">                <span class="keyword">if</span> ok:</span><br><span class="line">                        <span class="keyword">return</span> a</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/pablocelayes/rsa-wiener-attack">https://github.com/pablocelayes/rsa-wiener-attack</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-note/win/win-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/10/18/note/win/win-1/" class="article-date">
+  	<time datetime="2020-10-18T05:28:34.000Z" itemprop="datePublished">2020-10-18</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/18/note/win/win-1/">
+        power shell 禁止执行脚本的解决方法
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>Windows Power Shell执行脚本有一定的策略</p>
+<ul>
+<li>Restricted 不允许任何脚本执行</li>
+<li>AllSigned RemoteSigned 防止执行未签名脚本</li>
+</ul>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><ol>
+<li><p>使用</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">get-executionpolicy</span></span><br></pre></td></tr></table></figure>
+
+<p>获取脚本执行策略，一般情况为restricted</p>
+</li>
+<li><p>使用</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set-executionpolicy</span> remotesigned</span><br></pre></td></tr></table></figure>
+
+<p>将策略设置为远程脚本需要签名，需要管理员权限</p>
+</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/4eaad2163567">PowerShell：因为在此系统上禁止运行脚本，解决方法</a></p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p>:peach:</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/rev/z3" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -956,70 +1119,9 @@ DEFAULT_MMAP_MAX           65536</code></pre>
 
 
   
-    <article id="post-writeup/b01lers/wp" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/10/05/writeup/b01lers/wp/" class="article-date">
-  	<time datetime="2020-10-05T13:02:54.000Z" itemprop="datePublished">2020-10-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/05/writeup/b01lers/wp/">
-        B01lers Writeup(部分)
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Rev-superspy"><a href="#Rev-superspy" class="headerlink" title="[Rev] superspy"></a>[Rev] superspy</h2><p>google搜索Reversing Gameboy Advaced，找到这篇文章</p>
-<p><a target="_blank" rel="noopener" href="https://medium.com/@bruno.macabeus/reverse-engineering-a-gameboy-advance-game-introduction-ec185bd8e02">https://medium.com/@bruno.macabeus/reverse-engineering-a-gameboy-advance-game-introduction-ec185bd8e02</a></p>
-<p>使用文章里的debug工具，根据指引，发现屏幕显示的数据中，如果位<code>01 00</code> 则是背景，如果为</p>
-<figure class="highlight plain"><figcaption><span>00 03 00 03 00 03 00 0B 00```则为台阶</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>根据这个规律，使用二进制编辑工具打开super-spy.gba，搜索hex串<code>01 00 01 00</code>，找到之后可以看到有个地方正好满足这一规律，并且经过改动实验发现这里存储的就是地图数据。</p>
-<p>这样就可以改动最上面两个墙的长度，从而轻松拿到金币，获取flag</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+      <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/">Next &amp;raquo;</a>
     </nav>
   
 </div>

