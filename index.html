@@ -235,6 +235,66 @@
 
 
   
+    <article id="post-daily/virus/3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/04/21/daily/virus/3/" class="article-date">
+  	<time datetime="2021-04-21T10:42:48.000Z" itemprop="datePublished">2021-04-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/21/daily/virus/3/">
+        每日看病毒分析和leetcode-3
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="leetcode-91-解码方法"><a href="#leetcode-91-解码方法" class="headerlink" title="leetcode-91. 解码方法"></a>leetcode-91. 解码方法</h2><p>找出最长解码方法</p>
+<p>最可笑的是一年前提交过了，且速度很快。现在不会了。</p>
+<p>这次添加了笔记，应该不会忘了吧</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(<span class="keyword">char</span> * s)</span></span>&#123;</span><br><span class="line">	<span class="keyword">size_t</span> len=<span class="built_in">strlen</span>(s);</span><br><span class="line">	<span class="keyword">if</span>(len==<span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span>(s[<span class="number">0</span>]==<span class="string">&#x27;0&#x27;</span>)<span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// 第一个就为0，肯定是0</span></span><br><span class="line">	<span class="keyword">if</span>(len==<span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> dp[<span class="number">40000</span>]; <span class="comment">// dp[i] 表示到第i个字符有dp[i]种解码方法</span></span><br><span class="line">	<span class="built_in">memset</span>(dp,<span class="number">0</span>,<span class="keyword">sizeof</span>(<span class="number">40000</span>));</span><br><span class="line">	dp[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> num=(s[<span class="number">0</span>]<span class="number">-48</span>)*<span class="number">10</span>+s[<span class="number">1</span>]<span class="number">-48</span>;</span><br><span class="line">	dp[<span class="number">1</span>]=num&gt;=<span class="number">11</span>&amp;&amp;num&lt;=<span class="number">26</span>&amp;&amp;s[<span class="number">1</span>]!=<span class="string">&#x27;0&#x27;</span>?<span class="number">2</span>:<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span>(s[<span class="number">0</span>]&gt;<span class="string">&#x27;2&#x27;</span>&amp;&amp;s[<span class="number">1</span>]==<span class="string">&#x27;0&#x27;</span>)<span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// 不可能解码</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;len;i++)&#123;</span><br><span class="line">		num=(s[i<span class="number">-1</span>]<span class="number">-48</span>)*<span class="number">10</span>+s[i]<span class="number">-48</span>;</span><br><span class="line">		<span class="keyword">if</span>(num==<span class="number">0</span>||s[i]==<span class="string">&#x27;0&#x27;</span>&amp;&amp;s[i<span class="number">-1</span>]&gt;<span class="string">&#x27;2&#x27;</span>)<span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// 无法解码</span></span><br><span class="line">		<span class="keyword">if</span>(s[i]==<span class="string">&#x27;0&#x27;</span>)dp[i]=dp[i<span class="number">-2</span>]; <span class="comment">// 这个地方只能两个一起解码，所以解码数量没有增加</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(num&gt;=<span class="number">11</span>&amp;&amp;num&lt;=<span class="number">26</span>)dp[i]=dp[i<span class="number">-1</span>]+dp[i<span class="number">-2</span>]; <span class="comment">// 两种情况，一种情况是两个字符分别解码，那么s[i]，还有一种是s[i]和s[i-1]一起解码</span></span><br><span class="line">		<span class="keyword">else</span> dp[i]=dp[i<span class="number">-1</span>]; <span class="comment">// 当num&gt;26时，s[i]只能单独解码</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> dp[len<span class="number">-1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="老毛桃携带木马病毒"><a href="#老毛桃携带木马病毒" class="headerlink" title="老毛桃携带木马病毒"></a>老毛桃携带木马病毒</h2><p>火绒大大的文章 <a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1258730-1-1.html">https://www.52pojie.cn/thread-1258730-1-1.html</a></p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>感觉东西不多，但是没有样本不好操作。尝试了虚拟机安装，老毛桃直接找不到虚拟磁盘，看来是对这个做了优化啊。😂</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-daily/virus/2" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -264,10 +324,54 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="老毛桃携带木马病毒"><a href="#老毛桃携带木马病毒" class="headerlink" title="老毛桃携带木马病毒"></a>老毛桃携带木马病毒</h2><p>火绒大大的文章 <a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1258730-1-1.html">https://www.52pojie.cn/thread-1258730-1-1.html</a></p>
-<p>之前用过老毛桃和大白菜，发现都会预装软件。当时啥也不懂，就没详细看，今天可以详细看了。</p>
-<p>截至本文写作，老毛桃官网还可以下载<a target="_blank" rel="noopener" href="https://www.laomaotao.net/">https://www.laomaotao.net/</a> ，不过完整版800多M是个啥</p>
-<h2 id="php源码解密"><a href="#php源码解密" class="headerlink" title="php源码解密"></a>php源码解密</h2><p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-693641-1-1.html">https://www.52pojie.cn/thread-693641-1-1.html</a></p>
+        <h2 id="php源码解密"><a href="#php源码解密" class="headerlink" title="php源码解密"></a>php源码解密</h2><p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-693641-1-1.html">https://www.52pojie.cn/thread-693641-1-1.html</a></p>
+<p>先安装xdebug、vscode的PHP debug插件</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nikic/PHP-Parser">https://github.com/nikic/PHP-Parser</a> 使用这个格式化</p>
+<p>然后单步调试，过掉反调试，一直到eval就可以看到源码</p>
+<h2 id="leetcode-实现strstr"><a href="#leetcode-实现strstr" class="headerlink" title="leetcode 实现strstr"></a>leetcode 实现strstr</h2><p>KMP算法一直没看懂，这次看看</p>
+<p>前缀函数$\pi(i)$表示$s[0:i]$最长相等的真前缀和真后缀</p>
+<p>对于字符串aabaaab</p>
+<ul>
+<li>$\pi(0)=0$，因为a没有真前缀和真后缀</li>
+<li>$\pi(1)=1$，因为aa最长相等真前缀和真后缀长度为1</li>
+<li>$\pi(2)=0$，因为aab没有对应的真前缀和真后缀</li>
+<li>$\pi(3)=1$，因为aaba最长相等真前缀和真后缀长度为1</li>
+<li>$\pi(4)=2$</li>
+<li>$\pi(5)=2$</li>
+<li>$\pi(6)=3$</li>
+</ul>
+<p>KMP算法是严格$O(m)$的，靠的就是前缀函数的几个性质</p>
+<ol>
+<li><p>$\pi(i)\le\pi(i-1)+1$，直观地想，增加了一个字符之后最多增加一个真前缀和真后缀的相等的字符</p>
+<ul>
+<li>根据$\pi(i)$定义得到$\s[0:\pi(i)-1]=s[i-\pi(i)+1:i]$，即$\pi(i)$长度的真前缀和真后缀相等</li>
+<li>两区间的右端点同时左移，得到$s[0:\pi(i)-2]=s[i-\pi(i)+1:i-1]$，即真前缀和真后缀各减少一个字符</li>
+<li>根据$\pi(i-1)$定义得$\pi(i-1)\ge\pi(i)-1$，如果$\pi(i)\ne0$，那么最后一个字符肯定和真前缀地某个字符相等，删掉之后$\pi$函数肯定要减1</li>
+</ul>
+</li>
+<li><p>如果$s[i]=s[\pi(i-1)]$，那么$\pi(i)=\pi(i-1)+1$，直观地想，这分别是是$\pi(i-1)$的真后缀的下一个字符，所以成立</p>
+<ul>
+<li>根据$\pi(i-1)$定义得到，$s[0:\pi(i-1)-1]=s[i-\pi(i-1):i-1]$，就是1第一个式子带入$i-1$（1）</li>
+<li>因为$s[\pi(i-1)]=s[i]$，可得$s[0:\pi(i-1)]=s[i-\pi(i-1):i]$，真前缀和真后缀各增加一个相等字符</li>
+<li>根据$\pi(i)$定义得$\pi(i)\ge\pi(i-1)+1$，即有相等的之后真前缀和真后缀相等长度可能增加，结合第一个性质得到$\pi(i)=\pi(i-1)+1$</li>
+</ul>
+</li>
+</ol>
+<p>这样就可以根据这两个性质求出$\pi(i)$，找到最大的$j$，满足$s[0:j-1]=s[i-j:i-1]$，且$s[i]=s[j]$，就得到$\pi(i)=j+1$</p>
+<ol>
+<li>要求$j$尽可能大</li>
+<li>要求$j$满足$s[i]=s[j]$</li>
+</ol>
+<p>当$s[\pi(i-1)]\ne s[i]$时，$\pi(i)\le\pi(i-1)$，因为$j=\pi(i)-1$，所以$j\lt\pi(i)-1$，于是可以取（1）式两字串的长度为j的后缀，它们依然是相等的：$s[\pi(i-1)-j:\pi(i-1)-1]=s[i-j:i-1]$</p>
+<p>实际上是一个有限状态自动机</p>
+<p>接收到一个字符之后，如果和当前字符相等，就进入下一个字符的匹配，如果不相等，则依据当前状态和输入字符判断下一个状态是哪个，最终是一个有限状态自动机。</p>
+<p>设要匹配的字符串为pat，原字符串为txt</p>
+<p>构造状态转移矩阵dp，如果字符等于pat[j]，则转移到下一个状态，否则就回退到和自己相同的最长前缀。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="keyword">char</span> * haystack, <span class="keyword">char</span> * needle)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> dp[<span class="number">40000</span>][<span class="number">128</span>];</span><br><span class="line">	<span class="built_in">memset</span>(dp,<span class="number">0</span>,<span class="number">40000</span>*<span class="number">128</span>*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">	<span class="keyword">size_t</span> xlen=<span class="built_in">strlen</span>(haystack);</span><br><span class="line">	<span class="keyword">size_t</span> ylen=<span class="built_in">strlen</span>(needle);</span><br><span class="line">	<span class="keyword">if</span>(ylen==<span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> x=<span class="number">0</span>; <span class="comment">// 影子状态</span></span><br><span class="line">	dp[<span class="number">0</span>][needle[<span class="number">0</span>]]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">1</span>;i&lt;ylen;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">char</span> c=<span class="number">0</span>;c&lt;<span class="number">127</span>;c++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(c==needle[i])&#123;</span><br><span class="line">				dp[i][c]=i+<span class="number">1</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				dp[i][c]=dp[x][c];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		x=dp[x][needle[i]]; <span class="comment">// 这里可以判断x和当前字符是否有最大前缀</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> state=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">size_t</span> i=<span class="number">0</span>;i&lt;xlen;i++)&#123;</span><br><span class="line">		state=dp[state][haystack[i]];</span><br><span class="line">		<span class="comment">// printf(&quot;%d\n&quot;,state);</span></span><br><span class="line">		<span class="keyword">if</span>(state==ylen)&#123;</span><br><span class="line">			<span class="keyword">return</span> i-ylen+<span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>参考：</p>
+<p>题解 </p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/83334559">https://zhuanlan.zhihu.com/p/83334559</a></p>
 
       
     </div>
@@ -884,62 +988,6 @@
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li>《Windows内核安全与驱动开发》</li>
 </ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/data/twitter-crawler" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/04/01/note/data/twitter-crawler/" class="article-date">
-  	<time datetime="2021-04-01T02:41:55.000Z" itemprop="datePublished">2021-04-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/01/note/data/twitter-crawler/">
-        twitter爬虫
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a target="_blank" rel="noopener" href="https://developer.twitter.com/en/portal/dashboard">https://developer.twitter.com/en/portal/dashboard</a> 创建应用</p>
-<p>名称 </p>
 
       
     </div>

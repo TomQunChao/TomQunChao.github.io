@@ -173,6 +173,70 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-writeup/starctf2021/wp" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/01/23/writeup/starctf2021/wp/" class="article-date">
+  	<time datetime="2021-01-23T03:34:29.000Z" itemprop="datePublished">2021-01-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/23/writeup/starctf2021/wp/">
+        \*CTF2021 writeup(部分re)
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1rep"><a href="#1rep" class="headerlink" title="1rep"></a>1rep</h2><p><a target="_blank" rel="noopener" href="https://x-nagi.com/post/starctf2021.html#1rep">https://x-nagi.com/post/starctf2021.html#1rep</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/229322">https://www.anquanke.com/post/id/229322</a></p>
+<p>github上有官方wp</p>
+<ol>
+<li>有个Perl_run函数，应该是执行Perl的结构体</li>
+<li>审计libperl.so.5.22.1导出表，发现perl_dump_all函数，查阅文档知道和perl_run参数相同</li>
+<li>在perl_run下断点，设置$rip到perl_dump_all函数，通过在write下断点知道perl_dump_all函数使用文件句柄2，所以重定向输出2到文件</li>
+<li>dump出的文件585M</li>
+<li></li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/linux/inject-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -827,111 +891,6 @@
 <p>TACL<a target="_blank" rel="noopener" href="https://transacl.org/index.php/tacl">Transactions of the Association for Computational Linguistics (transacl.org)</a></p>
 <h2 id="相关会议"><a href="#相关会议" class="headerlink" title="相关会议"></a>相关会议</h2><p>ual Meeting of the Association for Computational Linguistics)<br>NAACL (Annual Conference of the North American Chapter of Association for Computational Linguistics)<br>EMNLP (Empirical Methods in Natural Language Processing)<br>EACL (Annual Conference of the European Chapter of Association for Computational Linguistics)<br>COLING (International Conference on Computational Linguistics)<br>SIGKDD (ACM SIGKDD Conference on Knowledge Discovery and Data Mining)<br>SIGIR (ACM SIGIR Conference on Research and Development in Information Retrieval)<br>WWW (International World Wide Web Conference)</p>
 <p>还有IEEE相关trans</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/math/linear-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/12/26/note/math/linear-1/" class="article-date">
-  	<time datetime="2020-12-26T11:01:13.000Z" itemprop="datePublished">2020-12-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/26/note/math/linear-1/">
-        线性代数入门-1
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本来想看格密码的，可是发现自己好多线性代数基础都忘了，于是开始复(yu)习线性代数</p>
-<p>这个系列是我的线性代数笔记，课程是<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1bb411H7JN?from=search&seid=16473507744870637372">MIT 线性代数</a>，挺有名的那个，<a target="_blank" rel="noopener" href="https://mitmath.github.io/1806/">课程网站</a>，教材是 Introduction to LinearAlgorithm, 5th</p>
-<h2 id="方程组的几何解释"><a href="#方程组的几何解释" class="headerlink" title="方程组的几何解释"></a>方程组的几何解释</h2><p>考虑如下线性方程组</p>
-<p>$$<br>\begin{cases}<br>2x-y=0<br>\-x+y=3<br>\end{cases}<br>$$</p>
-<p><strong>行图像</strong>：两个线性方程画成平面上的两条直线，直线的交点就是方程组的解</p>
-<p><img src="/.com//1.png"></p>
-<p>线性方程组的”线性“也是来源于此，在平面上表现为一条直线</p>
-<p><strong>列图像</strong>：线性方程组就是矩阵的线性组合</p>
-<p>上面的方程组可以写成下面的形式</p>
-<p>$$<br>x<br>\begin{bmatrix}<br>2\-1<br>\end{bmatrix}<br>+y\begin{bmatrix}-1\1\end{bmatrix}<br>=\begin{bmatrix}0\3\end{bmatrix}<br>$$</p>
-<p>其中$\begin{bmatrix}2\-1\end{bmatrix}$这种可以看成一个从$(0,0)$到$(2,-1)$的一个向量，如图<br><img src="/.com//2.png"></p>
-<p>这样问题就变成了向量$\begin{bmatrix}2\-1\end{bmatrix}$和向量$\begin{bmatrix}-1\1\end{bmatrix}$如何组合可以得到向量$\begin{bmatrix}0\3\end{bmatrix}$</p>
-<p>向量的相加，在图上表现为将向量平移后首尾相接，如图中虚线所示</p>
-<p><img src="/.com//3.png"></p>
-<p>3维空间(3个未知数)同理，只是行图像中，一个方程不再代表一条线，而是一个3维空间的一个平面；两个平面只能相交与一条直线(非奇异情况)</p>
-<h3 id="矩阵乘法"><a href="#矩阵乘法" class="headerlink" title="矩阵乘法"></a>矩阵乘法</h3><p>视频中介绍了矩阵乘法的两种方法，举例说明</p>
-<p>上面的方程组写成矩阵形式如下<br>$$<br>\begin{bmatrix}2 &amp; -1\ -1 &amp; 1\end{bmatrix}<br>\begin{bmatrix}x\y\end{bmatrix}<br>=<br>\begin{bmatrix}0\3\end{bmatrix}<br>$$<br>其中$x,y$可以是具体的数(解限定情况下就固定了)</p>
-<p>算法1：使用上面的方法，将矩阵相乘转化为矩阵分别相加</p>
-<p>$$<br>x<br>\begin{bmatrix}<br>2\-1<br>\end{bmatrix}<br>+y\begin{bmatrix}-1\1\end{bmatrix}<br>=\begin{bmatrix}0\3\end{bmatrix}<br>$$</p>
-<p>算法2：矩阵相乘算法</p>
-<p>将第一个矩阵的第一行分别与第二个矩阵的第一列点乘，结果作为结果矩阵的第一行第一列，然后是1的第二行和2的第一列，结果作为第二行第一列，以此类推</p>
-<p>形式化说法：将第一个矩阵的第$i$行和第二个矩阵的第$j$列相乘，结果作为结果矩阵的位于$(i,j)$的元素</p>
-<p>点乘($\cdot$)</p>
-<p>$[a,b,c]\cdot[d,e,f]=ad+be+cf$</p>
-<p>也可以看出矩阵相乘的充分必要条件，即第一个矩阵的行数等于第二个矩阵的列数，结果矩阵为(第一个矩阵的行数，第二个矩阵的列数)大小</p>
-<h3 id="知识回忆"><a href="#知识回忆" class="headerlink" title="知识回忆"></a>知识回忆</h3><p>如果一个矩阵中，任意一个行向量都不能成为其它行向量的线性表示，则称这个矩阵是非奇异的，并且是可逆的</p>
-<h2 id="矩阵消元"><a href="#矩阵消元" class="headerlink" title="矩阵消元"></a>矩阵消元</h2><h3 id="消元法"><a href="#消元法" class="headerlink" title="消元法"></a>消元法</h3><p>考虑三元一次方程组，解的时候使用消元法<br>$$<br>\begin{cases}<br>x+2y+z=2<br>\3x+8y+z=12<br>\\ \ \ \ \  \ \ \ \ 4y+z=2<br>\end{cases}<br>$$<br>可以写成矩阵形式<br>$$<br>\begin{bmatrix}<br>1&amp;2&amp;1\<br>3&amp;8&amp;1\<br>0&amp;4&amp;1<br>\end{bmatrix}<br>\begin{bmatrix}<br>x\y\z<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>2\12\2<br>\end{bmatrix}<br>$$<br>矩阵的坐标从左上角开始，如(1,2)代表第一行第二列的元素</p>
-<p>消元法首先选择(1,1)的元素作为主元，然后消去第二行和第三行的对应主元参数的系数(使它变为0)，再选择(2,2)作为主元，继续做</p>
-<p>主元的系数不能是0，如果是0需要进行行交换</p>
-<p>设上面的矩阵表达式为$Ax=b$，则$A$和$b$合并成为$A$的增长矩阵</p>
-<p>$$<br>\begin{bmatrix}<br>1&amp;2&amp;1&amp;2\<br>3&amp;8&amp;1&amp;12\<br>0&amp;4&amp;1&amp;2<br>\end{bmatrix}<br>$$</p>
-<p>回代即把消元后的矩阵回代到方程组中</p>
-<h3 id="矩阵乘法-1"><a href="#矩阵乘法-1" class="headerlink" title="矩阵乘法"></a>矩阵乘法</h3><p>上节课讲到了矩阵右乘一个列向量，那么矩阵左乘一个行向量也同理，可以理解为各个行相加</p>
-<p>$$<br>\begin{bmatrix}<br>x&amp;y&amp;z<br>\end{bmatrix}<br>\begin{bmatrix}<br>1&amp;2&amp;1\<br>3&amp;8&amp;1\<br>0&amp;4&amp;1<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>2&amp;12&amp;2<br>\end{bmatrix}<br>$$<br>可以理解为x倍第一行加y倍第二行加z倍第三行</p>
-<p>从这个算法可以看出，左乘矩阵即对矩阵进行行变换，同理右乘矩阵是列变换</p>
-<p>单位阵乘一个矩阵，矩阵的值不变</p>
-<p>$$<br>\begin{bmatrix}<br>1&amp;0&amp;0\0&amp;1&amp;0\0&amp;0&amp;1<br>\end{bmatrix}<br>$$</p>
-<p>矩阵消元进行的是行变换，可以理解为左乘一个矩阵。左乘的矩阵称为初等矩阵，如果为了消去(2,1)的系数，用$E_{2,1}$表示，同理有$E_{3,1},E_{3,2}$</p>
-<p>矩阵乘法具有结合律，但没有交换律</p>
-<h2 id="学习某些算法时遇到的符号"><a href="#学习某些算法时遇到的符号" class="headerlink" title="学习某些算法时遇到的符号"></a>学习某些算法时遇到的符号</h2><p>对于一个向量$\mathbf{x}$，$||\mathbf{x}||=\sqrt{\sum_{i=1}^{n} x_i^2}$表示$n$维空间中$\mathbf{x}$的模</p>
-<p>满秩矩阵：对于a*b大小的矩阵，如果行向量线性无关，称为行满秩，列向量线性无关称为列满秩，行列向量都线性无关，n阶方阵称为满秩矩阵</p>
-<p>正定矩阵：对于任何非0向量$\mathbf{z}$,$\mathbf{z^TMz}&gt;0$，则$M$为正定矩阵</p>
-<p>狭义定义：当且仅当…</p>
-<p>$\arg\limits_x \min f(x)$表示当$f(x)$取最小时$x$的值，同理$\arg\limits_x \max f(x)$</p>
-<p>向量点乘$\mathbf{}{v\cdot w}= \sum\limits_i v_iw_i$</p>
-<p>向量长度$\mathbf{||v||=\sqrt{v\cdot v}}$</p>
-<p>向量夹角$\cos\theta=\mathbf{\frac{v\cdot w}{||v||\ ||w||}}$</p>
-<p>向量点乘为0说明向量正交</p>
-<p>单位向量就是长度为1的向量</p>
-<p>$\mathbf{A}=\begin{bmatrix}1&amp;0&amp;0\-1&amp;1&amp;0\0&amp;-1&amp;1\end{bmatrix}$称为差异矩阵，因为$\mathbf{x}=\begin{bmatrix}a&amp;b&amp;c\end{bmatrix}^T$和它相乘，最终结果是$\begin{bmatrix}a&amp;b-a&amp;c-b\end{bmatrix}^T$</p>
-<p>依赖、相关性</p>
 
       
     </div>
