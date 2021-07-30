@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>常见的病毒样本下载网站 | Hexo</title>
+  <title>pwn学习之环境搭建 | Hexo</title>
 
   <!-- keywords -->
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="app.any.run  https:&#x2F;&#x2F;bazaar.abuse.ch&#x2F;browse 52破解病毒分析区 微步在线云沙箱 蓝天云服务器 malware traffic analysis VirusBay malc0de">
+  <meta name="description" content="系统ubuntu16.04或ubuntu18.04，在镜像站中的ubuntu-releases目录下就有 glibcbuuoj Links-&gt;Resources网站可以吓到glibc2.23-2.31各个版本的 pythonpip环境可能报错，可以尝试从bootstrap网站下载 1curl https:&#x2F;&#x2F;bootstrap.pypa.io&#x2F;get-pip.py -o get-pip.py">
 <meta property="og:type" content="article">
-<meta property="og:title" content="常见的病毒样本下载网站">
-<meta property="og:url" content="http://example.com/2021/04/13/note/rev/virus-1/index.html">
+<meta property="og:title" content="pwn学习之环境搭建">
+<meta property="og:url" content="http://example.com/2021/04/29/note/pwn/environment/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="app.any.run  https:&#x2F;&#x2F;bazaar.abuse.ch&#x2F;browse 52破解病毒分析区 微步在线云沙箱 蓝天云服务器 malware traffic analysis VirusBay malc0de">
+<meta property="og:description" content="系统ubuntu16.04或ubuntu18.04，在镜像站中的ubuntu-releases目录下就有 glibcbuuoj Links-&gt;Resources网站可以吓到glibc2.23-2.31各个版本的 pythonpip环境可能报错，可以尝试从bootstrap网站下载 1curl https:&#x2F;&#x2F;bootstrap.pypa.io&#x2F;get-pip.py -o get-pip.py">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-04-13T15:17:25.000Z">
-<meta property="article:modified_time" content="2021-07-30T00:23:51.177Z">
+<meta property="article:published_time" content="2021-04-29T13:43:37.000Z">
+<meta property="article:modified_time" content="2021-04-29T14:08:30.139Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -175,11 +175,11 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-note/rev/virus-1" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-note/pwn/environment" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2021/04/13/note/rev/virus-1/" class="article-date">
-  	<time datetime="2021-04-13T15:17:25.000Z" itemprop="datePublished">2021-04-13</time>
+      <a href="/2021/04/29/note/pwn/environment/" class="article-date">
+  	<time datetime="2021-04-29T13:43:37.000Z" itemprop="datePublished">2021-04-29</time>
 </a>
     </div>
   
@@ -192,7 +192,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      常见的病毒样本下载网站
+      pwn学习之环境搭建
       
     </h1>
   
@@ -210,16 +210,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ol>
-<li><a target="_blank" rel="noopener" href="https://app.any.run/submissions">app.any.run </a></li>
-<li><a target="_blank" rel="noopener" href="https://bazaar.abuse.ch/browse">https://bazaar.abuse.ch/browse</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum-32-1.html">52破解病毒分析区</a></li>
-<li><a target="_blank" rel="noopener" href="https://s.threatbook.cn/">微步在线云沙箱</a></li>
-<li><a target="_blank" rel="noopener" href="http://www.peaceserver.ys168.com/">蓝天云服务器</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.malware-traffic-analysis.net/2020/12/15/index.html">malware traffic analysis</a></li>
-<li><a target="_blank" rel="noopener" href="https://beta.virusbay.io/sample/browse">VirusBay</a></li>
-<li><a target="_blank" rel="noopener" href="http://malc0de.com/database/">malc0de</a></li>
-</ol>
+        <h2 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h2><p>ubuntu16.04或ubuntu18.04，在镜像站中的ubuntu-releases目录下就有</p>
+<h2 id="glibc"><a href="#glibc" class="headerlink" title="glibc"></a>glibc</h2><p>buuoj Links-&gt;Resources网站可以吓到glibc2.23-2.31各个版本的</p>
+<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p>pip环境可能报错，可以尝试从bootstrap网站下载</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py</span><br></pre></td></tr></table></figure>
+
+<p>版本不对应时会提示对应的版本链接</p>
+<h2 id="glibc源码"><a href="#glibc源码" class="headerlink" title="glibc源码"></a>glibc源码</h2><p><a target="_blank" rel="noopener" href="https://packages.ubuntu.com/xenial/glibc-source">https://packages.ubuntu.com/xenial/glibc-source</a></p>
+<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install gdb gdbserver gdb-multiarch qemu qemu-kvm</span><br></pre></td></tr></table></figure>
+
+<p>安装pwndbg <a target="_blank" rel="noopener" href="https://github.com/pwndbg/pwndbg">https://github.com/pwndbg/pwndbg</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;pwndbg&#x2F;pwndbg</span><br><span class="line">cd pwndbg</span><br><span class="line">.&#x2F;setup.sh</span><br></pre></td></tr></table></figure>
+
+<p>下载好glibc源码后解压，然后在gdb中设置源码搜索路径，为了方便也可以把这句话加入.gdbinit</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir path_to_glibc</span><br></pre></td></tr></table></figure>
+
+<h2 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h2><p>vscode jupyter python c/c++插件</p>
 
       
     </div>
@@ -229,18 +235,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2021/04/16/note/linux/driver-1/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2021/06/22/note/develop/software-engineer/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">&lt;</strong>
       <div class="article-nav-title">
         
-          linux驱动开发-1 环境搭建
+          软件工程周期以及文档
         
       </div>
     </a>
   
   
-    <a href="/2021/04/05/note/develop/driver-1/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">驱动开发入门-1</div>
+    <a href="/2021/04/22/daily/virus/3-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">每日病毒分析和leetcode-4</div>
       <strong class="article-nav-caption">&gt;</strong>
     </a>
   
@@ -250,7 +256,7 @@
 </article>
 
 
-<div class="ds-share share" data-thread-key="note/rev/virus-1" data-title="常见的病毒样本下载网站" data-url="http://example.com/2021/04/13/note/rev/virus-1/"  data-images="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" data-content="常见的病毒样本下载网站">
+<div class="ds-share share" data-thread-key="note/pwn/environment" data-title="pwn学习之环境搭建" data-url="http://example.com/2021/04/29/note/pwn/environment/"  data-images="https://raw.githubusercontent.com/TomQunChao/avatar/main/icon00.jpg" data-content="pwn学习之环境搭建">
     <div class="ds-share-inline">
       <ul  class="ds-share-icons-16">
       	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>

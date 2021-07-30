@@ -235,6 +235,280 @@
 
 
   
+    <article id="post-note/linux/i3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/07/16/note/linux/i3/" class="article-date">
+  	<time datetime="2021-07-16T07:48:34.000Z" itemprop="datePublished">2021-07-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/07/16/note/linux/i3/">
+        Ubuntu i3安装记录
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="保持系统最新"><a href="#保持系统最新" class="headerlink" title="保持系统最新"></a>保持系统最新</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt upgrade</span><br></pre></td></tr></table></figure>
+
+<p>然后打开Language Support和Additional Drivers安装中文支持和必要驱动</p>
+<h2 id="安装i3"><a href="#安装i3" class="headerlink" title="安装i3"></a>安装i3</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install i3 i3lock-fancy lightdm lightdm-settings</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装相关组件"><a href="#安装相关组件" class="headerlink" title="安装相关组件"></a>安装相关组件</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install compton feh nm-applet python3-pip blueman policykit-1-gnome volumeicon-alsa xfce4-power-manager vim-gtk3 proxychains4 scrot</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install autotiling dmenu</span><br></pre></td></tr></table></figure>
+
+<p>可选的组件包括spacevim，chromium挺好用的</p>
+<p>然后需要删除所有其它桌面管理器的快捷键</p>
+<p>scrot用于截屏，可以根据下面的配置文件语法自行设置快捷键</p>
+<h2 id="i3配置"><a href="#i3配置" class="headerlink" title="i3配置"></a>i3配置</h2><p>这是一份从manjaro-i3的配置文件中更改而来的文件，</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># i3 config file (v4)</span></span><br><span class="line"><span class="comment"># Please see http://i3wm.org/docs/userguide.html for a complete reference!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set mod key (Mod1=&lt;Alt&gt;, Mod4=&lt;Super&gt;)</span></span><br><span class="line"><span class="built_in">set</span> <span class="variable">$mod</span> Mod4</span><br><span class="line"></span><br><span class="line"><span class="comment"># set default desktop layout (default is tiling)</span></span><br><span class="line"><span class="comment"># workspace_layout tabbed &lt;stacking|tabbed&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Configure border style &lt;normal|1pixel|pixel xx|none|pixel&gt;</span></span><br><span class="line">default_border pixel 1</span><br><span class="line">default_floating_border normal</span><br><span class="line"></span><br><span class="line"><span class="comment"># Hide borders</span></span><br><span class="line">hide_edge_borders none</span><br><span class="line"></span><br><span class="line"><span class="comment"># change borders</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+u border none</span><br><span class="line">bindsym <span class="variable">$mod</span>+y border pixel 1</span><br><span class="line">bindsym <span class="variable">$mod</span>+n border normal</span><br><span class="line"></span><br><span class="line"><span class="comment"># Font for window titles. Will also be used by the bar unless a different font</span></span><br><span class="line"><span class="comment"># is used in the bar &#123;&#125; block below.</span></span><br><span class="line">font xft:URWGothic-Book 11</span><br><span class="line"></span><br><span class="line"><span class="comment"># Use Mouse+$mod to drag floating windows</span></span><br><span class="line">floating_modifier <span class="variable">$mod</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># start a terminal</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Return <span class="built_in">exec</span> gnome-terminal</span><br><span class="line"></span><br><span class="line"><span class="comment"># kill focused window</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+q <span class="built_in">kill</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># start program launcher</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+d <span class="built_in">exec</span> --no-startup-id dmenu_run</span><br><span class="line"></span><br><span class="line"><span class="comment"># launch categorized menu</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+z <span class="built_in">exec</span> --no-startup-id morc_menu</span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################################</span></span><br><span class="line"><span class="comment">## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -&gt; Pulseaudio later! ##</span></span><br><span class="line"><span class="comment">################################################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">exec</span> --no-startup-id volumeicon</span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+m <span class="built_in">exec</span> terminal -e <span class="string">&#x27;alsamixer&#x27;</span></span><br><span class="line"><span class="comment">#exec --no-startup-id pulseaudio</span></span><br><span class="line"><span class="comment">#exec --no-startup-id pa-applet</span></span><br><span class="line"><span class="comment">#bindsym $mod+Ctrl+m exec pavucontrol</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Screen brightness controls</span></span><br><span class="line"><span class="comment"># bindsym XF86MonBrightnessUp exec &quot;xbacklight -inc 10; notify-send &#x27;brightness up&#x27;&quot;</span></span><br><span class="line"><span class="comment"># bindsym XF86MonBrightnessDown exec &quot;xbacklight -dec 10; notify-send &#x27;brightness down&#x27;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Start Applications</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+b <span class="built_in">exec</span> terminal -e <span class="string">&#x27;bmenu&#x27;</span></span><br><span class="line"><span class="comment"># bindsym $mod+F2 exec palemoon</span></span><br><span class="line"><span class="comment"># bindsym $mod+F3 exec pcmanfm</span></span><br><span class="line"><span class="comment"># bindsym $mod+F3 exec ranger</span></span><br><span class="line"><span class="comment"># bindsym $mod+Shift+F3 exec pcmanfm_pkexec</span></span><br><span class="line"><span class="comment"># bindsym $mod+F5 exec terminal -e &#x27;mocp&#x27;</span></span><br><span class="line"><span class="comment">#bindsym $mod+t exec --no-startup-id pkill picom</span></span><br><span class="line"><span class="comment">#bindsym $mod+Ctrl+t exec --no-startup-id picom -b</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+d --release <span class="built_in">exec</span> <span class="string">&quot;killall dunst; exec notify-send &#x27;restart dunst&#x27;&quot;</span></span><br><span class="line">bindsym Print <span class="built_in">exec</span> --no-startup-id i3-scrot</span><br><span class="line">bindsym <span class="variable">$mod</span>+Print --release <span class="built_in">exec</span> --no-startup-id i3-scrot -w</span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+Print --release <span class="built_in">exec</span> --no-startup-id i3-scrot -s</span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+h <span class="built_in">exec</span> xdg-open /usr/share/doc/manjaro/i3_help.pdf</span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+x --release <span class="built_in">exec</span> --no-startup-id xkill</span><br><span class="line"></span><br><span class="line"><span class="comment"># focus_follows_mouse no</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># change focus</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+j focus left</span><br><span class="line">bindsym <span class="variable">$mod</span>+k focus down</span><br><span class="line">bindsym <span class="variable">$mod</span>+l focus up</span><br><span class="line">bindsym <span class="variable">$mod</span>+semicolon focus right</span><br><span class="line"></span><br><span class="line"><span class="comment"># alternatively, you can use the cursor keys:</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Left focus left</span><br><span class="line">bindsym <span class="variable">$mod</span>+Down focus down</span><br><span class="line">bindsym <span class="variable">$mod</span>+Up focus up</span><br><span class="line">bindsym <span class="variable">$mod</span>+Right focus right</span><br><span class="line"></span><br><span class="line"><span class="comment"># move focused window</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+j move left</span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+k move down</span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+l move up</span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+semicolon move right</span><br><span class="line"></span><br><span class="line"><span class="comment"># alternatively, you can use the cursor keys:</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+Left move left</span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+Down move down</span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+Up move up</span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+Right move right</span><br><span class="line"></span><br><span class="line"><span class="comment"># workspace back and forth (with/without active container)</span></span><br><span class="line">workspace_auto_back_and_forth yes</span><br><span class="line">bindsym <span class="variable">$mod</span>+b workspace back_and_forth</span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+b move container to workspace back_and_forth; workspace back_and_forth</span><br><span class="line"></span><br><span class="line"><span class="comment"># split orientation</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+h split h;<span class="built_in">exec</span> notify-send <span class="string">&#x27;tile horizontally&#x27;</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+v split v;<span class="built_in">exec</span> notify-send <span class="string">&#x27;tile vertically&#x27;</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+q split toggle</span><br><span class="line"></span><br><span class="line"><span class="comment"># toggle fullscreen mode for the focused container</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+f fullscreen toggle</span><br><span class="line"></span><br><span class="line"><span class="comment"># change container layout (stacked, tabbed, toggle split)</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+s layout stacking</span><br><span class="line">bindsym <span class="variable">$mod</span>+w layout tabbed</span><br><span class="line">bindsym <span class="variable">$mod</span>+e layout toggle split</span><br><span class="line"></span><br><span class="line"><span class="comment"># toggle tiling / floating</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+space floating toggle</span><br><span class="line"></span><br><span class="line"><span class="comment"># change focus between tiling / floating windows</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+space focus mode_toggle</span><br><span class="line"></span><br><span class="line"><span class="comment"># toggle sticky</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+s sticky toggle</span><br><span class="line"></span><br><span class="line"><span class="comment"># focus the parent container</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+a focus parent</span><br><span class="line"></span><br><span class="line"><span class="comment"># move the currently focused window to the scratchpad</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+minus move scratchpad</span><br><span class="line"></span><br><span class="line"><span class="comment"># Show the next scratchpad window or hide the focused scratchpad window.</span></span><br><span class="line"><span class="comment"># If there are multiple scratchpad windows, this command cycles through them.</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+minus scratchpad show</span><br><span class="line"></span><br><span class="line"><span class="comment">#navigate workspaces next / previous</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+Right workspace next</span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+Left workspace prev</span><br><span class="line"></span><br><span class="line"><span class="comment"># Workspace names</span></span><br><span class="line"><span class="comment"># to display names or symbols instead of plain workspace numbers you can use</span></span><br><span class="line"><span class="comment"># something like: set $ws1 1:mail</span></span><br><span class="line"><span class="comment">#                 set $ws2 2:</span></span><br><span class="line"><span class="built_in">set</span> <span class="variable">$ws1</span> 1</span><br><span class="line"><span class="built_in">set</span> <span class="variable">$ws2</span> 2</span><br><span class="line"><span class="built_in">set</span> <span class="variable">$ws3</span> 3</span><br><span class="line"><span class="built_in">set</span> <span class="variable">$ws4</span> 4</span><br><span class="line"><span class="built_in">set</span> <span class="variable">$ws5</span> 5</span><br><span class="line"><span class="built_in">set</span> <span class="variable">$ws6</span> 6</span><br><span class="line"><span class="built_in">set</span> <span class="variable">$ws7</span> 7</span><br><span class="line"><span class="built_in">set</span> <span class="variable">$ws8</span> 8</span><br><span class="line"></span><br><span class="line"><span class="comment"># switch to workspace</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+1 workspace <span class="variable">$ws1</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+2 workspace <span class="variable">$ws2</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+3 workspace <span class="variable">$ws3</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+4 workspace <span class="variable">$ws4</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+5 workspace <span class="variable">$ws5</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+6 workspace <span class="variable">$ws6</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+7 workspace <span class="variable">$ws7</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+8 workspace <span class="variable">$ws8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Move focused container to workspace</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+1 move container to workspace <span class="variable">$ws1</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+2 move container to workspace <span class="variable">$ws2</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+3 move container to workspace <span class="variable">$ws3</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+4 move container to workspace <span class="variable">$ws4</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+5 move container to workspace <span class="variable">$ws5</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+6 move container to workspace <span class="variable">$ws6</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+7 move container to workspace <span class="variable">$ws7</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Ctrl+8 move container to workspace <span class="variable">$ws8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Move to workspace with focused container</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+1 move container to workspace <span class="variable">$ws1</span>; workspace <span class="variable">$ws1</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+2 move container to workspace <span class="variable">$ws2</span>; workspace <span class="variable">$ws2</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+3 move container to workspace <span class="variable">$ws3</span>; workspace <span class="variable">$ws3</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+4 move container to workspace <span class="variable">$ws4</span>; workspace <span class="variable">$ws4</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+5 move container to workspace <span class="variable">$ws5</span>; workspace <span class="variable">$ws5</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+6 move container to workspace <span class="variable">$ws6</span>; workspace <span class="variable">$ws6</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+7 move container to workspace <span class="variable">$ws7</span>; workspace <span class="variable">$ws7</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+8 move container to workspace <span class="variable">$ws8</span>; workspace <span class="variable">$ws8</span></span><br><span class="line"><span class="comment"># Moving workspaces between screens</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+p move workspace to output right</span><br><span class="line"></span><br><span class="line"><span class="comment"># Open applications on specific workspaces</span></span><br><span class="line"><span class="comment"># assign [class=&quot;Thunderbird&quot;] $ws1</span></span><br><span class="line"><span class="comment"># assign [class=&quot;Pale moon&quot;] $ws2</span></span><br><span class="line"><span class="comment"># assign [class=&quot;Pcmanfm&quot;] $ws3</span></span><br><span class="line"><span class="comment"># assign [class=&quot;Skype&quot;] $ws5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Open specific applications in floating mode</span></span><br><span class="line">for_window [title=<span class="string">&quot;alsamixer&quot;</span>] floating <span class="built_in">enable</span> border pixel 1</span><br><span class="line">for_window [class=<span class="string">&quot;calamares&quot;</span>] floating <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;Clipgrab&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [title=<span class="string">&quot;File Transfer*&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [class=<span class="string">&quot;fpakman&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [class=<span class="string">&quot;Galculator&quot;</span>] floating <span class="built_in">enable</span> border pixel 1</span><br><span class="line">for_window [class=<span class="string">&quot;GParted&quot;</span>] floating <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [title=<span class="string">&quot;i3_help&quot;</span>] floating <span class="built_in">enable</span> sticky <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;Lightdm-settings&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [class=<span class="string">&quot;Lxappearance&quot;</span>] floating <span class="built_in">enable</span> sticky <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;Manjaro-hello&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [class=<span class="string">&quot;Manjaro Settings Manager&quot;</span>] floating <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [title=<span class="string">&quot;MuseScore: Play Panel&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [class=<span class="string">&quot;Nitrogen&quot;</span>] floating <span class="built_in">enable</span> sticky <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;Oblogout&quot;</span>] fullscreen <span class="built_in">enable</span></span><br><span class="line">for_window [class=<span class="string">&quot;octopi&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [title=<span class="string">&quot;About Pale Moon&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [class=<span class="string">&quot;Pamac-manager&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [class=<span class="string">&quot;Pavucontrol&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line">for_window [class=<span class="string">&quot;qt5ct&quot;</span>] floating <span class="built_in">enable</span> sticky <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;Qtconfig-qt4&quot;</span>] floating <span class="built_in">enable</span> sticky <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;Simple-scan&quot;</span>] floating <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;(?i)System-config-printer.py&quot;</span>] floating <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;Skype&quot;</span>] floating <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;Timeset-gui&quot;</span>] floating <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;(?i)virtualbox&quot;</span>] floating <span class="built_in">enable</span> border normal</span><br><span class="line">for_window [class=<span class="string">&quot;Xfburn&quot;</span>] floating <span class="built_in">enable</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># switch to workspace with urgent window automatically</span></span><br><span class="line">for_window [urgent=latest] focus</span><br><span class="line"></span><br><span class="line"><span class="comment"># reload the configuration file</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+c reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># restart i3 inplace (preserves your layout/session, can be used to upgrade i3)</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+r restart</span><br><span class="line"></span><br><span class="line"><span class="comment"># exit i3 (logs you out of your X session)</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+Shift+e <span class="built_in">exec</span> <span class="string">&quot;i3-nagbar -t warning -m &#x27;You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.&#x27; -b &#x27;Yes, exit i3&#x27; &#x27;i3-msg exit&#x27;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set shut down, restart and locking features</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+0 mode <span class="string">&quot;<span class="variable">$mode_system</span>&quot;</span></span><br><span class="line"><span class="built_in">set</span> <span class="variable">$mode_system</span> (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown</span><br><span class="line">mode <span class="string">&quot;<span class="variable">$mode_system</span>&quot;</span> &#123;</span><br><span class="line">    bindsym l <span class="built_in">exec</span> --no-startup-id i3lock-fancy, mode <span class="string">&quot;default&quot;</span></span><br><span class="line">    bindsym s <span class="built_in">exec</span> --no-startup-id <span class="built_in">suspend</span>, mode <span class="string">&quot;default&quot;</span></span><br><span class="line">    bindsym u <span class="built_in">exec</span> --no-startup-id i3exit switch_user, mode <span class="string">&quot;default&quot;</span></span><br><span class="line">    bindsym e <span class="built_in">exec</span> --no-startup-id i3exit <span class="built_in">logout</span>, mode <span class="string">&quot;default&quot;</span></span><br><span class="line">    bindsym h <span class="built_in">exec</span> --no-startup-id i3exit hibernate, mode <span class="string">&quot;default&quot;</span></span><br><span class="line">    bindsym r <span class="built_in">exec</span> --no-startup-id reboot, mode <span class="string">&quot;default&quot;</span></span><br><span class="line">    bindsym Shift+s <span class="built_in">exec</span> --no-startup-id shutdown now, mode <span class="string">&quot;default&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># exit system mode: &quot;Enter&quot; or &quot;Escape&quot;</span></span><br><span class="line">    bindsym Return mode <span class="string">&quot;default&quot;</span></span><br><span class="line">    bindsym Escape mode <span class="string">&quot;default&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Resize window (you can also use the mouse for that)</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+r mode <span class="string">&quot;resize&quot;</span></span><br><span class="line">mode <span class="string">&quot;resize&quot;</span> &#123;</span><br><span class="line">        <span class="comment"># These bindings trigger as soon as you enter the resize mode</span></span><br><span class="line">        <span class="comment"># Pressing left will shrink the window’s width.</span></span><br><span class="line">        <span class="comment"># Pressing right will grow the window’s width.</span></span><br><span class="line">        <span class="comment"># Pressing up will shrink the window’s height.</span></span><br><span class="line">        <span class="comment"># Pressing down will grow the window’s height.</span></span><br><span class="line">        bindsym j resize shrink width 5 px or 5 ppt</span><br><span class="line">        bindsym k resize grow height 5 px or 5 ppt</span><br><span class="line">        bindsym l resize shrink height 5 px or 5 ppt</span><br><span class="line">        bindsym semicolon resize grow width 5 px or 5 ppt</span><br><span class="line"></span><br><span class="line">        <span class="comment"># same bindings, but for the arrow keys</span></span><br><span class="line">        bindsym Left resize shrink width 10 px or 10 ppt</span><br><span class="line">        bindsym Down resize grow height 10 px or 10 ppt</span><br><span class="line">        bindsym Up resize shrink height 10 px or 10 ppt</span><br><span class="line">        bindsym Right resize grow width 10 px or 10 ppt</span><br><span class="line"></span><br><span class="line">        <span class="comment"># exit resize mode: Enter or Escape</span></span><br><span class="line">        bindsym Return mode <span class="string">&quot;default&quot;</span></span><br><span class="line">        bindsym Escape mode <span class="string">&quot;default&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Lock screen</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+9 <span class="built_in">exec</span> --no-startup-id i3lock-fancy</span><br><span class="line"></span><br><span class="line"><span class="comment">##########################################</span></span><br><span class="line"><span class="comment"># Autostart applications #################</span></span><br><span class="line"><span class="comment">##########################################</span></span><br><span class="line"><span class="comment"># exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1</span></span><br><span class="line"><span class="comment"># exec --no-startup-id nitrogen --restore; sleep 1; picom -b</span></span><br><span class="line"><span class="comment"># exec --no-startup-id manjaro-hello</span></span><br><span class="line">exec_always --no-startup-id compton</span><br><span class="line"><span class="built_in">exec</span> --no-startup-id feh --bg-fill ~/Pictures/Wallpapers/wallpaper1.png</span><br><span class="line"><span class="built_in">exec</span> --no-startup-id nm-applet</span><br><span class="line"><span class="built_in">exec</span> --no-startup-id xfce4-power-manager</span><br><span class="line"><span class="comment"># exec --no-startup-id pamac-tray</span></span><br><span class="line"><span class="comment"># exec --no-startup-id clipit</span></span><br><span class="line">exec_always --no-startup-id autotiling</span><br><span class="line"><span class="built_in">exec</span> --no-startup-id fcitx</span><br><span class="line"><span class="built_in">exec</span> --no-startup-id blueman-applet</span><br><span class="line"><span class="comment"># exec_always --no-startup-id sbxkb</span></span><br><span class="line"><span class="comment"># exec --no-startup-id start_conky_maia</span></span><br><span class="line"><span class="comment"># exec --no-startup-id start_conky_green</span></span><br><span class="line"><span class="built_in">exec</span> --no-startup-id xautolock -time 30 -locker i3lock-fancy</span><br><span class="line"><span class="built_in">exec</span> --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &amp;</span><br><span class="line"><span class="comment"># exec_always --no-startup-id ff-theme-util</span></span><br><span class="line"><span class="comment"># exec_always --no-startup-id fix_xcursor</span></span><br><span class="line"><span class="comment"># exec --no-startup-id ss-qt5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Color palette used for the terminal ( ~/.Xresources file )</span></span><br><span class="line"><span class="comment"># Colors are gathered based on the documentation:</span></span><br><span class="line"><span class="comment"># https://i3wm.org/docs/userguide.html#xresources</span></span><br><span class="line"><span class="comment"># Change the variable name at the place you want to match the color</span></span><br><span class="line"><span class="comment"># of your terminal like this:</span></span><br><span class="line"><span class="comment"># [example]</span></span><br><span class="line"><span class="comment"># If you want your bar to have the same background color as your </span></span><br><span class="line"><span class="comment"># terminal background change the line 362 from:</span></span><br><span class="line"><span class="comment"># background #14191D</span></span><br><span class="line"><span class="comment"># to:</span></span><br><span class="line"><span class="comment"># background $term_background</span></span><br><span class="line"><span class="comment"># Same logic applied to everything else.</span></span><br><span class="line">set_from_resource <span class="variable">$term_background</span> background</span><br><span class="line">set_from_resource <span class="variable">$term_foreground</span> foreground</span><br><span class="line">set_from_resource <span class="variable">$term_color0</span>     color0</span><br><span class="line">set_from_resource <span class="variable">$term_color1</span>     color1</span><br><span class="line">set_from_resource <span class="variable">$term_color2</span>     color2</span><br><span class="line">set_from_resource <span class="variable">$term_color3</span>     color3</span><br><span class="line">set_from_resource <span class="variable">$term_color4</span>     color4</span><br><span class="line">set_from_resource <span class="variable">$term_color5</span>     color5</span><br><span class="line">set_from_resource <span class="variable">$term_color6</span>     color6</span><br><span class="line">set_from_resource <span class="variable">$term_color7</span>     color7</span><br><span class="line">set_from_resource <span class="variable">$term_color8</span>     color8</span><br><span class="line">set_from_resource <span class="variable">$term_color9</span>     color9</span><br><span class="line">set_from_resource <span class="variable">$term_color10</span>    color10</span><br><span class="line">set_from_resource <span class="variable">$term_color11</span>    color11</span><br><span class="line">set_from_resource <span class="variable">$term_color12</span>    color12</span><br><span class="line">set_from_resource <span class="variable">$term_color13</span>    color13</span><br><span class="line">set_from_resource <span class="variable">$term_color14</span>    color14</span><br><span class="line">set_from_resource <span class="variable">$term_color15</span>    color15</span><br><span class="line"></span><br><span class="line"><span class="comment"># Start i3bar to display a workspace bar (plus the system information i3status if available)</span></span><br><span class="line">bar &#123;</span><br><span class="line">	i3bar_command i3bar -t</span><br><span class="line">	status_command i3status</span><br><span class="line">	position top</span><br><span class="line"></span><br><span class="line"><span class="comment">## please set your primary output first. Example: &#x27;xrandr --output eDP1 --primary&#x27;</span></span><br><span class="line"><span class="comment">#	tray_output primary</span></span><br><span class="line"><span class="comment">#	tray_output eDP1</span></span><br><span class="line"></span><br><span class="line">	bindsym button4 nop</span><br><span class="line">	bindsym button5 nop</span><br><span class="line"><span class="comment">#   font xft:URWGothic-Book 11</span></span><br><span class="line">	strip_workspace_numbers yes</span><br><span class="line">	status_command <span class="built_in">exec</span> ~/.config/i3/net-speed.sh</span><br><span class="line"></span><br><span class="line">    colors &#123;</span><br><span class="line">        background <span class="comment">#00000060</span></span><br><span class="line">        statusline <span class="comment">#ffffff</span></span><br><span class="line">        separator  <span class="comment">#00000060</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#                      border  backgr. text</span></span><br><span class="line">        focused_workspace  <span class="comment">#00000060 #00000060 #009900</span></span><br><span class="line">        active_workspace   <span class="comment">#595B5B #353836 #008800</span></span><br><span class="line">        inactive_workspace <span class="comment">#595B5B #222D31 #EEE8D5</span></span><br><span class="line">        binding_mode       <span class="comment">#16a085 #2C2C2C #F9FAF9</span></span><br><span class="line">        urgent_workspace   <span class="comment">#16a085 #FDF6E3 #E5201D</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># hide/unhide i3status bar</span></span><br><span class="line">bindsym <span class="variable">$mod</span>+m bar mode toggle</span><br><span class="line"></span><br><span class="line"><span class="comment"># Theme colors</span></span><br><span class="line"><span class="comment"># class                   border  backgr. text    indic.   child_border</span></span><br><span class="line">  client.focused          <span class="comment">#556064 #556064 #80FFF9 #FDF6E3</span></span><br><span class="line">  client.focused_inactive <span class="comment">#2F3D44 #2F3D44 #1ABC9C #454948</span></span><br><span class="line">  client.unfocused        <span class="comment">#2F3D44 #2F3D44 #1ABC9C #454948</span></span><br><span class="line">  client.urgent           <span class="comment">#CB4B16 #FDF6E3 #1ABC9C #268BD2</span></span><br><span class="line">  client.placeholder      <span class="comment">#000000 #0c0c0c #ffffff #000000 </span></span><br><span class="line"></span><br><span class="line">  client.background       <span class="comment">#2B2C2B</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#############################</span></span><br><span class="line"><span class="comment">### settings for i3-gaps: ###</span></span><br><span class="line"><span class="comment">#############################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set inner/outer gaps</span></span><br><span class="line"><span class="comment">#gaps inner 14</span></span><br><span class="line"><span class="comment">#gaps outer -2</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">## Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.</span></span><br><span class="line"><span class="comment">## gaps inner|outer current|all set|plus|minus &lt;px&gt;</span></span><br><span class="line"><span class="comment">## gaps inner all set 10</span></span><br><span class="line"><span class="comment">## gaps outer all plus 5</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">## Smart gaps (gaps used if only more than one container on the workspace)</span></span><br><span class="line"><span class="comment">#smart_gaps on</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">## Smart borders (draw borders around container only if it is not the only container on this workspace) </span></span><br><span class="line"><span class="comment">## on|no_gaps (on=always activate and no_gaps=only activate if the gap size to the edge of the screen is 0)</span></span><br><span class="line"><span class="comment">#smart_borders on</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">## Press $mod+Shift+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.</span></span><br><span class="line"><span class="comment">#set $mode_gaps Gaps: (o) outer, (i) inner</span></span><br><span class="line"><span class="comment">#set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)</span></span><br><span class="line"><span class="comment">#set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)</span></span><br><span class="line"><span class="comment">#bindsym $mod+Shift+g mode &quot;$mode_gaps&quot;</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#mode &quot;$mode_gaps&quot; &#123;</span></span><br><span class="line"><span class="comment">#        bindsym o      mode &quot;$mode_gaps_outer&quot;</span></span><br><span class="line"><span class="comment">#        bindsym i      mode &quot;$mode_gaps_inner&quot;</span></span><br><span class="line"><span class="comment">#        bindsym Return mode &quot;default&quot;</span></span><br><span class="line"><span class="comment">#        bindsym Escape mode &quot;default&quot;</span></span><br><span class="line"><span class="comment">#&#125;</span></span><br><span class="line"><span class="comment">#mode &quot;$mode_gaps_inner&quot; &#123;</span></span><br><span class="line"><span class="comment">#        bindsym plus  gaps inner current plus 5</span></span><br><span class="line"><span class="comment">#        bindsym minus gaps inner current minus 5</span></span><br><span class="line"><span class="comment">#        bindsym 0     gaps inner current set 0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#        bindsym Shift+plus  gaps inner all plus 5</span></span><br><span class="line"><span class="comment">#        bindsym Shift+minus gaps inner all minus 5</span></span><br><span class="line"><span class="comment">#        bindsym Shift+0     gaps inner all set 0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#        bindsym Return mode &quot;default&quot;</span></span><br><span class="line"><span class="comment">#        bindsym Escape mode &quot;default&quot;</span></span><br><span class="line"><span class="comment">#&#125;</span></span><br><span class="line"><span class="comment">#mode &quot;$mode_gaps_outer&quot; &#123;</span></span><br><span class="line"><span class="comment">#        bindsym plus  gaps outer current plus 5</span></span><br><span class="line"><span class="comment">#        bindsym minus gaps outer current minus 5</span></span><br><span class="line"><span class="comment">#        bindsym 0     gaps outer current set 0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#        bindsym Shift+plus  gaps outer all plus 5</span></span><br><span class="line"><span class="comment">#        bindsym Shift+minus gaps outer all minus 5</span></span><br><span class="line"><span class="comment">#        bindsym Shift+0     gaps outer all set 0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#        bindsym Return mode &quot;default&quot;</span></span><br><span class="line"><span class="comment">#        bindsym Escape mode &quot;default&quot;</span></span><br><span class="line"><span class="comment">#&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="附录：spacevim安装"><a href="#附录：spacevim安装" class="headerlink" title="附录：spacevim安装"></a>附录：spacevim安装</h3><p>安装</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sLf https://spacevim.org/cn/install.sh | bash -s -- -i vim</span><br></pre></td></tr></table></figure>
+
+<p>配置文件</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#=============================================================================</span></span><br><span class="line"><span class="comment"># dark_powered.toml --- dark powered configuration example for SpaceVim</span></span><br><span class="line"><span class="comment"># Copyright (c) 2016-2020 Wang Shidong &amp; Contributors</span></span><br><span class="line"><span class="comment"># Author: Wang Shidong &lt; wsdjeg at 163.com &gt;</span></span><br><span class="line"><span class="comment"># URL: https://spacevim.org</span></span><br><span class="line"><span class="comment"># License: GPLv3</span></span><br><span class="line"><span class="comment">#=============================================================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># All SpaceVim option below [option] section</span></span><br><span class="line"><span class="section">[options]</span></span><br><span class="line"><span class="comment"># set spacevim theme. by default colorscheme layer is not loaded,</span></span><br><span class="line"><span class="comment"># if you want to use more colorscheme, please load the colorscheme</span></span><br><span class="line"><span class="comment"># layer</span></span><br><span class="line"><span class="attr">colorscheme</span> = <span class="string">&quot;gruvbox&quot;</span></span><br><span class="line"><span class="attr">colorscheme_bg</span> = <span class="string">&quot;dark&quot;</span></span><br><span class="line"><span class="comment"># Disable guicolors in basic mode, many terminal do not support 24bit</span></span><br><span class="line"><span class="comment"># true colors</span></span><br><span class="line"><span class="attr">enable_guicolors</span> = <span class="literal">true</span></span><br><span class="line"><span class="comment"># Disable statusline separator, if you want to use other value, please</span></span><br><span class="line"><span class="comment"># install nerd fonts</span></span><br><span class="line"><span class="attr">statusline_separator</span> = <span class="string">&quot;arrow&quot;</span></span><br><span class="line"><span class="attr">statusline_iseparator</span> = <span class="string">&quot;arrow&quot;</span></span><br><span class="line"><span class="attr">buffer_index_type</span> = <span class="number">4</span></span><br><span class="line"><span class="attr">enable_tabline_filetype_icon</span> = <span class="literal">true</span></span><br><span class="line"><span class="attr">enable_statusline_mode</span> = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Enable autocomplete layer</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&#x27;autocomplete&#x27;</span></span><br><span class="line"><span class="attr">auto_completion_return_key_behavior</span> = <span class="string">&quot;complete&quot;</span></span><br><span class="line"><span class="attr">auto_completion_tab_key_behavior</span> = <span class="string">&quot;smart&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&#x27;shell&#x27;</span></span><br><span class="line"><span class="attr">default_position</span> = <span class="string">&#x27;top&#x27;</span></span><br><span class="line"><span class="attr">default_height</span> = <span class="number">30</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span>=<span class="string">&quot;lang#python&quot;</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;debug&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span>=<span class="string">&quot;lang#c&quot;</span></span><br><span class="line"><span class="attr">enable_clang_syntax_highlight</span> = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;lsp&quot;</span></span><br><span class="line"><span class="attr">filetypes</span> = [</span><br><span class="line">  <span class="string">&quot;c&quot;</span>,</span><br><span class="line">  <span class="string">&quot;cpp&quot;</span></span><br><span class="line">]</span><br><span class="line"><span class="section">[layers.override_cmd]</span></span><br><span class="line"><span class="attr">c</span> = [<span class="string">&quot;clangd&quot;</span>]</span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span>=<span class="string">&quot;format&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span>=<span class="string">&quot;lang#rust&quot;</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;lsp&quot;</span></span><br><span class="line"><span class="attr">filetypes</span> = [</span><br><span class="line">  <span class="string">&quot;rust&quot;</span></span><br><span class="line">]</span><br><span class="line"><span class="section">[layers.override_cmd]</span></span><br><span class="line"><span class="attr">rust</span> = [<span class="string">&quot;rls&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span>=<span class="string">&quot;lang#markdown&quot;</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span>=<span class="string">&quot;lang#latex&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;colorscheme&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[options]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;colorscheme&quot;</span></span><br><span class="line"><span class="attr">colorscheme_bg</span> = <span class="string">&quot;transparent&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="附录：下载国内相关软件"><a href="#附录：下载国内相关软件" class="headerlink" title="附录：下载国内相关软件"></a>附录：下载国内相关软件</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget https://dldir1.qq.com/music/clntupate/linux/deb/qqmusic_1.1.0_amd64.deb </span><br><span class="line">wget https://ime.sogouimecdn.com/202107161153/d2a8c3524aec02466092d41d25cb4e72/dl/index/1612260778/sogoupinyin_2.4.0.3469_amd64.deb</span><br><span class="line">wget https://wdl1.cache.wps.cn/wps/download/ep/Linux2019/10161/wps-office_11.1.0.10161_amd64.deb</span><br><span class="line">wget https://issuecdn.baidupcs.com/issue/netdisk/LinuxGuanjia/3.5.0/baidunetdisk_3.5.0_amd64.deb</span><br><span class="line">wget https://d1.music.126.net/dmusic/netease-cloud-music_1.2.1_amd64_ubuntu_20190428.deb</span><br><span class="line">wget https://ac8e24a1e1c7815d5d015ed5e013f532.dlied1.cdntips.net/dlied1.qq.com/qqweb/LinuxQQ/linuxqq_2.0.0-b2-1089_amd64.deb?mkey=60f12f1bb7c5a6f2&amp;f=8951&amp;cip=183.197.128.7&amp;proto=https&amp;access_type=<span class="variable">$header_ApolloNet</span></span><br><span class="line">wget https://az764295.vo.msecnd.net/stable/c3f126316369cd610563c75b1b1725e0679adfb3/code_1.58.2-1626302803_amd64.deb</span><br></pre></td></tr></table></figure>
+
+<p>然后安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -i *.deb || sudo apt install --fix-broken</span><br></pre></td></tr></table></figure>
+
+<p>搜狗输入法环境变量，编辑/etc/profile，在末尾添加</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> GTK_IM_MODULE=fcitx</span><br><span class="line"><span class="built_in">export</span> QT_IM_MODULE=fcitx</span><br><span class="line"><span class="built_in">export</span> XMODIFIERS=\@im=fcitx</span><br></pre></td></tr></table></figure>
+
+<h2 id="卸载不必要软件"><a href="#卸载不必要软件" class="headerlink" title="卸载不必要软件"></a>卸载不必要软件</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt autoremove gnome gnome-shell gnome-control-center</span><br></pre></td></tr></table></figure>
+
+<h2 id="设置i3status"><a href="#设置i3status" class="headerlink" title="设置i3status"></a>设置i3status</h2><p>编辑/etc/i3status.conf</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># i3status configuration file.</span></span><br><span class="line"><span class="comment"># see &quot;man i3status&quot; for documentation.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># It is important that this file is edited as UTF-8.</span></span><br><span class="line"><span class="comment"># The following line should contain a sharp s:</span></span><br><span class="line"><span class="comment"># ß</span></span><br><span class="line"><span class="comment"># If the above line is not correctly displayed, fix your editor first!</span></span><br><span class="line"></span><br><span class="line">general &#123;</span><br><span class="line">        colors = <span class="literal">true</span></span><br><span class="line">        interval = 5</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># order += &quot;ipv6&quot;</span></span><br><span class="line"><span class="comment">#order += &quot;wireless _first_&quot;</span></span><br><span class="line"><span class="comment">#order += &quot;ethernet _first_&quot;</span></span><br><span class="line"><span class="comment">#order += &quot;battery all&quot;</span></span><br><span class="line">order += <span class="string">&quot;disk /&quot;</span></span><br><span class="line">order += <span class="string">&quot;load&quot;</span></span><br><span class="line">order += <span class="string">&quot;memory&quot;</span></span><br><span class="line">order += <span class="string">&quot;tztime local&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#wireless _first_ &#123;</span></span><br><span class="line"><span class="comment">#        format_up = &quot;W: (%quality at %essid) %ip&quot;</span></span><br><span class="line"><span class="comment">#        format_down = &quot;W: down&quot;</span></span><br><span class="line"><span class="comment">#&#125;</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#ethernet _first_ &#123;</span></span><br><span class="line"><span class="comment">#        format_up = &quot;E: %ip (%speed)&quot;</span></span><br><span class="line"><span class="comment">#        format_down = &quot;E: down&quot;</span></span><br><span class="line"><span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#battery all &#123;</span></span><br><span class="line"><span class="comment">#        format = &quot;%status %percentage %remaining&quot;</span></span><br><span class="line"><span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">disk <span class="string">&quot;/&quot;</span> &#123;</span><br><span class="line">        format = <span class="string">&quot;disk: %avail&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">load &#123;</span><br><span class="line">        format = <span class="string">&quot;cpu: %1min&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">memory &#123;</span><br><span class="line">        format = <span class="string">&quot;%used/ %total&quot;</span></span><br><span class="line">        threshold_degraded = <span class="string">&quot;1G&quot;</span></span><br><span class="line">        format_degraded = <span class="string">&quot;MEMORY &lt; %available&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tztime <span class="built_in">local</span> &#123;</span><br><span class="line">        format = <span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-daily/paper/nlp-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/07/02/daily/paper/nlp-1/" class="article-date">
+  	<time datetime="2021-07-02T07:28:19.000Z" itemprop="datePublished">2021-07-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/07/02/daily/paper/nlp-1/">
+        每日论文阅读nlp-1
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="The-Design-and-Implementation-of-XiaoIce-an-Empathetic-Social-Chatbot"><a href="#The-Design-and-Implementation-of-XiaoIce-an-Empathetic-Social-Chatbot" class="headerlink" title="The Design and Implementation of XiaoIce, an Empathetic Social Chatbot"></a>The Design and Implementation of XiaoIce, an Empathetic Social Chatbot</h2><p>原文链接 <a target="_blank" rel="noopener" href="https://www.aclweb.org/anthology/2020.cl-1.2.pdf">https://www.aclweb.org/anthology/2020.cl-1.2.pdf</a></p>
+<p>小冰的设计有三个要点</p>
+<ol>
+<li>智商：驱动各种技能的方式，小冰共拥有230种技能</li>
+<li>情商：首先要有理解用户情感的技能，然后要针对用户自己的个人特点决定回应的文本、语气、内容，并在对话停滞时开启新的话题</li>
+<li>优化方式：CPS（每次对话的轮数）用于优化，但是不仅仅有这一个指标。</li>
+</ol>
+<p>小冰使用分层决策模型进行对话</p>
+<p>上层马尔科夫模型决定小冰使用哪一个对话模型，然后进入下层决策</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-note/develop/software-engineer" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/06/22/note/develop/software-engineer/" class="article-date">
+  	<time datetime="2021-06-22T02:18:16.000Z" itemprop="datePublished">2021-06-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/06/22/note/develop/software-engineer/">
+        软件工程周期以及文档
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="设计阶段"><a href="#设计阶段" class="headerlink" title="设计阶段"></a>设计阶段</h1><h1 id="开发阶段"><a href="#开发阶段" class="headerlink" title="开发阶段"></a>开发阶段</h1><h1 id="发布阶段"><a href="#发布阶段" class="headerlink" title="发布阶段"></a>发布阶段</h1>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-note/pwn/environment" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2021/04/29/note/pwn/environment/" class="article-date">
+  	<time datetime="2021-04-29T13:43:37.000Z" itemprop="datePublished">2021-04-29</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/29/note/pwn/environment/">
+        pwn学习之环境搭建
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h2><p>ubuntu16.04或ubuntu18.04，在镜像站中的ubuntu-releases目录下就有</p>
+<h2 id="glibc"><a href="#glibc" class="headerlink" title="glibc"></a>glibc</h2><p>buuoj Links-&gt;Resources网站可以吓到glibc2.23-2.31各个版本的</p>
+<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p>pip环境可能报错，可以尝试从bootstrap网站下载</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py</span><br></pre></td></tr></table></figure>
+
+<p>版本不对应时会提示对应的版本链接</p>
+<h2 id="glibc源码"><a href="#glibc源码" class="headerlink" title="glibc源码"></a>glibc源码</h2><p><a target="_blank" rel="noopener" href="https://packages.ubuntu.com/xenial/glibc-source">https://packages.ubuntu.com/xenial/glibc-source</a></p>
+<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install gdb gdbserver gdb-multiarch qemu qemu-kvm</span><br></pre></td></tr></table></figure>
+
+<p>安装pwndbg <a target="_blank" rel="noopener" href="https://github.com/pwndbg/pwndbg">https://github.com/pwndbg/pwndbg</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;pwndbg&#x2F;pwndbg</span><br><span class="line">cd pwndbg</span><br><span class="line">.&#x2F;setup.sh</span><br></pre></td></tr></table></figure>
+
+<p>下载好glibc源码后解压，然后在gdb中设置源码搜索路径，为了方便也可以把这句话加入.gdbinit</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir path_to_glibc</span><br></pre></td></tr></table></figure>
+
+<h2 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h2><p>vscode jupyter python c/c++插件</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-daily/virus/3-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -647,249 +921,6 @@
 <p>机器学习笔记 <a target="_blank" rel="noopener" href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-867-machine-learning-fall-2006/lecture-notes/">https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-867-machine-learning-fall-2006/lecture-notes/</a></p>
 <p>深度学习介绍 <a target="_blank" rel="noopener" href="http://introtodeeplearning.com/2020/index.html">http://introtodeeplearning.com/2020/index.html</a></p>
 <p>大数据和机器学习中的数学 <a target="_blank" rel="noopener" href="https://ocw.mit.edu/resources/res-ll-005-mathematics-of-big-data-and-machine-learning-january-iap-2020/">https://ocw.mit.edu/resources/res-ll-005-mathematics-of-big-data-and-machine-learning-january-iap-2020/</a> </p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/daily/IS/open-course-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/04/16/note/daily/IS/open-course-1/" class="article-date">
-  	<time datetime="2021-04-16T14:56:15.000Z" itemprop="datePublished">2021-04-16</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/16/note/daily/IS/open-course-1/">
-        信息安全公开课收集
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/win-driver/dri-5" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/04/16/note/win-driver/dri-5/" class="article-date">
-  	<time datetime="2021-04-16T13:12:47.000Z" itemprop="datePublished">2021-04-16</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/16/note/win-driver/dri-5/">
-        windows驱动开发-第四第五章
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/linux/driver-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/04/16/note/linux/driver-1/" class="article-date">
-  	<time datetime="2021-04-16T12:57:48.000Z" itemprop="datePublished">2021-04-16</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/16/note/linux/driver-1/">
-        linux驱动开发-1 环境搭建
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>安装qemu</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install qemu qemu-system qemu-user</span><br></pre></td></tr></table></figure>
-
-<p>安装交叉编译工具链</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gcc-10-aarch64-linux-gnu</span><br></pre></td></tr></table></figure>
-
-<p>去<a href="kernel.org">Linux内核网站</a>下载5.10内核源码</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> ARCH=arm64</span><br><span class="line"><span class="built_in">export</span> CROSS_COPILE=aarch64-linux-gnu-</span><br><span class="line">make defconfig</span><br><span class="line"><span class="comment"># 如果需要可以在此 配置initramfs路径为&quot;/tmp/rootfs/xxx&quot;</span></span><br><span class="line"><span class="comment"># 记得勾选上&quot;Compile the kernel with debug info&quot;，以及其他自己调试需要的配置选项</span></span><br><span class="line">make menuconfig</span><br><span class="line">make -j8 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-</span><br></pre></td></tr></table></figure>
-
-<p>制作根文件系统</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mkdir rootfs</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/mengning/menu.git</span><br><span class="line"><span class="built_in">cd</span> menu</span><br><span class="line"><span class="comment"># 修改Makefile，去掉&quot;find init hello ***&quot;和&quot;qemu -kernel ../linux&quot;语句</span></span><br><span class="line"><span class="built_in">cd</span> ../rootfs</span><br><span class="line">cp ../menu/init ./</span><br><span class="line">find . | cpio -o -Hnewc |gzip -9 &gt; ../rootfs.img</span><br></pre></td></tr></table></figure>
-
-<p>安装调试环境</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gdb-multiarch</span><br></pre></td></tr></table></figure>
-
-<p>启动调试环境</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在一个窗口输入启动</span></span><br><span class="line">qemu-system-aarch64  -M  virt -cpu cortex-a53 -smp 2 -m 4096M  -kernel /tmp/arch/arm64/boot/Image.gz   -nographic  -append <span class="string">&quot;console=ttyAMA0 init=/linuxrc ignore_loglevel&quot;</span>   -initrd /tmp/rootfs/rootfs.img  -S -gdb tcp::9000</span><br></pre></td></tr></table></figure>
-
-<p>参数解释</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-smp 核数目</span><br><span class="line">-m 物理内存大小</span><br><span class="line">-kernel 内核压缩镜像位置</span><br><span class="line">-initrd rootfs位置</span><br><span class="line">-nographic 不使用图形界面，不加可能会因为无法启动图形界面而失败</span><br><span class="line">-append cmdline启动参数</span><br><span class="line">-S 在入口处阻塞CPU</span><br><span class="line">-gdb tcp::xxxx 指定通信通道为 本地tcp通道(因为是在同一个机器上)，端口号为xxxx，如果不需要指定端口号可以用-s 代替</span><br></pre></td></tr></table></figure>
-
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>QEMU搭建arm64 Linux调试环境 - 小乐叔叔的文章 - 知乎<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/345232459">https://zhuanlan.zhihu.com/p/345232459</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/rev/virus-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/04/13/note/rev/virus-1/" class="article-date">
-  	<time datetime="2021-04-13T15:17:25.000Z" itemprop="datePublished">2021-04-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/13/note/rev/virus-1/">
-        常见的病毒样本下载网站
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li><a target="_blank" rel="noopener" href="https://app.any.run/submissions">app.any.run </a></li>
-<li><a target="_blank" rel="noopener" href="https://bazaar.abuse.ch/browse">https://bazaar.abuse.ch/browse</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.52pojie.cn/forum-32-1.html">52破解病毒分析区</a></li>
-</ol>
 
       
     </div>
