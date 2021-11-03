@@ -173,6 +173,85 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-note/develop/c-jump" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2020/11/09/note/develop/c-jump/" class="article-date">
+  	<time datetime="2020-11-09T11:48:35.000Z" itemprop="datePublished">2020-11-09</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/09/note/develop/c-jump/">
+        c中的setjump和longjump
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>goto可能会导致程序逻辑的混乱，并且非常容易导致程序栈帧的混乱，造成不可预知的后果。</p>
+<p>setjump和longjump用于代替goto。由于操作系统调用会有很“深”的函数调用，当某些操作完成后，系统调用函数想要快速返回用户层函数而不是一层层地返回，所以这里经常用setjmp/longjmp。</p>
+<p>另外笔者实践发现，某些时候递归函数使用setump/longjmp也能有很神奇的用处。</p>
+<ul>
+<li>使用setjmp/longjmp宏要包含setjmp.h<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setjmp</span><span class="params">(jmp_buf env)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>env是jmp_buf类型的变量，用于保存setjmp时的环境</li>
+<li>第一次调用setjmp必返回0，之后依据longjmp返回</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">longjmp</span><span class="params">(jmp_buf env,<span class="keyword">int</span> ret_val)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>(void是我猜的)</p>
+<ul>
+<li>env 之前setjmp保存的环境，跳转到保存的那一行</li>
+<li>ret_val 跳转到setjmp时返回值</li>
+</ul>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">jmp_buf buf;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">second</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;second\n&quot;</span>);</span><br><span class="line">    longjmp(buf,<span class="number">1</span>); <span class="comment">// setjmp返回1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">first</span><span class="params">()</span></span>&#123;</span><br><span class="line">    second();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;first\n&quot;</span>); <span class="comment">// 执行不到这一行</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!setjmp(buf))&#123; <span class="comment">// 第一次返回0，所以执行first，第二次由于longjmp，返回1，执行else</span></span><br><span class="line">        first();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;main\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">second</span><br><span class="line">main</span><br></pre></td></tr></table></figure>
+
+<h2 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">buf:</span><br><span class="line">        .zero   200</span><br><span class="line">.LC0:</span><br><span class="line">        .string &quot;second&quot;</span><br><span class="line">second():</span><br><span class="line">        push    rbp</span><br><span class="line">        mov     rbp, rsp</span><br><span class="line">        mov     edi, OFFSET FLAT:.LC0</span><br><span class="line">        call    puts</span><br><span class="line">        mov     esi, 1</span><br><span class="line">        mov     edi, OFFSET FLAT:buf</span><br><span class="line">        call    longjmp</span><br><span class="line">.LC1:</span><br><span class="line">        .string &quot;first&quot;</span><br><span class="line">first():</span><br><span class="line">        push    rbp</span><br><span class="line">        mov     rbp, rsp</span><br><span class="line">        call    second()</span><br><span class="line">        mov     edi, OFFSET FLAT:.LC1</span><br><span class="line">        call    puts</span><br><span class="line">        nop</span><br><span class="line">        pop     rbp</span><br><span class="line">        ret</span><br><span class="line">.LC2:</span><br><span class="line">        .string &quot;main&quot;</span><br><span class="line">main:</span><br><span class="line">        push    rbp</span><br><span class="line">        mov     rbp, rsp</span><br><span class="line">        mov     edi, OFFSET FLAT:buf</span><br><span class="line">        call    _setjmp</span><br><span class="line">        test    eax, eax</span><br><span class="line">        sete    al</span><br><span class="line">        test    al, al</span><br><span class="line">        je      .L5</span><br><span class="line">        call    first()</span><br><span class="line">        jmp     .L6</span><br><span class="line">.L5:</span><br><span class="line">        mov     edi, OFFSET FLAT:.LC2</span><br><span class="line">        call    puts</span><br><span class="line">.L6:</span><br><span class="line">        mov     eax, 0</span><br><span class="line">        pop     rbp</span><br><span class="line">        ret</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">JUMP_BUFFER</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Frame;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rbx;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rsp;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rbp;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rsi;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rdi;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 R12;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 R13;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 R14;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 R15;</span><br><span class="line">    <span class="keyword">unsigned</span> __int64 Rip;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> MxCsr;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span> FpCsr;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span> Spare;</span><br><span class="line"></span><br><span class="line">    SETJMP_FLOAT128 Xmm6;</span><br><span class="line">    SETJMP_FLOAT128 Xmm7;</span><br><span class="line">    SETJMP_FLOAT128 Xmm8;</span><br><span class="line">    SETJMP_FLOAT128 Xmm9;</span><br><span class="line">    SETJMP_FLOAT128 Xmm10;</span><br><span class="line">    SETJMP_FLOAT128 Xmm11;</span><br><span class="line">    SETJMP_FLOAT128 Xmm12;</span><br><span class="line">    SETJMP_FLOAT128 Xmm13;</span><br><span class="line">    SETJMP_FLOAT128 Xmm14;</span><br><span class="line">    SETJMP_FLOAT128 Xmm15;</span><br><span class="line">&#125; _JUMP_BUFFER;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到buffer内保存了所有寄存器和相关信息</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-macro-setjmp.html">C 库宏 - setjmp()</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-note/develop/cpp-lambda" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1147,156 +1226,6 @@
 <p>[5] <a target="_blank" rel="noopener" href="https://www.cnblogs.com/iBinary/p/10975839.html">IAT Hook - iBinary - 博客园</a></p>
 <p>[6] <a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-250832.htm">[原创]SSDT-HOOK–看雪</a></p>
 <p>[7] <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37552052/article/details/81453591">Windows Hook原理与实现_安全杂货铺-CSDN博客</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-note/rev/win-ehs" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/10/28/note/rev/win-ehs/" class="article-date">
-  	<time datetime="2020-10-28T00:35:26.000Z" itemprop="datePublished">2020-10-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/28/note/rev/win-ehs/">
-        windows异常处理机制
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h2><ul>
-<li><p>SEH：结构化异常处理</p>
-</li>
-<li><p>VEH向量化异常处理</p>
-</li>
-<li><p>TopLevelEH顶层异常处理</p>
-</li>
-</ul>
-<p>每种处理方法都可以三种值，在不同处理方法下意义不同</p>
-<ul>
-<li><p>EXCEPTION_EXECUTE_HANDLER</p>
-<p>该异常被处理，从异常处下一条指令开始执行</p>
-</li>
-<li><p>EXCEPTION_CONTINUE_SEARCH</p>
-<p>不处理该异常</p>
-</li>
-<li><p>EXCEPTION_CONTINUE_EXECUTIOIN</p>
-<p>忽略异常，从异常处继续执行</p>
-</li>
-</ul>
-<p>如果当前进程正在被调试，调试器也可以返回值</p>
-<ul>
-<li><p>DBG_CONTINUE</p>
-<p>等同于EXCEPTION_CONTINUE_EXECUTION</p>
-</li>
-<li><p>DBG_EXCEPTION_NOT_HANDLED</p>
-<p>等同于EXCEPTION_CONTINUE_SEARCH</p>
-</li>
-</ul>
-<p>异常处理器包含内核异常处理和R3异常处理</p>
-<h2 id="R3程序产生异常时，异常处理器处理顺序："><a href="#R3程序产生异常时，异常处理器处理顺序：" class="headerlink" title="R3程序产生异常时，异常处理器处理顺序："></a>R3程序产生异常时，异常处理器处理顺序：</h2><ol>
-<li><p>交给调试器</p>
-</li>
-<li><p>执行VEH</p>
-</li>
-<li><p>执行SEH</p>
-</li>
-<li><p>TopLevelEH</p>
-</li>
-<li><p>交给调试器</p>
-</li>
-<li><p>调试异常端口通知csrss.exe</p>
-</li>
-</ol>
-<h3 id="第一次交给调试器"><a href="#第一次交给调试器" class="headerlink" title="第一次交给调试器"></a>第一次交给调试器</h3><p>判断是否处理该异常</p>
-<ul>
-<li><p>处理返回DBG_CONTINUE</p>
-</li>
-<li><p>否则返回DBG_EXECUTE_NOT_HANDLED</p>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(!bExit)</span><br><span class="line">&#123;</span><br><span class="line">    DWORD dwContinueStatus = DBG_EXCEPTION_NOT_HANDLED;</span><br><span class="line">    DEBUG_EVENT debugEvent;</span><br><span class="line">    WaitForDebugEvent(&amp;debugEvent, INFINITE);</span><br><span class="line">    <span class="keyword">switch</span> ( debugEvent.dwDebugEventCode )</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> EXCEPTION_DEBUG_EVENT:</span><br><span class="line">        &#123;</span><br><span class="line">            EXCEPTION_DEBUG_INFO* pExcpInfo = &amp;debugEvent.u.Exception;</span><br><span class="line">            <span class="keyword">if</span> ( MessageBox(<span class="number">0</span>,_T(<span class="string">&quot;处理该异常?&quot;</span>), _T(<span class="string">&quot;我是调试器&quot;</span>),MB_YESNO)==IDYES )</span><br><span class="line">            &#123;</span><br><span class="line">                dwContinueStatus = DBG_CONTINUE;</span><br><span class="line">                <span class="comment">//...</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    ContinueDebugEvent(debugEvent.dwProcessId,  debugEvent.dwThreadId, dwContinueStatus);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="执行VEH"><a href="#执行VEH" class="headerlink" title="执行VEH"></a>执行VEH</h3><p>如果没有被调试，或者调试器不处理该异常(返回DBG_EXCEPTION_NOT_HANDLED)，就会把异常交给VEH</p>
-<p>VEH是个链表，每个VEH按顺序调用</p>
-<p>VEH在SEH之前执行，不依赖某一线程，返回值：</p>
-<ul>
-<li><p>EXCEPTION_CONTINUE_SEARCH 交给下一个VEH</p>
-</li>
-<li><p>EXCEPTION_CONTINUE_EXECUTION 认为已被处理，退出异常处理器在异常指令处继续执行</p>
-</li>
-<li><p>EXCEPTION_EXECUTE_HANDLED 无效，等同于EXCEPTION_CONTINUE_SEARCH</p>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LONG NTAPI <span class="title">FirstVectExcepHandler</span><span class="params">( PEXCEPTION_POINTERS pExcepInfo )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>( ... )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> EXCEPTION_CONTINUE_EXECUTION;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> EXCEPTION_CONTINUE_SEARCH;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//参数1=1表示插入Veh链的头部，=0表示插入到VEH链的尾部</span></span><br><span class="line">AddVectoredExceptionHandler( <span class="number">1</span>, &amp;FirstVectExcepHandler );</span><br></pre></td></tr></table></figure>
-
-<h3 id="执行SEH"><a href="#执行SEH" class="headerlink" title="执行SEH"></a>执行SEH</h3><p>当所有的VEH都不处理该异常，该异常就会让SEH处理，SEH只能处理自己线程的异常，基于线程栈的异常处理机制</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LONG <span class="title">FirstSEHer</span><span class="params">( PEXCEPTION_POINTERS pExcepInfo )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TCHAR* pTitle = _T(<span class="string">&quot;第一个SEH处理器&quot;</span>);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][1] in \n&quot;</span>) );</span><br><span class="line">    LONG nRet = ShowSelectMessageBox(pTitle);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][1] out \n&quot;</span>) );</span><br><span class="line">    <span class="keyword">return</span> nRet;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LONG <span class="title">SecondSEHer</span><span class="params">( PEXCEPTION_POINTERS pExcepInfo )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TCHAR* pTitle = _T(<span class="string">&quot;第二个SEH处理器&quot;</span>);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][2] in \n&quot;</span>) );</span><br><span class="line">    LONG nRet = ShowSelectMessageBox(pTitle);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][2] out \n&quot;</span>) );;</span><br><span class="line">    <span class="keyword">return</span> nRet;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ExcepFunction</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    __try</span><br><span class="line">    &#123;</span><br><span class="line">        __try</span><br><span class="line">        &#123;</span><br><span class="line">            __try</span><br><span class="line">            &#123;</span><br><span class="line"> </span><br><span class="line">                _tprintf( _T(<span class="string">&quot;[EH.Exe] *[CALL] int 3\n&quot;</span>) );</span><br><span class="line">                __asm <span class="keyword">int</span> <span class="number">3</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            __finally</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">printf</span>( <span class="string">&quot;[EH.Exe] *[SEH][0] finally call...\n&quot;</span> );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        __except( FirstSEHer(GetExceptionInformation()) )</span><br><span class="line">        &#123;</span><br><span class="line">            _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][1] 被俺处理了~(只有返回EXCEPTION_EXECUTE_HANDLER才会走到这里)\n&quot;</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    __except( SecondSEHer(GetExceptionInformation()) )</span><br><span class="line">    &#123;</span><br><span class="line">        _tprintf( _T(<span class="string">&quot;[EH.Exe] [SEH][2] 被俺处理了(只有返回EXCEPTION_EXECUTE_HANDLER才会走到这里)\n&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="执行TopLevelEH"><a href="#执行TopLevelEH" class="headerlink" title="执行TopLevelEH"></a>执行TopLevelEH</h3><p>利用SEH实现，但是可以处理所有线程抛出的异常。如果正在被调试，则顶层异常会被忽略。</p>
-<p>返回值：</p>
-<ul>
-<li><p>EXCEPTION_CONTINUE_SEARCH</p>
-<p>查注册表，如果存在调试器，则抛给调试器</p>
-<p>注册表路径：KLM\software\microsoft\windows nt\currentvsrsion\aedebug。如果Auto==1，Debugger!=NULL</p>
-</li>
-<li><p>EXCEPTION_EXECUTE_HANDLER</p>
-<p>杀死该进程</p>
-</li>
-<li><p>EXCEPTION_CONTINUE_EXECUTION</p>
-<p>和SEH一样</p>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LONG NTAPI <span class="title">TopLevelExcepFilter</span><span class="params">( PEXCEPTION_POINTERS pExcepInfo )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TCHAR* pTitle = _T(<span class="string">&quot;*顶级* 异常处理器&quot;</span>);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [TOP] in \n&quot;</span>) );</span><br><span class="line">    LONG nRet = ShowSelectMessageBox(pTitle);</span><br><span class="line">    _tprintf( _T(<span class="string">&quot;[EH.Exe] [TOP] out \n&quot;</span>) );;</span><br><span class="line">    <span class="keyword">return</span> nRet;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//注册</span></span><br><span class="line">SetUnhandledExceptionFilter( &amp;TopLevelExcepFilter );</span><br></pre></td></tr></table></figure>
-
-<h3 id="再次交给调试器"><a href="#再次交给调试器" class="headerlink" title="再次交给调试器"></a>再次交给调试器</h3><p>返回值</p>
-<ul>
-<li><p>DBG_CONTINUE</p>
-<p>和第一次相同</p>
-</li>
-<li><p>DBG_EXCEPTION_NOT_HANDLED</p>
-<p>直接杀死进程</p>
-</li>
-</ul>
-<h3 id="调试异常端口通知csrss-exe"><a href="#调试异常端口通知csrss-exe" class="headerlink" title="调试异常端口通知csrss.exe"></a>调试异常端口通知csrss.exe</h3><p>上面的异常处理机制都没有处理该异常，则调用csrss.exe，弹出一个对话框</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-173853.htm">[原创]白话windows之四 异常处理机制(VEH、SEH、TopLevelEH…)</a></p>
 
       
     </div>
